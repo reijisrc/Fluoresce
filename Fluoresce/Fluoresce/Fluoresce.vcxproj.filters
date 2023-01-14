@@ -4,15 +4,24 @@
     <Filter Include="Engine">
       <UniqueIdentifier>{DBC7D3B0-C769-FE86-B024-12DB9C6585D7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Core">
+      <UniqueIdentifier>{130D9B61-7FC2-1357-08B7-0D2E746B0A5B}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine\Core\DataDefine.h">
-      <Filter>Engine</Filter>
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Core\Log.h">
+      <Filter>Engine\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Fluoresce.h" />
-    <ClInclude Include="src\Engine\Core\Log.h" />
+    <ClInclude Include="src\frpch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Engine\Core\Log.cpp" />
+    <ClCompile Include="src\Engine\Core\Log.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\frpch.cpp" />
   </ItemGroup>
 </Project>

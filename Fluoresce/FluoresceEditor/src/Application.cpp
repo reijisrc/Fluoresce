@@ -12,7 +12,12 @@
 
 int main()
 {
-    Fluoresce::PrintLog();
+	Fluoresce::Log::Init();
 
-    std::cin.get();
+	FR_CLIENT_INFO("Console Application");
+
+	int t = 5;
+	FR_CLIENT_TRACE("t = {0}", t);
+
+	std::cin.get();
 }

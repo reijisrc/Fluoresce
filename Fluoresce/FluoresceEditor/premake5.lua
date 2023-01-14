@@ -16,9 +16,10 @@ project "FluoresceEditor"
 	
    includedirs
    {
+		"%{wks.location}/Fluoresce/dependencies/spdlog/include",
 		"%{wks.location}/Fluoresce/src"
    }
-
+   
    links
    {
 		"Fluoresce"
@@ -41,3 +42,4 @@ project "FluoresceEditor"
 		defines "FR_RELEASE"
 		runtime "Release"
 		optimize "on"
+		

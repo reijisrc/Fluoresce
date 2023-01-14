@@ -8,6 +8,9 @@ project "Fluoresce"
 	targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")
 
+	pchheader "frpch.h"
+	pchsource "src/frpch.cpp"
+	
 	files 
 	{
 		"src/**.h",
@@ -21,7 +24,13 @@ project "Fluoresce"
 
    includedirs
    {
-		"src"
+		"src",
+		"%{IncludeDir.spdlog}"
+   }
+   
+   libdirs 
+   { 
+		"%{LibraryDir.spdlog}"
    }
 
    links
@@ -36,13 +45,28 @@ project "Fluoresce"
 		defines "FR_DEBUG"
 		runtime "Debug"
 		symbols "on"
+		
+		links
+		{
+			"spdlogd.lib"
+		}
 
    filter "configurations:Development"
 		defines "FR_DEVELOPMENT"
 		runtime "Release"
 		optimize "on"
+		
+		links
+		{
+			"spdlog.lib"
+		}
 
    filter "configurations:Release"
 		defines "FR_RELEASE"
 		runtime "Release"
 		optimize "on"
+		
+		links
+		{
+			"spdlog.lib"
+		}
