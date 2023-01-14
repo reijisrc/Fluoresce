@@ -9,16 +9,34 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Engine\Core\Application.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Core\Assert.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Core\BaseDefine.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Core\DataDefine.h">
       <Filter>Engine\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Core\EnterPoint.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Core\Log.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Core\PlatformCheck.h">
       <Filter>Engine\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Fluoresce.h" />
     <ClInclude Include="src\frpch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Engine\Core\Application.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
     <ClCompile Include="src\Engine\Core\Log.cpp">
       <Filter>Engine\Core</Filter>
     </ClCompile>

@@ -20,6 +20,11 @@ project "FluoresceEditor"
 		"%{wks.location}/Fluoresce/src"
    }
    
+    libdirs 
+   { 
+		"%{LibraryDir.spdlog}"
+   }
+   
    links
    {
 		"Fluoresce"
@@ -32,14 +37,29 @@ project "FluoresceEditor"
 		defines "FR_DEBUG"
 		runtime "Debug"
 		symbols "on"
+		
+		links
+		{
+			"spdlogd.lib"
+		}
 
    filter "configurations:Development"
 		defines "FR_DEVELOPMENT"
 		runtime "Release"
 		optimize "on"
+		
+		links
+		{
+			"spdlog.lib"
+		}
 
    filter "configurations:Release"
 		defines "FR_RELEASE"
 		runtime "Release"
 		optimize "on"
+		
+		links
+		{
+			"spdlog.lib"
+		}
 		

@@ -16,6 +16,7 @@ namespace Fluoresce {
 	Ref<spdlog::logger> Log::s_CoreLogger;
 	Ref<spdlog::logger> Log::s_ClientLogger;
 
+	//	ƒƒO‰Šú‰»
 	void Log::Init()
 	{
 		std::vector<spdlog::sink_ptr> logSinks;

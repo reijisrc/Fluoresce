@@ -24,4 +24,12 @@ namespace Fluoresce {
 
 	template<typename T>
 	using WeakRef = std::weak_ptr<T>;
+
+	typedef signed char sint8;
+	typedef unsigned char uint8;
+	typedef int sint32;
+	typedef unsigned int  uint32;
+	typedef float float32;
+	typedef long long sint64;
+	typedef unsigned long long uint64;
 }

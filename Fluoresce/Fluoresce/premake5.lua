@@ -21,16 +21,11 @@ project "Fluoresce"
 	{
 		"_CRT_SECURE_NO_WARNINGS",
 	}
-
-   includedirs
+	
+	includedirs
    {
 		"src",
 		"%{IncludeDir.spdlog}"
-   }
-   
-   libdirs 
-   { 
-		"%{LibraryDir.spdlog}"
    }
 
    links
@@ -46,27 +41,12 @@ project "Fluoresce"
 		runtime "Debug"
 		symbols "on"
 		
-		links
-		{
-			"spdlogd.lib"
-		}
-
    filter "configurations:Development"
 		defines "FR_DEVELOPMENT"
 		runtime "Release"
 		optimize "on"
-		
-		links
-		{
-			"spdlog.lib"
-		}
 
    filter "configurations:Release"
 		defines "FR_RELEASE"
 		runtime "Release"
 		optimize "on"
-		
-		links
-		{
-			"spdlog.lib"
-		}
