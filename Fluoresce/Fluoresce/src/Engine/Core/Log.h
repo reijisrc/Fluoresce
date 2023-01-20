@@ -2,7 +2,6 @@
 
 #include "Engine/Core/DataDefine.h"
 
-// This ignores all warnings raised inside External headers
 #pragma warning(push, 0)
 #include <spdlog/spdlog.h>
 #include <spdlog/fmt/ostr.h>
@@ -23,14 +22,14 @@ namespace Fluoresce {
 	};
 }
 
-// エンジンコア ログ出力マクロ
+// エンジン側 ログ出力マクロ
 #define FR_CORE_TRACE(...)    ::Fluoresce::Log::GetCoreLogger()->trace(__VA_ARGS__)
 #define FR_CORE_INFO(...)     ::Fluoresce::Log::GetCoreLogger()->info(__VA_ARGS__)
 #define FR_CORE_WARN(...)     ::Fluoresce::Log::GetCoreLogger()->warn(__VA_ARGS__)
 #define FR_CORE_ERROR(...)    ::Fluoresce::Log::GetCoreLogger()->error(__VA_ARGS__)
 #define FR_CORE_CRITICAL(...) ::Fluoresce::Log::GetCoreLogger()->critical(__VA_ARGS__)
 
-// クライアントコア ログ出力マクロ
+// クライアント側 ログ出力マクロ
 #define FR_CLIENT_TRACE(...)         ::Fluoresce::Log::GetClientLogger()->trace(__VA_ARGS__)
 #define FR_CLIENT_INFO(...)          ::Fluoresce::Log::GetClientLogger()->info(__VA_ARGS__)
 #define FR_CLIENT_WARN(...)          ::Fluoresce::Log::GetClientLogger()->warn(__VA_ARGS__)

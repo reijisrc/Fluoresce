@@ -1,5 +1,5 @@
 ﻿//==============================================================================//
-// Name : Editor.cpp														// 
+// Name : Editor.cpp															// 
 // Describe : 	アプリケーション:エディター										// 
 // Author : Ding Qi																// 
 // Create Date : 2022/03/22														// 
@@ -31,16 +31,3 @@ namespace Fluoresce {
 	}
 
 }
-
-//int main()
-//{
-//	Fluoresce::Log::Init();
-//
-//	FR_CLIENT_INFO("Console Application");
-//
-//	int t = 5;
-//	FR_CORE_ASSERT(t > 3);
-//	FR_CLIENT_TRACE("t = {0}", t);
-//
-//	std::cin.get();
-//}

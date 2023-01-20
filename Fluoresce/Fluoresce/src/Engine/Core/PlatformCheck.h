@@ -1,4 +1,4 @@
-// Platform detection using predefined macros
+// プラッドフォーム別の定義
 #ifdef _WIN32
 	/* Windows x64/x86 */
 	#ifdef _WIN64
@@ -12,6 +12,6 @@
 	#define FR_PLATFORM_LINUX
 	#error "Linux is not supported!"
 #else
-	/* Unknown compiler/platform */
+	/* 非対応プラッドフォーム */
 	#error "Unknown platform!"
-#endif // End of platform detection
+#endif

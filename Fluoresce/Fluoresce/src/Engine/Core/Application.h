@@ -48,6 +48,6 @@ namespace Fluoresce {
 		friend int ::main(int argc, char** argv);
 	};
 
-	// アプリケーション側実装
+	// 実行exe側に実装
 	Application* CreateApplication(ApplicationCommandLineArgs args);
 }
