@@ -1,11 +1,10 @@
 ﻿//==============================================================================//
 // Name : Editor.cpp															// 
-// Describe : 	アプリケーション:エディター										// 
+// Describe : 	Fluoresceエディター												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/03/22														// 
 // Modify Date : 2022/03/22														// 
 //==============================================================================//
-
 #include <Fluoresce.h>
 #include <Engine/Core/EnterPoint.h>
 
@@ -21,11 +20,11 @@ namespace Fluoresce {
 		}
 	};
 
-	Application* CreateApplication(ApplicationCommandLineArgs args)
+	Application* CreateApplication(CommandLineArgs args)
 	{
 		ApplicationSpecification spec;
 		spec.Name = "FluoresceEditor";
-		spec.CommandLineArgs = args;
+		spec.CmdLineArgs = args;
 
 		return new FluoresceEditor(spec);
 	}

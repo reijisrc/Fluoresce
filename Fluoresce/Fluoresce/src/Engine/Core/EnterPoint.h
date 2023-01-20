@@ -4,7 +4,7 @@
 
 #ifdef FR_PLATFORM_WINDOWS
 
-extern Fluoresce::Application* Fluoresce::CreateApplication(ApplicationCommandLineArgs args);
+extern Fluoresce::Application* Fluoresce::CreateApplication(CommandLineArgs args);
 
 int main(int argc, char** argv)
 {

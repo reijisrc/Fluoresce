@@ -7,6 +7,12 @@
     <Filter Include="Engine\Core">
       <UniqueIdentifier>{130D9B61-7FC2-1357-08B7-0D2E746B0A5B}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Win64">
+      <UniqueIdentifier>{F136D494-DD04-C89A-C698-38C1B205A4FF}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine\Core\Application.h">
@@ -30,8 +36,21 @@
     <ClInclude Include="src\Engine\Core\PlatformCheck.h">
       <Filter>Engine\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Core\Window.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Fluoresce.h" />
+    <ClInclude Include="src\Platform\Win64\WinWindow.h">
+      <Filter>Platform\Win64</Filter>
+    </ClInclude>
     <ClInclude Include="src\frpch.h" />
+    <ClInclude Include="src\Engine\Events\ApplicationEvent.h" />
+    <ClInclude Include="src\Engine\Events\Event.h" />
+    <ClInclude Include="src\Engine\Events\KeyEvent.h" />
+    <ClInclude Include="src\Engine\Events\MouseEvent.h" />
+    <ClInclude Include="src\Engine\Core\Input.h" />
+    <ClInclude Include="src\Engine\Core\KeyCodes.h" />
+    <ClInclude Include="src\Engine\Core\MouseCodes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Engine\Core\Application.cpp">
@@ -40,6 +59,10 @@
     <ClCompile Include="src\Engine\Core\Log.cpp">
       <Filter>Engine\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\Platform\Win64\WinWindow.cpp">
+      <Filter>Platform\Win64</Filter>
+    </ClCompile>
     <ClCompile Include="src\frpch.cpp" />
+    <ClCompile Include="src\Platform\Win64\WinInput.cpp" />
   </ItemGroup>
 </Project>

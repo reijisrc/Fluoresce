@@ -1,3 +1,10 @@
+//==============================================================================//
+// Name : frpch.h																// 
+// Describe : 	プリコンパイル済みヘッダー										// 
+// Author : Ding Qi																// 
+// Create Date : 2022/03/26														// 
+// Modify Date : 2022/03/26														// 
+//==============================================================================//
 #pragma once
 
 #include<iostream>
@@ -18,3 +25,4 @@
 #include "Engine/Core/BaseDefine.h"
 #include "Engine/Core/DataDefine.h"
 #include "Engine/Core/Log.h"
+#include "Engine/Core/Assert.h"

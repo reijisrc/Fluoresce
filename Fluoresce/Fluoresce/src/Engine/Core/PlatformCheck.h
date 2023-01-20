@@ -1,4 +1,4 @@
-// プラッドフォーム別の定義
+// プラッドフォームチェック & プリプロセッサ
 #ifdef _WIN32
 	/* Windows x64/x86 */
 	#ifdef _WIN64
@@ -9,7 +9,6 @@
 	#error "x86 Builds are not supported!"
 	#endif"
 #elif defined(__linux__)
-	#define FR_PLATFORM_LINUX
 	#error "Linux is not supported!"
 #else
 	/* 非対応プラッドフォーム */

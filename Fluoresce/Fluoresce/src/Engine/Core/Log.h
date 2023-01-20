@@ -1,3 +1,10 @@
+//==============================================================================//
+// Name : Log.h																	// 
+// Describe :	モジュール:ログ													// 
+// Author : Ding Qi																// 
+// Create Date : 2022/03/18														// 
+// Modify Date : 2022/03/26														// 
+//==============================================================================//
 #pragma once
 
 #include "Engine/Core/DataDefine.h"
@@ -9,6 +16,7 @@
 
 namespace Fluoresce {
 
+	// ログ
 	class Log
 	{
 	public:

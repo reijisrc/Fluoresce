@@ -1,3 +1,10 @@
+//==============================================================================//
+// Name : BaseDefine.h															// 
+// Describe :	É}ÉNÉçíËã`														// 
+// Author : Ding Qi																// 
+// Create Date : 2022/03/22														// 
+// Modify Date : 2022/03/26														// 
+//==============================================================================//
 #pragma once
 
 #include "Engine/Core/PlatformCheck.h"
@@ -22,3 +29,5 @@
 #define FR_STRINGIFY_MACRO(x) #x
 
 #define BIT(x) (1 << x)
+
+#define FR_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1) 

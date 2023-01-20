@@ -3,7 +3,6 @@ project "FluoresceEditor"
   language "C++"
   toolset "v142"
   cppdialect "C++17"
-  staticruntime "on"
   
   targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
   objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")
@@ -14,17 +13,15 @@ project "FluoresceEditor"
 		"src/**.cpp"
 	}
 	
+
+	-- 追加のインクルードディレクトリ
    includedirs
    {
-		"%{wks.location}/Fluoresce/dependencies/spdlog/include",
-		"%{wks.location}/Fluoresce/src"
+		"%{wks.location}/Fluoresce/src",
+		"%{IncludeDir.spdlog}"
    }
    
-    libdirs 
-   { 
-		"%{LibraryDir.spdlog}"
-   }
-   
+   -- 外部プロジェクトとリンク
    links
    {
 		"Fluoresce"
@@ -32,34 +29,20 @@ project "FluoresceEditor"
 
    filter "system:windows"
 		systemversion "latest"
-
+		staticruntime "on"
+		
    filter "configurations:Debug"
 		defines "FR_DEBUG"
 		runtime "Debug"
 		symbols "on"
-		
-		links
-		{
-			"spdlogd.lib"
-		}
 
    filter "configurations:Development"
 		defines "FR_DEVELOPMENT"
 		runtime "Release"
 		optimize "on"
 		
-		links
-		{
-			"spdlog.lib"
-		}
-
    filter "configurations:Release"
 		defines "FR_RELEASE"
 		runtime "Release"
 		optimize "on"
-		
-		links
-		{
-			"spdlog.lib"
-		}
 		
