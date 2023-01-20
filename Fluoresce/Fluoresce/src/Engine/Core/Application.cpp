@@ -9,6 +9,7 @@
 #include "Engine/Core/Application.h"
 
 #include "Engine/Core/Input.h"
+#include <glad/glad.h>
 
 namespace Fluoresce {
 
@@ -45,6 +46,25 @@ namespace Fluoresce {
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(FR_BIND_EVENT_FN(Application::OnWindowClose));
 		dispatcher.Dispatch<WindowResizeEvent>(FR_BIND_EVENT_FN(Application::OnWindowResize));
+
+		for (auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend(); ++it)
+		{
+			if (e.Handled)
+				break;
+			(*it)->OnEvent(e);
+		}
+	}
+
+	void Application::PushLayer(Layer* layer)
+	{
+		m_LayerStack.PushLayer(layer);
+		layer->OnAttach();
+	}
+
+	void Application::PushOverlay(Layer* layer)
+	{
+		m_LayerStack.PushOverlay(layer);
+		layer->OnAttach();
 	}
 
 	void Application::Close()
@@ -56,7 +76,19 @@ namespace Fluoresce {
 	{
 		while (m_Running)
 		{
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			glClearColor(0.8, 0.25, 0.4, 1.0);
 			float32 time = m_Window->GetWindowTime();
+			DeltaTime deltatime = time - m_LastFrameTime;
+			m_LastFrameTime = time;
+
+			if (!m_Minimized)
+			{
+				for (Layer* layer : m_LayerStack)
+				{
+					layer->OnUpdate(deltatime);
+				}
+			}
 
 			m_Window->OnUpdate();
 		}

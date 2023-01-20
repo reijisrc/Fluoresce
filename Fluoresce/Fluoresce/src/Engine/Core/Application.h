@@ -10,8 +10,10 @@
 #include "Engine/Core/BaseDefine.h"
 #include "Engine/Core/Window.h"
 
-#include "Engine//Events/Event.h"
-#include "Engine//Events/ApplicationEvent.h"
+#include "Engine/Events/ApplicationEvent.h"
+#include "Engine/Events/Event.h"
+#include "Engine/Core/LayerStack.h"
+#include "Engine/Core/DataDefine.h"
 
 int main(int argc, char** argv);
 
@@ -47,6 +49,9 @@ namespace Fluoresce {
 
 		void OnEvent(Event& e);
 
+		void PushLayer(Layer* layer);
+		void PushOverlay(Layer* layer);
+
 		Window& GetWindow() { return *m_Window; }
 
 		void Close();
@@ -65,8 +70,11 @@ namespace Fluoresce {
 		std::unique_ptr<Window> m_Window;
 		bool m_Running = true;
 		bool m_Minimized = false;
+		LayerStack	m_LayerStack;
+		float32		m_LastFrameTime = 0.0f;
 	private:
 		static Application* s_Instance;
+
 		friend int ::main(int argc, char** argv);
 	};
 

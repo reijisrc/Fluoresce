@@ -28,14 +28,16 @@ project "Fluoresce"
 	{
 		"src",
 		"%{IncludeDir.spdlog}",
-		"%{IncludeDir.glfw}"
+		"%{IncludeDir.glfw}",
+		"%{IncludeDir.glad}"
 	}
    
    -- 追加のライブラリディレクトリ
    libdirs       
    { 
 		"%{LibraryDir.spdlog}",
-		"%{LibraryDir.glfw}"
+		"%{LibraryDir.glfw}",
+		"%{LibraryDir.glad}"
    }
    
    -- 外部プロジェクトとリンク
@@ -56,7 +58,8 @@ project "Fluoresce"
 		links
 		{
 			"spdlogd.lib",
-			"glfw3_debug.lib"
+			"glfw3_debug.lib",
+			"glad_debug.lib"
 		}
 		
    filter "configurations:Development"
@@ -67,7 +70,8 @@ project "Fluoresce"
 		links
 		{
 			"spdlogd.lib",
-			"glfw3_dev.lib"
+			"glfw3_dev.lib",
+			"glad_debug.lib"
 		}
 
    filter "configurations:Release"
@@ -78,6 +82,7 @@ project "Fluoresce"
 		links
 		{
 			"spdlog.lib",
-			"glfw3.lib"
+			"glfw3.lib",
+			"glad.lib"
 		}
 		

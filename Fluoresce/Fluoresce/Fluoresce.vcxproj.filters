@@ -7,6 +7,9 @@
     <Filter Include="Engine\Core">
       <UniqueIdentifier>{130D9B61-7FC2-1357-08B7-0D2E746B0A5B}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Events">
+      <UniqueIdentifier>{5FAFB439-CB6F-3070-94AA-79ED002A754C}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Platform">
       <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
     </Filter>
@@ -30,7 +33,16 @@
     <ClInclude Include="src\Engine\Core\EnterPoint.h">
       <Filter>Engine\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Core\Input.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Core\KeyCodes.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Core\Log.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Core\MouseCodes.h">
       <Filter>Engine\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Core\PlatformCheck.h">
@@ -39,18 +51,30 @@
     <ClInclude Include="src\Engine\Core\Window.h">
       <Filter>Engine\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Events\ApplicationEvent.h">
+      <Filter>Engine\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Events\Event.h">
+      <Filter>Engine\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Events\KeyEvent.h">
+      <Filter>Engine\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Events\MouseEvent.h">
+      <Filter>Engine\Events</Filter>
+    </ClInclude>
     <ClInclude Include="src\Fluoresce.h" />
     <ClInclude Include="src\Platform\Win64\WinWindow.h">
       <Filter>Platform\Win64</Filter>
     </ClInclude>
     <ClInclude Include="src\frpch.h" />
-    <ClInclude Include="src\Engine\Events\ApplicationEvent.h" />
-    <ClInclude Include="src\Engine\Events\Event.h" />
-    <ClInclude Include="src\Engine\Events\KeyEvent.h" />
-    <ClInclude Include="src\Engine\Events\MouseEvent.h" />
-    <ClInclude Include="src\Engine\Core\Input.h" />
-    <ClInclude Include="src\Engine\Core\KeyCodes.h" />
-    <ClInclude Include="src\Engine\Core\MouseCodes.h" />
+    <ClInclude Include="src\Engine\Graphics\GraphicsContext.h" />
+    <ClInclude Include="src\Platform\OpenGL\GLContext.h" />
+    <ClInclude Include="src\Engine\Graphics\GraphicsCore.h" />
+    <ClInclude Include="src\Platform\OpenGL\GLCore.h" />
+    <ClInclude Include="src\Engine\Core\Layer.h" />
+    <ClInclude Include="src\Engine\Core\LayerStack.h" />
+    <ClInclude Include="src\Engine\Core\DeltaTime.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Engine\Core\Application.cpp">
@@ -59,10 +83,18 @@
     <ClCompile Include="src\Engine\Core\Log.cpp">
       <Filter>Engine\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\Platform\Win64\WinInput.cpp">
+      <Filter>Platform\Win64</Filter>
+    </ClCompile>
     <ClCompile Include="src\Platform\Win64\WinWindow.cpp">
       <Filter>Platform\Win64</Filter>
     </ClCompile>
     <ClCompile Include="src\frpch.cpp" />
-    <ClCompile Include="src\Platform\Win64\WinInput.cpp" />
+    <ClCompile Include="src\Engine\Graphics\GraphicsContext.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\GLContext.cpp" />
+    <ClCompile Include="src\Engine\Graphics\GraphicsCore.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\GLCore.cpp" />
+    <ClCompile Include="src\Engine\Core\Layer.cpp" />
+    <ClCompile Include="src\Engine\Core\LayerStack.cpp" />
   </ItemGroup>
 </Project>

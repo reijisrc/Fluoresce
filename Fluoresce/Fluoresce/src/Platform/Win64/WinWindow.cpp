@@ -40,7 +40,7 @@ namespace Fluoresce {
 
 	void WinWindow::OnUpdate()
 	{
-		glfwSwapBuffers(m_Window);
+		m_Context->SwapBuffer();
 		glfwPollEvents();
 	}
 
@@ -86,7 +86,8 @@ namespace Fluoresce {
 		m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
 		++s_GLFWWindowCount;
 
-		glfwMakeContextCurrent(m_Window);
+		m_Context = GraphicsContext::Create(m_Window);
+		m_Context->Init();
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
 

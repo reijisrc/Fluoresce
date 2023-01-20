@@ -8,6 +8,7 @@
 #pragma once
 
 #include "Engine/Core/Window.h"
+#include "Engine/Graphics/GraphicsContext.h"
 #include <GLFW/glfw3.h>
 
 namespace Fluoresce {
@@ -38,6 +39,7 @@ namespace Fluoresce {
 		virtual void ShutDown();
 	private:
 		GLFWwindow* m_Window;
+		Scope<GraphicsContext> m_Context;
 
 		struct WindowData
 		{
