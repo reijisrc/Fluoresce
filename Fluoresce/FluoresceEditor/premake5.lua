@@ -18,7 +18,8 @@ project "FluoresceEditor"
    includedirs
    {
 		"%{wks.location}/Fluoresce/src",
-		"%{IncludeDir.spdlog}"
+		"%{IncludeDir.spdlog}",
+		"%{IncludeDir.glm}"
    }
    
    -- 外部プロジェクトとリンク

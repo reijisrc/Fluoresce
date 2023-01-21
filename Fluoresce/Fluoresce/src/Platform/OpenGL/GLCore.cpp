@@ -55,6 +55,16 @@ namespace Fluoresce
 		glViewport(x, y, width, height);
 	}
 
+	void GLCore::SetClearColor(const FrVec4& color)
+	{
+		glClearColor(color.r, color.g, color.b, color.a);
+	}
+
+	void GLCore::SetClearColor(const Vec4& color)
+	{
+		glClearColor(color.r, color.g, color.b, color.a);
+	}
+
 	void GLCore::Clear()
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

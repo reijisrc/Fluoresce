@@ -1,6 +1,6 @@
 //==============================================================================//
 // Name : GraphicsContext.h														// 
-// Describe : 	基底グラフィックスコンテキスト									// 
+// Describe : 	グラフィックスコンテキスト										// 
 // Author : Ding Qi																// 
 // Create Date : 2022/04/10														// 
 // Modify Date : 2022/04/10														// 
@@ -9,7 +9,7 @@
 
 namespace Fluoresce {
 
-	// 基底グラフィックスコンテキスト
+	// グラフィックスコンテキスト
 	class GraphicsContext
 	{
 	public:

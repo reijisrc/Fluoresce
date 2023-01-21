@@ -3,7 +3,7 @@
 // Describe : 	グラフィックスコア												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/04/10														// 
-// Modify Date : 2022/04/10														// 
+// Modify Date : 2022/04/23														// 
 //==============================================================================//
 #include "frpch.h"
 
@@ -11,8 +11,6 @@
 #include "Platform/OpenGL/GLCore.h"
 
 namespace Fluoresce {
-
-	GraphicsCore::API GraphicsCore::s_API = GraphicsCore::API::OpenGL4;
 
 	Scope<GraphicsCore> GraphicsCore::Create()
 	{
@@ -25,4 +23,9 @@ namespace Fluoresce {
 		FR_CORE_ASSERT(false, "Unknown GraphicsAPI!");
 		return nullptr;
 	}
+
+	// OpenGL4固定
+	GraphicsCore::API GraphicsCore::s_API = GraphicsCore::API::OpenGL4;
+
+	Scope<GraphicsCore> RenderCommand::s_GraphicsAPI = GraphicsCore::Create();
 }

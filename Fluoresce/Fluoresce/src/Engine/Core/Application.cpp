@@ -3,12 +3,14 @@
 // Describe : 	アプリケーション												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/03/22														// 
-// Modify Date : 2022/03/26														// 
+// Modify Date : 2022/04/23														// 
 //==============================================================================//
 #include "frpch.h"
 #include "Engine/Core/Application.h"
-
 #include "Engine/Core/Input.h"
+
+#include "Engine/Renderer/RenderPipeline.h"
+
 #include <glad/glad.h>
 
 namespace Fluoresce {
@@ -27,13 +29,7 @@ namespace Fluoresce {
 		m_Window = Window::Create(WindowProps(m_Specification.Name));
 		m_Window->SetEventCallBack(FR_BIND_EVENT_FN(Application::OnEvent));
 
-#ifdef FR_DEBUG
-		FR_CORE_INFO("Application Initialized:DEBUG");
-#elif FR_DEVELOPMENT
-		FR_CORE_INFO("Application Initialized:DEVELOPMENT");
-#elif FR_RELEASE
-		FR_CORE_INFO("Application Initialized:RELEASE");
-#endif
+		RenderPipeline::Init();
 	}
 
 	Application::~Application()
@@ -74,10 +70,13 @@ namespace Fluoresce {
 
 	void Application::Run()
 	{
+		static const FrVec4 clearColor = FrVec4(0.8f, 0.25f, 0.4f, 1.0f);
+
 		while (m_Running)
 		{
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			glClearColor(0.8, 0.25, 0.4, 1.0);
+			RenderCommand::Clear();
+			RenderCommand::SetClearColor(clearColor);
+
 			float32 time = m_Window->GetWindowTime();
 			DeltaTime deltatime = time - m_LastFrameTime;
 			m_LastFrameTime = time;
@@ -109,6 +108,7 @@ namespace Fluoresce {
 		}
 
 		m_Minimized = false;
+		RenderPipeline::OnWindowResize(e.GetWidth(), e.GetHeight());
 
 		return false;
 	}

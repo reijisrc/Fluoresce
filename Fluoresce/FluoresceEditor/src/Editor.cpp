@@ -16,7 +16,13 @@ namespace Fluoresce {
 		FluoresceEditor(const ApplicationSpecification& spec)
 			: Application(spec)
 		{
-			FR_CLIENT_INFO("Editor Initialized");
+#ifdef FR_DEBUG
+			FR_CLIENT_INFO("Application(DEBUG) Initialized");
+#elif FR_DEVELOPMENT
+			FR_CLIENT_INFO("Application(DEVELOPMENT) Initialized");
+#elif FR_RELEASE
+			FR_CLIENT_INFO("Application(RELEASE) Initialized");
+#endif
 		}
 	};
 

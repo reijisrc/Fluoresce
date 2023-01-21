@@ -13,6 +13,7 @@ struct GLFWwindow;
 
 namespace Fluoresce 
 {
+	// GLコンテキスト
 	class GLContext : public GraphicsContext
 	{
 	public:

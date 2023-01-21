@@ -11,10 +11,13 @@
 
 namespace Fluoresce 
 {
+	// GLÉRÉA
 	class GLCore : public GraphicsCore
 	{
 		virtual void Init() override;
 		virtual void SetViewport(uint32 x, uint32 y, uint32 width, uint32 height) override;
+		virtual void SetClearColor(const FrVec4& color) override;
+		virtual void SetClearColor(const Vec4& color) override;
 		virtual void Clear() override;
 
 		virtual void SetLineWidth(float32 width) override;
