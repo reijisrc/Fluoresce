@@ -3,7 +3,7 @@
 // Describe : 	アプリケーション												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/03/22														// 
-// Modify Date : 2022/04/23														// 
+// Modify Date : 2022/05/14														// 
 //==============================================================================//
 #include "frpch.h"
 #include "Engine/Core/Application.h"
@@ -30,6 +30,9 @@ namespace Fluoresce {
 		m_Window->SetEventCallBack(FR_BIND_EVENT_FN(Application::OnEvent));
 
 		RenderPipeline::Init();
+
+		m_ImGuiLayer = new ImGuiLayer();
+		PushOverlay(m_ImGuiLayer);
 	}
 
 	Application::~Application()
@@ -70,13 +73,8 @@ namespace Fluoresce {
 
 	void Application::Run()
 	{
-		static const FrVec4 clearColor = FrVec4(0.8f, 0.25f, 0.4f, 1.0f);
-
 		while (m_Running)
 		{
-			RenderCommand::Clear();
-			RenderCommand::SetClearColor(clearColor);
-
 			float32 time = m_Window->GetWindowTime();
 			DeltaTime deltatime = time - m_LastFrameTime;
 			m_LastFrameTime = time;
@@ -87,6 +85,13 @@ namespace Fluoresce {
 				{
 					layer->OnUpdate(deltatime);
 				}
+
+				m_ImGuiLayer->Begin();
+				for (Layer* layer : m_LayerStack)
+				{
+					layer->OnImGuiRender();
+				}
+				m_ImGuiLayer->End();
 			}
 
 			m_Window->OnUpdate();

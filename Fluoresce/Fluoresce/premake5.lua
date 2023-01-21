@@ -30,7 +30,8 @@ project "Fluoresce"
 		"%{IncludeDir.spdlog}",
 		"%{IncludeDir.glfw}",
 		"%{IncludeDir.glad}",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.imgui}"
 	}
    
    -- 追加のライブラリディレクトリ
@@ -39,7 +40,8 @@ project "Fluoresce"
 		"%{LibraryDir.spdlog}",
 		"%{LibraryDir.glfw}",
 		"%{LibraryDir.glad}",
-		"%{LibraryDir.glm}"
+		"%{LibraryDir.glm}",
+		"%{LibraryDir.imgui}"
    }
    
    -- 外部プロジェクトとリンク
@@ -62,7 +64,8 @@ project "Fluoresce"
 			"spdlog_debug.lib",
 			"glfw3_debug.lib",
 			"glad_debug.lib",
-			"glm_static_debug.lib"
+			"glm_static_debug.lib",
+			"imgui_debug.lib"
 		}
 		
    filter "configurations:Development"
@@ -75,7 +78,8 @@ project "Fluoresce"
 			"spdlog_debug.lib",
 			"glfw3_dev.lib",
 			"glad_debug.lib",
-			"glm_static_dev.lib"
+			"glm_static_dev.lib",
+			"imgui_debug.lib"
 		}
 
    filter "configurations:Release"
@@ -88,6 +92,7 @@ project "Fluoresce"
 			"spdlog.lib",
 			"glfw3.lib",
 			"glad.lib",
-			"glm_static.lib"
+			"glm_static.lib",
+			"imgui.lib"
 		}
 		

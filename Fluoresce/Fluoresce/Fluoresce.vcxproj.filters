@@ -13,6 +13,15 @@
     <Filter Include="Engine\Graphics">
       <UniqueIdentifier>{7B960115-E721-6FD9-F032-F2CD5C3DCBD9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\ImGui">
+      <UniqueIdentifier>{45756795-31D8-F639-DA5D-2FF0C69FC2BC}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Renderer">
+      <UniqueIdentifier>{E1119970-4D9D-0635-56AE-8929C2B86235}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Utils">
+      <UniqueIdentifier>{7B014596-6764-D43A-10EA-0CF1FC2BA0BD}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Platform">
       <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
     </Filter>
@@ -57,6 +66,9 @@
     <ClInclude Include="src\Engine\Core\Log.h">
       <Filter>Engine\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Core\MathDefine.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Core\MouseCodes.h">
       <Filter>Engine\Core</Filter>
     </ClInclude>
@@ -84,6 +96,15 @@
     <ClInclude Include="src\Engine\Graphics\GraphicsCore.h">
       <Filter>Engine\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\ImGui\ImguiLayer.h">
+      <Filter>Engine\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Renderer\RenderPipeline.h">
+      <Filter>Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Utils\GlmUtil.h">
+      <Filter>Engine\Utils</Filter>
+    </ClInclude>
     <ClInclude Include="src\Fluoresce.h" />
     <ClInclude Include="src\Platform\OpenGL\GLContext.h">
       <Filter>Platform\OpenGL</Filter>
@@ -95,9 +116,6 @@
       <Filter>Platform\Win64</Filter>
     </ClInclude>
     <ClInclude Include="src\frpch.h" />
-    <ClInclude Include="src\Engine\Core\MathDefine.h" />
-    <ClInclude Include="src\Engine\Utils\GlmUtil.h" />
-    <ClInclude Include="src\Engine\Renderer\RenderPipeline.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Engine\Core\Application.cpp">
@@ -118,6 +136,15 @@
     <ClCompile Include="src\Engine\Graphics\GraphicsCore.cpp">
       <Filter>Engine\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\ImGui\ImguiImpl.cpp">
+      <Filter>Engine\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\ImGui\ImguiLayer.cpp">
+      <Filter>Engine\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Renderer\RenderPipeline.cpp">
+      <Filter>Engine\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\GLContext.cpp">
       <Filter>Platform\OpenGL</Filter>
     </ClCompile>
@@ -131,6 +158,5 @@
       <Filter>Platform\Win64</Filter>
     </ClCompile>
     <ClCompile Include="src\frpch.cpp" />
-    <ClCompile Include="src\Engine\Renderer\RenderPipeline.cpp" />
   </ItemGroup>
 </Project>

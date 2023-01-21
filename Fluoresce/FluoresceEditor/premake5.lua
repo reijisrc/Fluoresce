@@ -19,7 +19,8 @@ project "FluoresceEditor"
    {
 		"%{wks.location}/Fluoresce/src",
 		"%{IncludeDir.spdlog}",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.imgui}"
    }
    
    -- 外部プロジェクトとリンク

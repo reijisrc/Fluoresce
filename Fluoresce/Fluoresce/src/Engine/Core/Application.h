@@ -3,7 +3,7 @@
 // Describe : 	アプリケーション												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/03/22														// 
-// Modify Date : 2022/03/26														// 
+// Modify Date : 2022/05/14														// 
 //==============================================================================//
 #pragma once
 
@@ -14,6 +14,8 @@
 #include "Engine/Events/Event.h"
 #include "Engine/Core/LayerStack.h"
 #include "Engine/Core/DataDefine.h"
+
+#include "Engine/ImGui/ImGuiLayer.h"
 
 int main(int argc, char** argv);
 
@@ -35,7 +37,7 @@ namespace Fluoresce {
 	// アプリケーション スペック
 	struct ApplicationSpecification
 	{
-		std::string Name = "Fluoresce Engine";
+		std::string Name = "Fluoresce";
 		std::string WorkingDirectory;
 		CommandLineArgs CmdLineArgs;
 	};
@@ -56,6 +58,8 @@ namespace Fluoresce {
 
 		void Close();
 
+		ImGuiLayer* GetImGuiLayer() { return m_ImGuiLayer; }
+
 		static Application& Get() { return *s_Instance; }
 
 		const ApplicationSpecification& GetSpecification() const { return m_Specification; }
@@ -68,6 +72,7 @@ namespace Fluoresce {
 	private:
 		ApplicationSpecification m_Specification;
 		std::unique_ptr<Window> m_Window;
+		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		bool m_Minimized = false;
 		LayerStack	m_LayerStack;
