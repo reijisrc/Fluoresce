@@ -3,11 +3,12 @@
 // Describe : 	アプリケーション(エディター)									// 
 // Author : Ding Qi																// 
 // Create Date : 2022/05/14														// 
-// Modify Date : 2022/05/14														// 
+// Modify Date : 2022/05/29														// 
 //==============================================================================//
 #include "Fluoresce.h"
 #include "Engine/Core/EnterPoint.h"
 
+#include "EditorCore.h"
 #include "EditorLayer.h"
 
 namespace Fluoresce {
@@ -18,7 +19,13 @@ namespace Fluoresce {
 		FluoresceApp(const ApplicationSpecification& spec)
 			: Application(spec)
 		{
-			PushLayer(new EditorLayer());
+			Editor::EditorCore::Init();
+			PushLayer(new Editor::EditorLayer());
+		}
+
+		~FluoresceApp()
+		{
+			Editor::EditorCore::ShutDown();
 		}
 	};
 

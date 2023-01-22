@@ -20,7 +20,8 @@ project "Fluoresce"
   	defines
 	{
 		"_CRT_SECURE_NO_WARNINGS",
-		"GLFW_INCLUDE_NONE"
+		"GLFW_INCLUDE_NONE",
+		"YAML_CPP_STATIC_DEFINE"
 	}
 	
 	-- 追加のインクルードディレクトリ
@@ -31,7 +32,8 @@ project "Fluoresce"
 		"%{IncludeDir.glfw}",
 		"%{IncludeDir.glad}",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.imgui}"
+		"%{IncludeDir.imgui}",
+		"%{IncludeDir.yaml_cpp}"
 	}
    
    -- 追加のライブラリディレクトリ
@@ -41,7 +43,8 @@ project "Fluoresce"
 		"%{LibraryDir.glfw}",
 		"%{LibraryDir.glad}",
 		"%{LibraryDir.glm}",
-		"%{LibraryDir.imgui}"
+		"%{LibraryDir.imgui}",
+		"%{LibraryDir.yaml_cpp}"
    }
    
    -- 外部プロジェクトとリンク
@@ -65,7 +68,8 @@ project "Fluoresce"
 			"glfw3_debug.lib",
 			"glad_debug.lib",
 			"glm_static_debug.lib",
-			"imgui_debug.lib"
+			"imgui_debug.lib",
+			"yaml-cpp_debug.lib"
 		}
 		
    filter "configurations:Development"
@@ -79,7 +83,8 @@ project "Fluoresce"
 			"glfw3_dev.lib",
 			"glad_debug.lib",
 			"glm_static_dev.lib",
-			"imgui_debug.lib"
+			"imgui_debug.lib",
+			"yaml-cpp_debug.lib"
 		}
 
    filter "configurations:Release"
@@ -93,6 +98,7 @@ project "Fluoresce"
 			"glfw3.lib",
 			"glad.lib",
 			"glm_static.lib",
-			"imgui.lib"
+			"imgui.lib",
+			"yaml-cpp.lib"
 		}
 		

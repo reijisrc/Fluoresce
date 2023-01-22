@@ -3,7 +3,7 @@
 // Describe : 	Imguiレイヤー													// 
 // Author : Ding Qi																// 
 // Create Date : 2022/05/14														// 
-// Modify Date : 2022/05/14														// 
+// Modify Date : 2022/05/29														// 
 //==============================================================================//
 #pragma once
 
@@ -15,11 +15,13 @@
 namespace Fluoresce {
 
 	// Imguiレイヤー
-	class ImGuiLayer : public Layer
+	class ImguiLayer : public Layer
 	{
 	public:
-		ImGuiLayer();
-		~ImGuiLayer();
+		using CostomItemColor = std::array<FrVec4, 18>;
+	public:
+		ImguiLayer();
+		~ImguiLayer();
 
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
@@ -31,7 +33,17 @@ namespace Fluoresce {
 
 		void DockspaceBegin();
 		void DockspaceEnd();
+
+		void SetDefaultFont();
+		void SetFont(sint32 index);
+		sint32 GetFontIndex() const { return m_FontIndex; };
+
+		void SetDefaultItemColor();
+		void SetItemColor(const CostomItemColor& itemcolor);
+		const CostomItemColor& GetCostomItemColor() const { return m_ItemColor; };
 	private:
 		bool m_BlockEvents = true;
+		sint32	m_FontIndex = 0;
+		CostomItemColor m_ItemColor;
 	};
 }

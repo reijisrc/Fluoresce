@@ -99,6 +99,9 @@
     <ClInclude Include="src\Engine\ImGui\ImguiLayer.h">
       <Filter>Engine\ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\ImGui\ImguiSerializer.h">
+      <Filter>Engine\ImGui</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Renderer\RenderPipeline.h">
       <Filter>Engine\Renderer</Filter>
     </ClInclude>
@@ -140,6 +143,9 @@
       <Filter>Engine\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\ImGui\ImguiLayer.cpp">
+      <Filter>Engine\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\ImGui\ImguiSerializer.cpp">
       <Filter>Engine\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Renderer\RenderPipeline.cpp">

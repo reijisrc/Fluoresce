@@ -3,7 +3,7 @@
 // Describe : 	アプリケーション												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/03/22														// 
-// Modify Date : 2022/05/14														// 
+// Modify Date : 2022/05/29														// 
 //==============================================================================//
 #pragma once
 
@@ -58,7 +58,7 @@ namespace Fluoresce {
 
 		void Close();
 
-		ImGuiLayer* GetImGuiLayer() { return m_ImGuiLayer; }
+		ImguiLayer* GetImguiLayer() { return m_ImguiLayer; }
 
 		static Application& Get() { return *s_Instance; }
 
@@ -72,7 +72,7 @@ namespace Fluoresce {
 	private:
 		ApplicationSpecification m_Specification;
 		std::unique_ptr<Window> m_Window;
-		ImGuiLayer* m_ImGuiLayer;
+		ImguiLayer* m_ImguiLayer;
 		bool m_Running = true;
 		bool m_Minimized = false;
 		LayerStack	m_LayerStack;

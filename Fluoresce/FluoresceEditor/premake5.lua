@@ -17,10 +17,11 @@ project "FluoresceEditor"
 	-- 追加のインクルードディレクトリ
    includedirs
    {
+		"src",
 		"%{wks.location}/Fluoresce/src",
 		"%{IncludeDir.spdlog}",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.imgui}"
+		"%{IncludeDir.imgui}",
    }
    
    -- 外部プロジェクトとリンク

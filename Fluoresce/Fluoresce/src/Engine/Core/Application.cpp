@@ -11,8 +11,6 @@
 
 #include "Engine/Renderer/RenderPipeline.h"
 
-#include <glad/glad.h>
-
 namespace Fluoresce {
 
 	Application* Application::s_Instance = nullptr;
@@ -31,8 +29,8 @@ namespace Fluoresce {
 
 		RenderPipeline::Init();
 
-		m_ImGuiLayer = new ImGuiLayer();
-		PushOverlay(m_ImGuiLayer);
+		m_ImguiLayer = new ImguiLayer();
+		PushOverlay(m_ImguiLayer);
 	}
 
 	Application::~Application()
@@ -86,12 +84,12 @@ namespace Fluoresce {
 					layer->OnUpdate(deltatime);
 				}
 
-				m_ImGuiLayer->Begin();
+				m_ImguiLayer->Begin();
 				for (Layer* layer : m_LayerStack)
 				{
-					layer->OnImGuiRender();
+					layer->OnImguiRender();
 				}
-				m_ImGuiLayer->End();
+				m_ImguiLayer->End();
 			}
 
 			m_Window->OnUpdate();
