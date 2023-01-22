@@ -7,7 +7,6 @@
 //==============================================================================//
 #include "EditorLayer.h"
 
-//#include "EditorCore.h"
 #include "Engine/Graphics/GraphicsCore.h"
 
 #include <imgui.h>

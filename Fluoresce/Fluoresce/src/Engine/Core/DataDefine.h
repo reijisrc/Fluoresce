@@ -3,7 +3,7 @@
 // Describe :	データ定義														// 
 // Author : Ding Qi																// 
 // Create Date : 2022/03/22														// 
-// Modify Date : 2022/03/26														// 
+// Modify Date : 2022/08/13														// 
 //==============================================================================//
 #pragma once
 
@@ -32,6 +32,7 @@ namespace Fluoresce {
 	template<typename T>
 	using WeakRef = std::weak_ptr<T>;
 
+	// データ転送用汎用Vec4 
 	struct FrVec4
 	{
 		union
