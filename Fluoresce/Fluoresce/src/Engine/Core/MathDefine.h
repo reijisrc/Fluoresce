@@ -3,12 +3,13 @@
 // Describe :	数学データ定義													// 
 // Author : Ding Qi																// 
 // Create Date : 2022/04/23														// 
-// Modify Date : 2022/04/23														// 
+// Modify Date : 2022/10/15														// 
 //==============================================================================//
 #pragma once
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Fluoresce {
 

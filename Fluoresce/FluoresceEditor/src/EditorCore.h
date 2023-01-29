@@ -3,7 +3,7 @@
 // Describe : 	エディターコア													// 
 // Author : Ding Qi																// 
 // Create Date : 2022/05/29														// 
-// Modify Date : 2022/05/29														// 
+// Modify Date : 2022/10/15														// 
 //==============================================================================//
 #pragma once
 
@@ -35,6 +35,8 @@ namespace Fluoresce {
 			static std::filesystem::path& GetPath(EditorPath path);
 
 			static const std::string GetConfigPath();
+
+			static Ref<Texture2D> LoadTextureAsset(const std::string& path);
 		};
 	}
 };

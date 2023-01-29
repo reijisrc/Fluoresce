@@ -3,7 +3,7 @@
 // Describe :	スプライトレンダラー											// 
 // Author : Ding Qi																// 
 // Create Date : 2022/08/15														// 
-// Modify Date : 2022/08/15														// 
+// Modify Date : 2022/10/15														// 
 //==============================================================================//
 #include "frpch.h"
 #include "Engine/Renderer/SpriteRenderer.h"
@@ -21,6 +21,7 @@ namespace Fluoresce {
 	constexpr uint32 maxVectices = maxQuad * 4;
 	constexpr uint32 maxIndices = maxQuad * 6;
 	constexpr size_t quadVertexCount = 4;
+	constexpr uint32 maxTextureSlots = 32;
 
 	// スプライトデフォルト頂点座標とUV座標
 	static Vec4 s_DefaultVertexPositions[quadVertexCount] =
@@ -57,6 +58,9 @@ namespace Fluoresce {
 		uint32 QuadIndexCount = 0;
 		QuadVertex* QuadVertexBufferBase = nullptr;
 		QuadVertex* QuadVertexBufferPtr = nullptr;
+
+		std::array<Ref<Texture2D>, maxTextureSlots> TextureSlots;
+		uint32_t TextureSlotIndex = 1;
 	};
 
     void SpriteRenderer::Init(const std::string& shaderPath)
@@ -95,6 +99,8 @@ namespace Fluoresce {
 		Ref<IndexBuffer> quadIB = IndexBuffer::Create(quadIndices, maxIndices);
 		m_Data->VertexArray->SetIndexBuffer(quadIB);
 		delete[] quadIndices;
+
+		m_Data->TextureSlots[0] = RenderPipeline::GetWhiteTexture();
     }
 
 	void SpriteRenderer::ShutDown()
@@ -109,6 +115,11 @@ namespace Fluoresce {
 		{
 			uint32_t dataSize = (uint32_t)((uint8_t*)m_Data->QuadVertexBufferPtr - (uint8_t*)m_Data->QuadVertexBufferBase);
 			m_Data->VertexBuffer->SetData(m_Data->QuadVertexBufferBase, dataSize);
+
+			for (uint32_t i = 0; i < m_Data->TextureSlotIndex; i++)
+			{
+				m_Data->TextureSlots[i]->Bind(i);
+			}
 
 			m_Data->Shader->Bind();
 			RenderCommand::DrawIndexed(m_Data->VertexArray, m_Data->QuadIndexCount);
@@ -168,6 +179,56 @@ namespace Fluoresce {
 			m_Data->QuadVertexBufferPtr->TexCoord = s_DefaultTexCoord[i];
 			m_Data->QuadVertexBufferPtr->TexIndex = 0.0f;
 			m_Data->QuadVertexBufferPtr->TilingFactor = 1.0f;
+			m_Data->QuadVertexBufferPtr++;
+		}
+
+		m_Data->QuadIndexCount += 6;
+
+		m_Stats.VertexCount += quadVertexCount;
+		m_Stats.IndexCount += 6;
+	}
+
+	void SpriteRenderer::DrawSprite(const Vec3& position, const Vec2& size, const Vec4& color, const Ref<Texture2D>& texture, float32 tilingFactor)
+	{
+		Mat4 transform = glm::translate(glm::mat4(1.0f), position)
+			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+
+		DrawSprite(transform, color, texture, tilingFactor);
+	}
+
+	void SpriteRenderer::DrawSprite(const Mat4& transform, const Vec4& color, const Ref<Texture2D>& texture, float32 tilingFactor)
+	{
+		if (m_Data->QuadIndexCount >= maxIndices)
+			NextBatch();
+
+		float32 textureIndex = 0.0f;
+		for (uint32_t i = 1; i < m_Data->TextureSlotIndex; i++)
+		{
+			if (*m_Data->TextureSlots[i] == *texture)
+			{
+				textureIndex = (float32)i;
+				break;
+			}
+		}
+
+		if (textureIndex == 0.0f)
+		{
+			if (m_Data->TextureSlotIndex >= maxTextureSlots)
+				NextBatch();
+
+			textureIndex = (float32)m_Data->TextureSlotIndex;
+			m_Data->TextureSlots[m_Data->TextureSlotIndex] = texture;
+			m_Data->TextureSlotIndex++;
+		}
+
+		for (size_t i = 0; i < quadVertexCount; i++)
+		{
+			Vec3 pos = transform * s_DefaultVertexPositions[i];
+			m_Data->QuadVertexBufferPtr->Position = pos;
+			m_Data->QuadVertexBufferPtr->Color = color;
+			m_Data->QuadVertexBufferPtr->TexCoord = s_DefaultTexCoord[i];
+			m_Data->QuadVertexBufferPtr->TexIndex = textureIndex;
+			m_Data->QuadVertexBufferPtr->TilingFactor = tilingFactor;
 			m_Data->QuadVertexBufferPtr++;
 		}
 

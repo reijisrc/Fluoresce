@@ -3,12 +3,12 @@
 // Describe : 	エディターコア													// 
 // Author : Ding Qi																// 
 // Create Date : 2022/05/29														// 
-// Modify Date : 2022/05/29														// 
+// Modify Date : 2022/10/15														// 
 //==============================================================================//
 #include "EditorCore.h"
 #include "Engine/ImGui/ImguiSerializer.h"
 
-#define EDITOR_VERSION               "0.31"
+#define EDITOR_VERSION               "0.40"
 
 namespace Fluoresce {
 
@@ -103,6 +103,14 @@ namespace Fluoresce {
 			path += "/editor.config";
 
 			return path;
+		}
+
+		Ref<Texture2D> EditorCore::LoadTextureAsset(const std::string& path)
+		{
+			std::string texturePath = EditorCore::GetPath(EditorPath::_AssetsPath).string();
+			texturePath += "/textures/";
+			texturePath += path;
+			return Texture2D::Create(texturePath);
 		}
 	}
 }

@@ -13,7 +13,9 @@ project "Fluoresce"
 	files 
 	{
 		"src/**.h",
-		"src/**.cpp"
+		"src/**.cpp",
+		"dependencies/stb_image/**.h",
+		"dependencies/stb_image/**.cpp"
 	}
 
 	-- プリプロセッサ
@@ -33,7 +35,8 @@ project "Fluoresce"
 		"%{IncludeDir.glad}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.imgui}",
-		"%{IncludeDir.yaml_cpp}"
+		"%{IncludeDir.yaml_cpp}",
+		"%{IncludeDir.stb_image}"
 	}
    
    -- 追加のライブラリディレクトリ

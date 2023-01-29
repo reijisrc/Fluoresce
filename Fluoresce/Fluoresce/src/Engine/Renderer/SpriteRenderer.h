@@ -3,11 +3,12 @@
 // Describe :	スプライトレンダラー											// 
 // Author : Ding Qi																// 
 // Create Date : 2022/08/15														// 
-// Modify Date : 2022/08/15														// 
+// Modify Date : 2022/10/15														//  
 //==============================================================================//
 #pragma once
 
 #include "Engine/Graphics/Camera.h"
+#include "Engine/Graphics/Texture.h"
 #include "Engine/Renderer/BatchRenderer.h"
 
 namespace Fluoresce {
@@ -28,6 +29,9 @@ namespace Fluoresce {
 
 		void DrawQuad(const Vec3& position, const Vec2& size, const Vec4& color);
 		void DrawQuad(const Mat4& transform, const Vec4& color);
+
+		void DrawSprite(const Vec3& positon, const Vec2& size, const Vec4& color, const Ref<Texture2D>& texture, float32 tilingFactor = 1.0f);
+		void DrawSprite(const Mat4& transform, const Vec4& color, const Ref<Texture2D>& texture, float32 tilingFactor = 1.0f);
 	private:
 		struct RendererData;
 		RendererData* m_Data;
