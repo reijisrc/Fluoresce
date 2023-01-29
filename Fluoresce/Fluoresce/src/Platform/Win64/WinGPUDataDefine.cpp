@@ -64,7 +64,7 @@ namespace Fluoresce
 	}
 
 	BufferElements::BufferElements(GPUDataType type, const std::string& name, bool normalized)
-		: Name(name), Type(type), Size(GetGPUDataTypeCount(type)), Offset(0), Normalized(normalized)
+		: Name(name), Type(type), Size(GetGPUDataTypeSize(type)), Offset(0), Normalized(normalized)
 	{
 
 	}

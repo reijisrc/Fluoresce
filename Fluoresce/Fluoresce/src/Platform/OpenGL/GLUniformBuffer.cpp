@@ -24,7 +24,6 @@ namespace Fluoresce {
 		glDeleteBuffers(1, &m_RendererID);
 	}
 
-
 	void GLUniformBuffer::SetData(const void* data, uint32 size, uint32 offset)
 	{
 		glNamedBufferSubData(m_RendererID, offset, size, data);

@@ -35,7 +35,7 @@ namespace Fluoresce {
 
 	Application::~Application()
 	{
-
+		RenderPipeline::ShutDown();
 	}
 
 	void Application::OnEvent(Event& e)

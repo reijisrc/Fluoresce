@@ -90,10 +90,31 @@
     <ClInclude Include="src\Engine\Events\MouseEvent.h">
       <Filter>Engine\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Graphics\Camera.h">
+      <Filter>Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Graphics\GPUDataDefine.h">
+      <Filter>Engine\Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Graphics\GraphicsContext.h">
       <Filter>Engine\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Graphics\GraphicsCore.h">
+      <Filter>Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Graphics\IndexBuffer.h">
+      <Filter>Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Graphics\Shader.h">
+      <Filter>Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Graphics\UniformBuffer.h">
+      <Filter>Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Graphics\VertexArray.h">
+      <Filter>Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Graphics\VertexBuffer.h">
       <Filter>Engine\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\ImGui\ImguiLayer.h">
@@ -102,34 +123,47 @@
     <ClInclude Include="src\Engine\ImGui\ImguiSerializer.h">
       <Filter>Engine\ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Renderer\BatchRenderer.h">
+      <Filter>Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Renderer\LineRenderer.h">
+      <Filter>Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Renderer\RenderCommand.h">
+      <Filter>Engine\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Renderer\RenderPipeline.h">
+      <Filter>Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Renderer\SpriteRenderer.h">
       <Filter>Engine\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Utils\GlmUtil.h">
       <Filter>Engine\Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\Fluoresce.h" />
+    <ClInclude Include="src\Platform\OpenGL\GLBuffer.h">
+      <Filter>Platform\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\GLContext.h">
       <Filter>Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\GLCore.h">
       <Filter>Platform\OpenGL</Filter>
     </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\GLShader.h">
+      <Filter>Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\GLUniformBuffer.h">
+      <Filter>Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\GLVertexArray.h">
+      <Filter>Platform\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\Platform\Win64\WinWindow.h">
       <Filter>Platform\Win64</Filter>
     </ClInclude>
     <ClInclude Include="src\frpch.h" />
-    <ClInclude Include="src\Engine\Graphics\VertexBuffer.h" />
-    <ClInclude Include="src\Engine\Graphics\GPUDataDefine.h" />
-    <ClInclude Include="src\Engine\Graphics\IndexBuffer.h" />
-    <ClInclude Include="src\Platform\OpenGL\GLBuffer.h" />
-    <ClInclude Include="src\Engine\Graphics\Shader.h" />
-    <ClInclude Include="src\Engine\Graphics\Camera.h" />
-    <ClInclude Include="src\Platform\OpenGL\GLShader.h" />
-    <ClInclude Include="src\Engine\Graphics\UniformBuffer.h" />
-    <ClInclude Include="src\Platform\OpenGL\GLUniformBuffer.h" />
-    <ClInclude Include="src\Platform\OpenGL\GLVertexArray.h" />
-    <ClInclude Include="src\Engine\Graphics\VertexArray.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Engine\Core\Application.cpp">
@@ -144,10 +178,28 @@
     <ClCompile Include="src\Engine\Core\Log.cpp">
       <Filter>Engine\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Graphics\Camera.cpp">
+      <Filter>Engine\Graphics</Filter>
+    </ClCompile>
     <ClCompile Include="src\Engine\Graphics\GraphicsContext.cpp">
       <Filter>Engine\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Graphics\GraphicsCore.cpp">
+      <Filter>Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Graphics\IndexBuffer.cpp">
+      <Filter>Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Graphics\Shader.cpp">
+      <Filter>Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Graphics\UniformBuffer.cpp">
+      <Filter>Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Graphics\VertexArray.cpp">
+      <Filter>Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Graphics\VertexBuffer.cpp">
       <Filter>Engine\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\ImGui\ImguiImpl.cpp">
@@ -159,14 +211,41 @@
     <ClCompile Include="src\Engine\ImGui\ImguiSerializer.cpp">
       <Filter>Engine\ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Renderer\BatchRenderer.cpp">
+      <Filter>Engine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Renderer\LineRenderer.cpp">
+      <Filter>Engine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Renderer\RenderCommand.cpp">
+      <Filter>Engine\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Engine\Renderer\RenderPipeline.cpp">
       <Filter>Engine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Renderer\SpriteRenderer.cpp">
+      <Filter>Engine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\GLBuffer.cpp">
+      <Filter>Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\GLContext.cpp">
       <Filter>Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\GLCore.cpp">
       <Filter>Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\GLShader.cpp">
+      <Filter>Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\GLUniformBuffer.cpp">
+      <Filter>Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\GLVertexArray.cpp">
+      <Filter>Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\Win64\WinGPUDataDefine.cpp">
+      <Filter>Platform\Win64</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\Win64\WinInput.cpp">
       <Filter>Platform\Win64</Filter>
@@ -175,16 +254,5 @@
       <Filter>Platform\Win64</Filter>
     </ClCompile>
     <ClCompile Include="src\frpch.cpp" />
-    <ClCompile Include="src\Engine\Graphics\VertexBuffer.cpp" />
-    <ClCompile Include="src\Platform\Win64\WinGPUDataDefine.cpp" />
-    <ClCompile Include="src\Engine\Graphics\IndexBuffer.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\GLBuffer.cpp" />
-    <ClCompile Include="src\Engine\Graphics\Shader.cpp" />
-    <ClCompile Include="src\Engine\Graphics\Camera.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\GLShader.cpp" />
-    <ClCompile Include="src\Engine\Graphics\UniformBuffer.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\GLUniformBuffer.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\GLVertexArray.cpp" />
-    <ClCompile Include="src\Engine\Graphics\VertexArray.cpp" />
   </ItemGroup>
 </Project>

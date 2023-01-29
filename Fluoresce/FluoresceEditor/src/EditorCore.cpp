@@ -59,8 +59,7 @@ namespace Fluoresce {
 				// デフォルト設定
 				else
 				{
-					auto pImguiLayer = Application::Get().GetImguiLayer();
-					if (pImguiLayer)
+					if (auto pImguiLayer = Application::Get().GetImguiLayer(); pImguiLayer)
 					{
 						pImguiLayer->SetDefaultFont();
 						pImguiLayer->SetDefaultItemColor();

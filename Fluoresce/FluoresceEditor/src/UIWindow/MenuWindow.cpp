@@ -18,8 +18,7 @@ namespace Fluoresce {
 	{
 		MenuWindow::MenuWindow()
 		{
-			auto pImguiLayer = Application::Get().GetImguiLayer();
-			if (pImguiLayer)
+			if (auto pImguiLayer = Application::Get().GetImguiLayer(); pImguiLayer)
 			{
 				m_LocalFontIndex = pImguiLayer->GetFontIndex();
 				m_LocalItemColor = pImguiLayer->GetCostomItemColor();
@@ -50,27 +49,20 @@ namespace Fluoresce {
 				ImGui::EndTabBar();
 			}
 		
+			if (auto pImguiLayer = Application::Get().GetImguiLayer(); pImguiLayer)
 			{
-				auto pImguiLayer = Application::Get().GetImguiLayer();
-
 				if (ImGui::Button("Save"))
 				{
-					if (pImguiLayer)
-					{
-						ImguiSerializer serializer;
-						serializer.Serialize(EditorCore::GetConfigPath(), m_LocalFontIndex, m_LocalItemColor);
-					}
+					ImguiSerializer serializer;
+					serializer.Serialize(EditorCore::GetConfigPath(), m_LocalFontIndex, m_LocalItemColor);
 				}
 				ImGui::SameLine();
 				if(ImGui::Button("Default"))
 				{
-					if (pImguiLayer)
-					{
-						pImguiLayer->SetDefaultFont();
-						pImguiLayer->SetDefaultItemColor();
-						m_LocalFontIndex = pImguiLayer->GetFontIndex();
-						m_LocalItemColor = pImguiLayer->GetCostomItemColor();
-					}
+					pImguiLayer->SetDefaultFont();
+					pImguiLayer->SetDefaultItemColor();
+					m_LocalFontIndex = pImguiLayer->GetFontIndex();
+					m_LocalItemColor = pImguiLayer->GetCostomItemColor();
 				}
 			}
 

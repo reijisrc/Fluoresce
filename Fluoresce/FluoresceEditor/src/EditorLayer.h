@@ -29,9 +29,12 @@ namespace Fluoresce {
 
 		private:
 			void DrawMenuBar();
-
+			void DrawRenderStats();
 		private:
 			MenuWindow	m_MenuWindow;
+			Ref<VertexArray>	VertexArray;
+			Ref<VertexBuffer>	VertexBuffer;
+			Ref<Shader>			Shader;
 		};
 	}
 };

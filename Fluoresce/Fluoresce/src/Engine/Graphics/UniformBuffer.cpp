@@ -13,7 +13,7 @@
 
 namespace Fluoresce {
 
-	Ref<UniformBuffer> UniformBuffer::Create(uint32_t size, uint32_t binding)
+	Ref<UniformBuffer> UniformBuffer::Create(uint32 size, uint32 binding)
 	{
 		switch (GraphicsCore::GetAPI())
 		{

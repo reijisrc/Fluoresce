@@ -116,7 +116,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;spdlog_debug.lib;glfw3_dev.lib;glad_debug.lib;glm_static_dev.lib;imgui_debug.lib;yaml-cpp_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;spdlog_debug.lib;glfw3_dev.lib;glad_debug.lib;glm_static_dev.lib;imgui_debug.lib;yaml-cpp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>dependencies\spdlog\lib;dependencies\glfw\lib;dependencies\glad\lib;dependencies\glm\lib;dependencies\imgui\lib;dependencies\yaml-cpp\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
@@ -167,24 +167,28 @@
     <ClInclude Include="src\Engine\Events\KeyEvent.h" />
     <ClInclude Include="src\Engine\Events\MouseEvent.h" />
     <ClInclude Include="src\Engine\Graphics\Camera.h" />
-    <ClInclude Include="src\Engine\Graphics\VertexArray.h" />
-    <ClInclude Include="src\Platform\OpenGL\GLUniformBuffer.h" />
-    <ClInclude Include="src\Engine\Graphics\IndexBuffer.h" />
-    <ClInclude Include="src\Engine\Graphics\Shader.h" />
-    <ClInclude Include="src\Engine\Graphics\UniformBuffer.h" />
-    <ClInclude Include="src\Engine\Graphics\VertexBuffer.h" />
     <ClInclude Include="src\Engine\Graphics\GPUDataDefine.h" />
     <ClInclude Include="src\Engine\Graphics\GraphicsContext.h" />
     <ClInclude Include="src\Engine\Graphics\GraphicsCore.h" />
+    <ClInclude Include="src\Engine\Graphics\IndexBuffer.h" />
+    <ClInclude Include="src\Engine\Graphics\Shader.h" />
+    <ClInclude Include="src\Engine\Graphics\UniformBuffer.h" />
+    <ClInclude Include="src\Engine\Graphics\VertexArray.h" />
+    <ClInclude Include="src\Engine\Graphics\VertexBuffer.h" />
     <ClInclude Include="src\Engine\ImGui\ImguiLayer.h" />
     <ClInclude Include="src\Engine\ImGui\ImguiSerializer.h" />
+    <ClInclude Include="src\Engine\Renderer\BatchRenderer.h" />
+    <ClInclude Include="src\Engine\Renderer\LineRenderer.h" />
+    <ClInclude Include="src\Engine\Renderer\RenderCommand.h" />
     <ClInclude Include="src\Engine\Renderer\RenderPipeline.h" />
+    <ClInclude Include="src\Engine\Renderer\SpriteRenderer.h" />
     <ClInclude Include="src\Engine\Utils\GlmUtil.h" />
     <ClInclude Include="src\Fluoresce.h" />
     <ClInclude Include="src\Platform\OpenGL\GLBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\GLContext.h" />
     <ClInclude Include="src\Platform\OpenGL\GLCore.h" />
     <ClInclude Include="src\Platform\OpenGL\GLShader.h" />
+    <ClInclude Include="src\Platform\OpenGL\GLUniformBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\GLVertexArray.h" />
     <ClInclude Include="src\Platform\Win64\WinWindow.h" />
     <ClInclude Include="src\frpch.h" />
@@ -195,22 +199,26 @@
     <ClCompile Include="src\Engine\Core\LayerStack.cpp" />
     <ClCompile Include="src\Engine\Core\Log.cpp" />
     <ClCompile Include="src\Engine\Graphics\Camera.cpp" />
-    <ClCompile Include="src\Engine\Graphics\VertexArray.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\GLUniformBuffer.cpp" />
+    <ClCompile Include="src\Engine\Graphics\GraphicsContext.cpp" />
+    <ClCompile Include="src\Engine\Graphics\GraphicsCore.cpp" />
     <ClCompile Include="src\Engine\Graphics\IndexBuffer.cpp" />
     <ClCompile Include="src\Engine\Graphics\Shader.cpp" />
     <ClCompile Include="src\Engine\Graphics\UniformBuffer.cpp" />
+    <ClCompile Include="src\Engine\Graphics\VertexArray.cpp" />
     <ClCompile Include="src\Engine\Graphics\VertexBuffer.cpp" />
-    <ClCompile Include="src\Engine\Graphics\GraphicsContext.cpp" />
-    <ClCompile Include="src\Engine\Graphics\GraphicsCore.cpp" />
     <ClCompile Include="src\Engine\ImGui\ImguiImpl.cpp" />
     <ClCompile Include="src\Engine\ImGui\ImguiLayer.cpp" />
     <ClCompile Include="src\Engine\ImGui\ImguiSerializer.cpp" />
+    <ClCompile Include="src\Engine\Renderer\BatchRenderer.cpp" />
+    <ClCompile Include="src\Engine\Renderer\LineRenderer.cpp" />
+    <ClCompile Include="src\Engine\Renderer\RenderCommand.cpp" />
     <ClCompile Include="src\Engine\Renderer\RenderPipeline.cpp" />
+    <ClCompile Include="src\Engine\Renderer\SpriteRenderer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\GLBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\GLContext.cpp" />
     <ClCompile Include="src\Platform\OpenGL\GLCore.cpp" />
     <ClCompile Include="src\Platform\OpenGL\GLShader.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\GLUniformBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\GLVertexArray.cpp" />
     <ClCompile Include="src\Platform\Win64\WinGPUDataDefine.cpp" />
     <ClCompile Include="src\Platform\Win64\WinInput.cpp" />

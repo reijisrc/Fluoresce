@@ -7,24 +7,40 @@
 //==============================================================================//
 #pragma once
 
-#include "Engine/Graphics/GraphicsCore.h"
+#include "Engine/Graphics/UniformBuffer.h"
+#include "Engine/Renderer/LineRenderer.h"
+#include "Engine/Renderer/SpriteRenderer.h"
 
 namespace Fluoresce 
 {
+
 	//	レンダーパイプライン
 	class RenderPipeline
 	{
 	public:
+		enum class UniformBufferIndex
+		{
+			Camera = 0,
+			Max,
+		};
+
+		struct CameraData
+		{
+			Mat4 ViewProjection;
+		};
+
+	public:
 		static void Init();
+		static void ShutDown();
+
 		static void OnWindowResize(uint32 width, uint32 height);
 
-		static void BeginScene(const Mat4& transform, const Mat4& projection);
-		static void EndScene();
-
-		static GraphicsCore::API GetAPI() { return GraphicsCore::GetAPI(); }
-
+		static Ref<UniformBuffer> GetUniformBuffer(UniformBufferIndex index);
+		static LineRenderer& GetLineRenderer();
+		static SpriteRenderer& GetSpriteRenderer();
 	private:
-		struct SceneData;
-		static SceneData* m_SceneData;
+		static std::vector<Ref<UniformBuffer>> s_UniformBuffers;
+		static Scope<LineRenderer> s_LineRenderer;
+		static Scope<SpriteRenderer> s_SpriteRenderer;
 	};
 }

@@ -84,7 +84,7 @@ project "Fluoresce"
 			"glad_debug.lib",
 			"glm_static_dev.lib",
 			"imgui_debug.lib",
-			"yaml-cpp_debug.lib"
+			"yaml-cpp.lib"
 		}
 
    filter "configurations:Release"

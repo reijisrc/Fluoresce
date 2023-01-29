@@ -10,5 +10,16 @@
 #include "Engine/Core/KeyCodes.h"
 #include "Engine/Core/MouseCodes.h"
 
+// グラフィックズ
+#include "Engine/Graphics/Camera.h"
+#include "Engine/Graphics/Shader.h"
+#include "Engine/Graphics/VertexBuffer.h"
+#include "Engine/Graphics/IndexBuffer.h"
+#include "Engine/Graphics/VertexArray.h"
+
+// レンダラー
+#include "Engine/Renderer/RenderCommand.h"
+#include "Engine/Renderer/RenderPipeline.h"
+
 // ImGui
 #include "Engine/ImGui/ImGuiLayer.h"
