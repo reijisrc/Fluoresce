@@ -3,7 +3,7 @@
 // Describe :	スプライトレンダラー											// 
 // Author : Ding Qi																// 
 // Create Date : 2022/08/15														// 
-// Modify Date : 2022/10/15														// 
+// Modify Date : 2023/01/07														// 
 //==============================================================================//
 #include "frpch.h"
 #include "Engine/Renderer/SpriteRenderer.h"
@@ -47,6 +47,8 @@ namespace Fluoresce {
 		Vec2 TexCoord = Vec2(0.0f);
 		float32 TexIndex = 0.0f;
 		float32 TilingFactor = 1.0f;
+		// マウスpick用ID
+		sint32 EntityID = -1;
 	};
 
 	struct SpriteRenderer::RendererData
@@ -76,6 +78,7 @@ namespace Fluoresce {
 			{ GPUDataType::Float2, "a_TexCoord"},
 			{ GPUDataType::Float, "a_TexIndex" },
 			{ GPUDataType::Float, "a_TilingFactor" },
+			{ GPUDataType::Int, "a_EntityID" }
 			});
 
 		m_Data->VertexArray->AddVertexBuffer(m_Data->VertexBuffer);
@@ -158,15 +161,15 @@ namespace Fluoresce {
 		Submit();
 	}
 
-	void SpriteRenderer::DrawQuad(const Vec3& position, const Vec2& size, const Vec4& color)
+	void SpriteRenderer::DrawQuad(const Vec3& position, const Vec2& size, const Vec4& color, sint32 entityID)
 	{
 		Mat4 transform = glm::translate(Mat4(1.0f), position)
 			* glm::scale(Mat4(1.0f), { size.x, size.y, 1.0f });
 
-		DrawQuad(transform, color);
+		DrawQuad(transform, color, entityID);
 	}
 
-	void SpriteRenderer::DrawQuad(const Mat4& transform, const Vec4& color)
+	void SpriteRenderer::DrawQuad(const Mat4& transform, const Vec4& color, sint32 entityID)
 	{
 		if (m_Data->QuadIndexCount >= maxIndices)
 			NextBatch();
@@ -179,6 +182,7 @@ namespace Fluoresce {
 			m_Data->QuadVertexBufferPtr->TexCoord = s_DefaultTexCoord[i];
 			m_Data->QuadVertexBufferPtr->TexIndex = 0.0f;
 			m_Data->QuadVertexBufferPtr->TilingFactor = 1.0f;
+			m_Data->QuadVertexBufferPtr->EntityID = entityID;
 			m_Data->QuadVertexBufferPtr++;
 		}
 
@@ -188,15 +192,15 @@ namespace Fluoresce {
 		m_Stats.IndexCount += 6;
 	}
 
-	void SpriteRenderer::DrawSprite(const Vec3& position, const Vec2& size, const Vec4& color, const Ref<Texture2D>& texture, float32 tilingFactor)
+	void SpriteRenderer::DrawSprite(const Vec3& position, const Vec2& size, const Vec4& color, const Ref<Texture2D>& texture, float32 tilingFactor, sint32 entityID)
 	{
 		Mat4 transform = glm::translate(Mat4(1.0f), position)
 			* glm::scale(Mat4(1.0f), { size.x, size.y, 1.0f });
 
-		DrawSprite(transform, color, texture, tilingFactor);
+		DrawSprite(transform, color, texture, tilingFactor, entityID);
 	}
 
-	void SpriteRenderer::DrawSprite(const Mat4& transform, const Vec4& color, const Ref<Texture2D>& texture, float32 tilingFactor)
+	void SpriteRenderer::DrawSprite(const Mat4& transform, const Vec4& color, const Ref<Texture2D>& texture, float32 tilingFactor, sint32 entityID)
 	{
 		if (m_Data->QuadIndexCount >= maxIndices)
 			NextBatch();
@@ -229,6 +233,7 @@ namespace Fluoresce {
 			m_Data->QuadVertexBufferPtr->TexCoord = s_DefaultTexCoord[i];
 			m_Data->QuadVertexBufferPtr->TexIndex = textureIndex;
 			m_Data->QuadVertexBufferPtr->TilingFactor = tilingFactor;
+			m_Data->QuadVertexBufferPtr->EntityID = entityID;
 			m_Data->QuadVertexBufferPtr++;
 		}
 
@@ -238,16 +243,16 @@ namespace Fluoresce {
 		m_Stats.IndexCount += 6;
 	}
 
-	void SpriteRenderer::DrawSpriteEntity(const Mat4& transform, SpriteRendererComponent& src)
+	void SpriteRenderer::DrawSpriteEntity(const Mat4& transform, SpriteRendererComponent& src, sint32 entityID)
 	{
 		if (!src.Texture.expired() && src.EnableTexture)
 		{
 			auto texture = src.Texture.lock();
-			DrawSprite(transform, src.Color, texture, src.TilingFactor);
+			DrawSprite(transform, src.Color, texture, src.TilingFactor, entityID);
 		}
 		else
 		{
-			DrawQuad(transform, src.Color);
+			DrawQuad(transform, src.Color, entityID);
 		}
 	}
 }

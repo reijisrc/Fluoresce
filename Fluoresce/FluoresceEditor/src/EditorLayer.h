@@ -3,11 +3,12 @@
 // Describe : 	エディターレイヤー												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/05/14														// 
-// Modify Date : 2022/10/15														// 
+// Modify Date : 2023/01/07														// 
 //==============================================================================//
 #pragma once
 
 #include "Fluoresce.h"
+#include "Panel/SceneHierarchyPanel.h"
 #include "UIWindow/MenuWindow.h"
 
 namespace Fluoresce {
@@ -18,6 +19,7 @@ namespace Fluoresce {
 		{
 			_EditorPanel_Viewport = 0,
 			_EditorPanel_SceneSettings,
+			_EditorPanel_SceneHierarchyPanel,
 			_EditorPanel_Max
 		};
 
@@ -25,7 +27,7 @@ namespace Fluoresce {
 		class EditorLayer : public Layer
 		{
 		public:
-			using PanelFlag = std::array<bool, 2>;
+			using PanelFlag = std::array<bool, EditorPanel::_EditorPanel_Max>;
 		public:
 			EditorLayer();
 			virtual ~EditorLayer();
@@ -37,8 +39,11 @@ namespace Fluoresce {
 			virtual void OnEvent(Event& e) override;
 
 		private:
-			void DrawMenuBar();
+			bool OnKeyPressed(KeyPressedEvent& e);
+			bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
 
+			void DrawMenuBar();
+			void DrawPanels();
 			void DrawViewport();
 			void DrawSceneSettings();
 		private:
@@ -52,12 +57,14 @@ namespace Fluoresce {
 			};
 			Vec4 m_ViewportClearColor = { 0.1f, 0.1f ,0.1f, 1.0f };
 
-			Ref<Texture2D>	m_Texture;
 			Ref<Framebuffer> m_Framebuffer;
 			Ref<Scene>		m_Scene;
 
+			Entity		m_HoveredEntity;
 			PanelFlag	m_PanelFlag;
-			MenuWindow	m_MenuWindow;
+
+			SceneHierarchyPanel m_SceneHierarchyPanel;
+			MenuWindow			m_MenuWindow;
 		};
 	}
 };

@@ -3,7 +3,7 @@
 // Describe : 	シーン															// 
 // Author : Ding Qi																// 
 // Create Date : 2022/12/29														// 
-// Modify Date : 2022/12/29														// 
+// Modify Date : 2023/01/07														// 
 //==============================================================================//
 #pragma once
 
@@ -15,6 +15,10 @@
 namespace Fluoresce {
 
 	class Entity;
+
+	namespace Editor {
+		class SceneHierarchyPanel;
+	}
 
 	// シーン
 	class Scene
@@ -57,5 +61,6 @@ namespace Fluoresce {
 		bool m_IsPaused = false;
 
 		friend class Entity;
+		friend class Editor::SceneHierarchyPanel;
 	};
 };

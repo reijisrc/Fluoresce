@@ -3,7 +3,7 @@
 // Describe : 	エディターレイヤー												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/05/14														// 
-// Modify Date : 2022/10/15														// 
+// Modify Date : 2023/01/07														// 
 //==============================================================================//
 #include "EditorLayer.h"
 #include "EditorCore.h"
@@ -35,7 +35,7 @@ namespace Fluoresce {
 			fbSpec.Height = 720;
 			m_Framebuffer = Framebuffer::Create(fbSpec);
 
-			m_Texture = EditorCore::LoadTextureAsset("brickwall.jpg");
+			//m_Texture = EditorCore::LoadTextureAsset("brickwall.jpg");
 
 			m_Scene = CreateRef<Scene>();
 
@@ -44,9 +44,11 @@ namespace Fluoresce {
 			auto sceneCamera = camera.GetComponent<CameraComponent>();
 			sceneCamera.Camera.SetOrthographic(5.0f,-1.0f, 1.0f);
 
-			 auto square = m_Scene->CreateEntity("Sprite");
-			//square.AddComponent<TransformComponent>(square);
+			auto square = m_Scene->CreateEntity("Sprite");
 			square.AddComponent<SpriteRendererComponent>(Vec4{ 0.0f, 1.0f, 1.0f, 1.0f });
+
+
+			m_SceneHierarchyPanel.SetContext(m_Scene);
 		}
 
 		void EditorLayer::OnDetach()
@@ -82,8 +84,26 @@ namespace Fluoresce {
 			spriteRenderer.ResetStats();
 
 			m_Framebuffer->Bind();
-			RenderCommand::Clear();
 			RenderCommand::SetClearColor(m_ViewportClearColor);
+			RenderCommand::Clear();
+
+			// カラーバッファ1:クリア
+			m_Framebuffer->ClearAttachment(1, -1);
+
+			auto [mx, my] = ImGui::GetMousePos();
+			mx -= m_ViewportBounds[0].x;
+			my -= m_ViewportBounds[0].y;
+			Vec2 viewportSize = m_ViewportBounds[1] - m_ViewportBounds[0];
+			my = viewportSize.y - my;
+			int mouseX = (int)mx;
+			int mouseY = (int)my;
+
+			// マウスpick情報
+			if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
+			{
+				sint32 pixelData = m_Framebuffer->ReadPixel(1, mouseX, mouseY);
+				m_HoveredEntity = (pixelData == -1) ? Entity() : Entity(static_cast<entt::entity>(pixelData), m_Scene.get());
+			}
 
 			m_Scene->OnRender(ts);
 
@@ -102,13 +122,32 @@ namespace Fluoresce {
 
 				DrawSceneSettings();
 
+				DrawPanels();
+
 				pImguiLayer->DockspaceEnd();
 			}
 		}
 
 		void EditorLayer::OnEvent(Event& e)
 		{
+			EventDispatcher dispatcher(e);
+			dispatcher.Dispatch<KeyPressedEvent>(FR_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
+			dispatcher.Dispatch<MouseButtonPressedEvent>(FR_BIND_EVENT_FN(EditorLayer::OnMouseButtonPressed));
+		}
 
+		bool EditorLayer::OnKeyPressed(KeyPressedEvent& e)
+		{
+			return false;
+		}
+
+		bool EditorLayer::OnMouseButtonPressed(MouseButtonPressedEvent& e)
+		{
+			if (e.GetMouseButton() == Mouse::ButtonLeft)
+			{
+				if (m_ViewportHovered)
+					m_SceneHierarchyPanel.SetSelectedEntity(m_HoveredEntity);
+			}
+			return false;
 		}
 
 		void EditorLayer::DrawMenuBar()
@@ -133,6 +172,7 @@ namespace Fluoresce {
 				{
 					ImGui::MenuItem("Viewport", NULL, &m_PanelFlag.at(EditorPanel::_EditorPanel_Viewport));
 					ImGui::MenuItem("SceneSetting", NULL, &m_PanelFlag.at(EditorPanel::_EditorPanel_SceneSettings));
+					ImGui::MenuItem("SceneHierarchyPanel", NULL, &m_PanelFlag.at(EditorPanel::_EditorPanel_SceneHierarchyPanel));
 					ImGui::Separator();
 					ImGui::MenuItem("Customize", NULL, &showCustomizeWindow);
 					ImGui::EndMenu();
@@ -155,6 +195,14 @@ namespace Fluoresce {
 			if (showAboutWindow)
 			{
 				m_MenuWindow.DrawAboutWindow(&showAboutWindow);
+			}
+		}
+
+		void EditorLayer::DrawPanels()
+		{
+			if (m_PanelFlag.at(EditorPanel::_EditorPanel_SceneHierarchyPanel))
+			{
+				m_SceneHierarchyPanel.OnImGuiRender();
 			}
 		}
 
@@ -199,7 +247,11 @@ namespace Fluoresce {
 
 				if (ImGui::TreeNodeEx((void*)2754597, treeNodeFlags, "Scene Setting"))
 				{
+					std::string name = "None";
 					ImGui::ColorEdit4("BgColor", glm::value_ptr(m_ViewportClearColor));
+					if (m_HoveredEntity)
+						name = m_HoveredEntity.GetComponent<TagComponent>().Tag;
+					ImGui::Text("Hovered Entity: %s", name.c_str());
 					ImGui::TreePop();
 				}
 

@@ -3,7 +3,7 @@
 // Describe : 	ÉVÅ[Éì															// 
 // Author : Ding Qi																// 
 // Create Date : 2022/12/29														// 
-// Modify Date : 2022/12/29														// 
+// Modify Date : 2023/01/07														// 
 //==============================================================================//
 #include "frpch.h"
 #include "Engine/Scene/Scene.h"
@@ -97,7 +97,7 @@ namespace Fluoresce {
 				{
 					auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 
-					spriteRenderer.DrawSpriteEntity(transform.GetTransform(), sprite);
+					spriteRenderer.DrawSpriteEntity(transform.GetTransform(), sprite, (sint32)entity);
 				}
 			}
 
