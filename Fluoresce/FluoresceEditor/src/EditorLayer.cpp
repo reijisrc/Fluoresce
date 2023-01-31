@@ -8,7 +8,6 @@
 #include "EditorLayer.h"
 #include "EditorCore.h"
 
-#include "Engine/Graphics/GraphicsCore.h"
 #include <imgui.h>
 
 namespace Fluoresce {
@@ -37,6 +36,17 @@ namespace Fluoresce {
 			m_Framebuffer = Framebuffer::Create(fbSpec);
 
 			m_Texture = EditorCore::LoadTextureAsset("brickwall.jpg");
+
+			m_Scene = CreateRef<Scene>();
+
+			auto camera = m_Scene->CreateEntity("Camera");
+			camera.AddComponent<CameraComponent>();
+			auto sceneCamera = camera.GetComponent<CameraComponent>();
+			sceneCamera.Camera.SetOrthographic(5.0f,-1.0f, 1.0f);
+
+			 auto square = m_Scene->CreateEntity("Sprite");
+			//square.AddComponent<TransformComponent>(square);
+			square.AddComponent<SpriteRendererComponent>(Vec4{ 0.0f, 1.0f, 1.0f, 1.0f });
 		}
 
 		void EditorLayer::OnDetach()
@@ -51,7 +61,7 @@ namespace Fluoresce {
 			auto& spriteRenderer = RenderPipeline::GetSpriteRenderer();
 
 			bool resize = false;
-			// ビューポットリサイズ
+			// ビューポートリサイズ
 			if (FramebufferSpecification spec = m_Framebuffer->GetSpecification();
 				m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f &&
 				(spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y))
@@ -60,20 +70,22 @@ namespace Fluoresce {
 				resize = true;
 			}
 
+			// シーンリサイズ
+			if (resize)
+			{
+				m_Scene->OnViewportResize((uint32)m_ViewportSize.x, (uint32)m_ViewportSize.y);
+			}
+
+			m_Scene->OnUpdate(ts);
+
 			lineRenderer.ResetStats();
 			spriteRenderer.ResetStats();
 
 			m_Framebuffer->Bind();
 			RenderCommand::Clear();
-			RenderCommand::SetClearColor(m_ViewportColor);
+			RenderCommand::SetClearColor(m_ViewportClearColor);
 
-			spriteRenderer.Begin(camera, Mat4(1.0f));
-			spriteRenderer.DrawSprite(Vec3(0.0f, 0.0f, 0.0f), Vec2(0.5f, 0.5f), Vec4(1.0f, 1.0f, 1.0f, 1.0f), m_Texture);
-			spriteRenderer.End();
-
-			lineRenderer.Begin(camera, Mat4(1.0f));
-			lineRenderer.DrawRect(Vec3(0.0f, 0.0f, 0.0f), Vec2(1.0f, 1.0f), Vec4(0.0f, 1.0f, 1.0f, 1.0f));
-			lineRenderer.End();
+			m_Scene->OnRender(ts);
 
 			m_Framebuffer->Unbind();
 		}
@@ -187,7 +199,7 @@ namespace Fluoresce {
 
 				if (ImGui::TreeNodeEx((void*)2754597, treeNodeFlags, "Scene Setting"))
 				{
-					ImGui::ColorEdit4("BgColor", glm::value_ptr(m_ViewportColor));
+					ImGui::ColorEdit4("BgColor", glm::value_ptr(m_ViewportClearColor));
 					ImGui::TreePop();
 				}
 

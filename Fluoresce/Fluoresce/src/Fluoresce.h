@@ -4,6 +4,7 @@
 #include "Engine/Core/Log.h"
 #include "Engine/Core/Assert.h"
 #include "Engine/Core/Layer.h"
+#include "Engine//Core/UniqueID.h"
 
 // “ü—Í
 #include "Engine/Core/Input.h"
@@ -22,6 +23,11 @@
 // ƒŒƒ“ƒ_ƒ‰[
 #include "Engine/Renderer/RenderCommand.h"
 #include "Engine/Renderer/RenderPipeline.h"
+
+// ECS
+#include "Engine/Scene/Scene.h"
+#include "Engine/Scene/Entity.h"
+#include "Engine/Scene/Components.h"
 
 // ImGui
 #include "Engine/ImGui/ImGuiLayer.h"

@@ -36,7 +36,8 @@ project "Fluoresce"
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.imgui}",
 		"%{IncludeDir.yaml_cpp}",
-		"%{IncludeDir.stb_image}"
+		"%{IncludeDir.stb_image}",
+		"%{IncludeDir.entt}"
 	}
    
    -- 追加のライブラリディレクトリ
@@ -82,11 +83,11 @@ project "Fluoresce"
 		
 		links
 		{
-			"spdlog_debug.lib",
+			"spdlog.lib",
 			"glfw3_dev.lib",
-			"glad_debug.lib",
+			"glad.lib",
 			"glm_static_dev.lib",
-			"imgui_debug.lib",
+			"imgui.lib",
 			"yaml-cpp.lib"
 		}
 

@@ -7,6 +7,9 @@
     <Filter Include="dependencies\stb_image">
       <UniqueIdentifier>{26BD49FD-12B7-724F-FB23-0960E7BCD8BB}</UniqueIdentifier>
     </Filter>
+    <Filter Include="dependencies\stb_image\include">
+      <UniqueIdentifier>{99AABC5A-85D0-86C1-6E16-0C8D5ADBAB8D}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src">
       <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
     </Filter>
@@ -28,6 +31,9 @@
     <Filter Include="src\Engine\Renderer">
       <UniqueIdentifier>{F838018B-649A-DE98-ED07-254B59681558}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Engine\Scene">
+      <UniqueIdentifier>{AF1338A9-9B0C-57FB-C43E-3C80B0963607}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Engine\Utils">
       <UniqueIdentifier>{F2A765A9-DEA0-84FB-07D3-6980F32A6407}</UniqueIdentifier>
     </Filter>
@@ -42,8 +48,8 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="dependencies\stb_image\stb_image.h">
-      <Filter>dependencies\stb_image</Filter>
+    <ClInclude Include="dependencies\stb_image\include\stb_image.h">
+      <Filter>dependencies\stb_image\include</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Core\Application.h">
       <Filter>src\Engine\Core</Filter>
@@ -87,6 +93,9 @@
     <ClInclude Include="src\Engine\Core\PlatformCheck.h">
       <Filter>src\Engine\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Core\UniqueID.h">
+      <Filter>src\Engine\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Core\Window.h">
       <Filter>src\Engine\Core</Filter>
     </ClInclude>
@@ -105,6 +114,9 @@
     <ClInclude Include="src\Engine\Graphics\Camera.h">
       <Filter>src\Engine\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Graphics\Framebuffer.h">
+      <Filter>src\Engine\Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Graphics\GPUDataDefine.h">
       <Filter>src\Engine\Graphics</Filter>
     </ClInclude>
@@ -118,6 +130,9 @@
       <Filter>src\Engine\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Graphics\Shader.h">
+      <Filter>src\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Graphics\Texture.h">
       <Filter>src\Engine\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Graphics\UniformBuffer.h">
@@ -150,6 +165,9 @@
     <ClInclude Include="src\Engine\Renderer\SpriteRenderer.h">
       <Filter>src\Engine\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Scene\Scene.h">
+      <Filter>src\Engine\Scene</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Utils\GlmUtil.h">
       <Filter>src\Engine\Utils</Filter>
     </ClInclude>
@@ -165,7 +183,13 @@
     <ClInclude Include="src\Platform\OpenGL\GLCore.h">
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\GLFramebuffer.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\GLShader.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\GLTexture.h">
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\GLUniformBuffer.h">
@@ -180,14 +204,13 @@
     <ClInclude Include="src\frpch.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Graphics\Texture.h" />
-    <ClInclude Include="src\Platform\OpenGL\GLTexture.h" />
-    <ClInclude Include="src\Engine\Graphics\Framebuffer.h" />
-    <ClInclude Include="src\Platform\OpenGL\GLFramebuffer.h" />
+    <ClInclude Include="src\Engine\Scene\Components.h" />
+    <ClInclude Include="src\Engine\Scene\Entity.h" />
+    <ClInclude Include="src\Engine\Scene\SceneCamera.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dependencies\stb_image\stb_image.cpp">
-      <Filter>dependencies\stb_image</Filter>
+    <ClCompile Include="dependencies\stb_image\include\stb_image.cpp">
+      <Filter>dependencies\stb_image\include</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Core\Application.cpp">
       <Filter>src\Engine\Core</Filter>
@@ -201,7 +224,13 @@
     <ClCompile Include="src\Engine\Core\Log.cpp">
       <Filter>src\Engine\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Core\UniqueID.cpp">
+      <Filter>src\Engine\Core</Filter>
+    </ClCompile>
     <ClCompile Include="src\Engine\Graphics\Camera.cpp">
+      <Filter>src\Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Graphics\Framebuffer.cpp">
       <Filter>src\Engine\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Graphics\GraphicsContext.cpp">
@@ -214,6 +243,9 @@
       <Filter>src\Engine\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Graphics\Shader.cpp">
+      <Filter>src\Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Graphics\Texture.cpp">
       <Filter>src\Engine\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Graphics\UniformBuffer.cpp">
@@ -249,6 +281,9 @@
     <ClCompile Include="src\Engine\Renderer\SpriteRenderer.cpp">
       <Filter>src\Engine\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Scene\Scene.cpp">
+      <Filter>src\Engine\Scene</Filter>
+    </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\GLBuffer.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
@@ -258,7 +293,13 @@
     <ClCompile Include="src\Platform\OpenGL\GLCore.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\GLFramebuffer.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\GLShader.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\GLTexture.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\GLUniformBuffer.cpp">
@@ -279,9 +320,8 @@
     <ClCompile Include="src\frpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\Graphics\Texture.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\GLTexture.cpp" />
-    <ClCompile Include="src\Engine\Graphics\Framebuffer.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\GLFramebuffer.cpp" />
+    <ClCompile Include="src\Engine\Scene\Components.cpp" />
+    <ClCompile Include="src\Engine\Scene\Entity.cpp" />
+    <ClCompile Include="src\Engine\Scene\SceneCamera.cpp" />
   </ItemGroup>
 </Project>

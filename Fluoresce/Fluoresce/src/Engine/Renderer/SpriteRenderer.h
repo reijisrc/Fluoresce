@@ -10,6 +10,7 @@
 #include "Engine/Graphics/Camera.h"
 #include "Engine/Graphics/Texture.h"
 #include "Engine/Renderer/BatchRenderer.h"
+#include "Engine/Scene/Components.h"
 
 namespace Fluoresce {
 
@@ -32,6 +33,9 @@ namespace Fluoresce {
 
 		void DrawSprite(const Vec3& positon, const Vec2& size, const Vec4& color, const Ref<Texture2D>& texture, float32 tilingFactor = 1.0f);
 		void DrawSprite(const Mat4& transform, const Vec4& color, const Ref<Texture2D>& texture, float32 tilingFactor = 1.0f);
+
+		void DrawSpriteEntity(const Mat4& transform, SpriteRendererComponent& src);
+
 	private:
 		struct RendererData;
 		RendererData* m_Data;

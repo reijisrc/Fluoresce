@@ -50,10 +50,11 @@ namespace Fluoresce {
 				{ 0.0f, 0.0f },
 				{ 0.0f, 0.0f }
 			};
-			Vec4 m_ViewportColor = { 0.1f, 0.1f ,0.1f, 1.0f };
+			Vec4 m_ViewportClearColor = { 0.1f, 0.1f ,0.1f, 1.0f };
 
 			Ref<Texture2D>	m_Texture;
 			Ref<Framebuffer> m_Framebuffer;
+			Ref<Scene>		m_Scene;
 
 			PanelFlag	m_PanelFlag;
 			MenuWindow	m_MenuWindow;

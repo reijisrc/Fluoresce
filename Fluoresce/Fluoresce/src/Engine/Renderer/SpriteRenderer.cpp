@@ -160,8 +160,8 @@ namespace Fluoresce {
 
 	void SpriteRenderer::DrawQuad(const Vec3& position, const Vec2& size, const Vec4& color)
 	{
-		Mat4 transform = glm::translate(glm::mat4(1.0f), position)
-			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+		Mat4 transform = glm::translate(Mat4(1.0f), position)
+			* glm::scale(Mat4(1.0f), { size.x, size.y, 1.0f });
 
 		DrawQuad(transform, color);
 	}
@@ -190,8 +190,8 @@ namespace Fluoresce {
 
 	void SpriteRenderer::DrawSprite(const Vec3& position, const Vec2& size, const Vec4& color, const Ref<Texture2D>& texture, float32 tilingFactor)
 	{
-		Mat4 transform = glm::translate(glm::mat4(1.0f), position)
-			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+		Mat4 transform = glm::translate(Mat4(1.0f), position)
+			* glm::scale(Mat4(1.0f), { size.x, size.y, 1.0f });
 
 		DrawSprite(transform, color, texture, tilingFactor);
 	}
@@ -236,5 +236,18 @@ namespace Fluoresce {
 
 		m_Stats.VertexCount += quadVertexCount;
 		m_Stats.IndexCount += 6;
+	}
+
+	void SpriteRenderer::DrawSpriteEntity(const Mat4& transform, SpriteRendererComponent& src)
+	{
+		if (!src.Texture.expired() && src.EnableTexture)
+		{
+			auto texture = src.Texture.lock();
+			DrawSprite(transform, src.Color, texture, src.TilingFactor);
+		}
+		else
+		{
+			DrawQuad(transform, src.Color);
+		}
 	}
 }

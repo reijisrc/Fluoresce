@@ -7,7 +7,8 @@ IncludeDir["glad"] = "%{wks.location}/Fluoresce/dependencies/glad/include"
 IncludeDir["glm"] = "%{wks.location}/Fluoresce/dependencies/glm/include"
 IncludeDir["imgui"] = "%{wks.location}/Fluoresce/dependencies/imgui/include"
 IncludeDir["yaml_cpp"] = "%{wks.location}/Fluoresce/dependencies/yaml-cpp/include"
-IncludeDir["stb_image"] = "%{wks.location}/Fluoresce/dependencies/stb_image"
+IncludeDir["stb_image"] = "%{wks.location}/Fluoresce/dependencies/stb_image/include"
+IncludeDir["entt"] = "%{wks.location}/Fluoresce/dependencies/entt/include"
 
 LibraryDir = {}
 LibraryDir["spdlog"] = "%{wks.location}/Fluoresce/dependencies/spdlog/lib"
