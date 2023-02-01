@@ -3,14 +3,16 @@
 // Describe : 	エディターレイヤー												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/05/14														// 
-// Modify Date : 2023/01/09														// 
+// Modify Date : 2023/01/12														// 
 //==============================================================================//
 #include "EditorLayer.h"
 #include "EditorCore.h"
 
 #include "Engine/Utils/FileUtil.h"
+#include "Engine/Utils/GlmUtil.h"
 
 #include <imgui.h>
+#include <ImGuizmo.h>
 
 namespace Fluoresce {
 
@@ -182,6 +184,31 @@ namespace Fluoresce {
 
 				break;
 			}
+			// ImGizmos
+			case Key::Q:
+			{
+				if (!ImGuizmo::IsUsing() && editmode)
+					m_GizmoType = -1;
+				break;
+			}
+			case Key::W:
+			{
+				if (!ImGuizmo::IsUsing() && editmode)
+					m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;
+				break;
+			}
+			case Key::E:
+			{
+				if (!ImGuizmo::IsUsing() && editmode)
+					m_GizmoType = ImGuizmo::OPERATION::ROTATE;
+				break;
+			}
+			case Key::R:
+			{
+				if (!ImGuizmo::IsUsing() && editmode)
+					m_GizmoType = ImGuizmo::OPERATION::SCALE;
+				break;
+			}
 			}
 			return false;
 		}
@@ -318,6 +345,50 @@ namespace Fluoresce {
 					}
 					ImGui::EndDragDropTarget();
 				}
+
+				// ImGizmos
+				Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();
+				if (selectedEntity && m_GizmoType != -1)
+				{
+					ImGuizmo::SetOrthographic(false);
+					ImGuizmo::SetDrawlist();
+
+					ImGuizmo::SetRect(m_ViewportBounds[0].x, m_ViewportBounds[0].y, m_ViewportBounds[1].x - m_ViewportBounds[0].x, m_ViewportBounds[1].y - m_ViewportBounds[0].y);
+					
+					const Mat4& cameraProjection = m_EditorCamera.GetProjection();
+					Mat4 cameraView = m_EditorCamera.GetViewMatrix();
+
+					auto& tc = selectedEntity.GetComponent<TransformComponent>();
+					Mat4 transform = tc.GetTransform();
+
+					// Snapping
+					bool snap = Input::IsKeyPressed(Key::LeftControl);
+					float snapValue = 0.5f; // Snap to 0.5m for translation/scale
+
+					// Snap to 45 degrees for rotation
+					if (m_GizmoType == ImGuizmo::OPERATION::ROTATE)
+						snapValue = 45.0f;
+					float snapValues[3] = { snapValue, snapValue, snapValue };
+
+					ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
+						(ImGuizmo::OPERATION)m_GizmoType,
+						ImGuizmo::LOCAL,
+						glm::value_ptr(transform),
+						nullptr,
+						snap ? snapValues : nullptr);
+
+					if (ImGuizmo::IsUsing())
+					{
+						Vec3 translation, rotation, scale;
+						Fluoresce::DecomposeTransform(transform, translation, rotation, scale);
+
+						glm::vec3 deltaRotation = rotation - tc.Rotation;
+						tc.Translation = translation;
+						tc.Rotation += deltaRotation;
+						tc.Scale = scale;
+					}
+				}
+
 				ImGui::End();
 				ImGui::PopStyleVar();
 			}

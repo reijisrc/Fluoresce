@@ -14,8 +14,10 @@ project "Fluoresce"
 	{
 		"src/**.h",
 		"src/**.cpp",
-		"dependencies/stb_image/**.h",
-		"dependencies/stb_image/**.cpp"
+		"dependencies/stb_image/src/**.h",
+		"dependencies/stb_image/src/**.cpp",
+		"dependencies/ImGuizmo/src/ImGuizmo.h",
+		"dependencies/ImGuizmo/src/ImGuizmo.cpp"
 	}
 
 	-- プリプロセッサ
@@ -37,7 +39,8 @@ project "Fluoresce"
 		"%{IncludeDir.imgui}",
 		"%{IncludeDir.yaml_cpp}",
 		"%{IncludeDir.stb_image}",
-		"%{IncludeDir.entt}"
+		"%{IncludeDir.entt}",
+		"%{IncludeDir.ImGuizmo}"
 	}
    
    -- 追加のライブラリディレクトリ
@@ -56,6 +59,9 @@ project "Fluoresce"
    {
 		"opengl32.lib"
    }
+   
+   filter "files:dependencies/ImGuizmo/src/**.cpp"
+	flags { "NoPCH" }
 
    filter "system:windows"
 		systemversion "latest"

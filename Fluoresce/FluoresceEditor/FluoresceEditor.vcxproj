@@ -79,7 +79,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>FR_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\Fluoresce\src;..\Fluoresce\dependencies\spdlog\include;..\Fluoresce\dependencies\glm\include;..\Fluoresce\dependencies\imgui\include;..\Fluoresce\dependencies\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\Fluoresce\src;..\Fluoresce\dependencies\spdlog\include;..\Fluoresce\dependencies\glm\include;..\Fluoresce\dependencies\imgui\include;..\Fluoresce\dependencies\entt\include;..\Fluoresce\dependencies\ImGuizmo\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -97,7 +97,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>FR_DEVELOPMENT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\Fluoresce\src;..\Fluoresce\dependencies\spdlog\include;..\Fluoresce\dependencies\glm\include;..\Fluoresce\dependencies\imgui\include;..\Fluoresce\dependencies\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\Fluoresce\src;..\Fluoresce\dependencies\spdlog\include;..\Fluoresce\dependencies\glm\include;..\Fluoresce\dependencies\imgui\include;..\Fluoresce\dependencies\entt\include;..\Fluoresce\dependencies\ImGuizmo\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -118,7 +118,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>FR_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\Fluoresce\src;..\Fluoresce\dependencies\spdlog\include;..\Fluoresce\dependencies\glm\include;..\Fluoresce\dependencies\imgui\include;..\Fluoresce\dependencies\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\Fluoresce\src;..\Fluoresce\dependencies\spdlog\include;..\Fluoresce\dependencies\glm\include;..\Fluoresce\dependencies\imgui\include;..\Fluoresce\dependencies\entt\include;..\Fluoresce\dependencies\ImGuizmo\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>

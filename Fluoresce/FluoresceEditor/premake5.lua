@@ -22,7 +22,8 @@ project "FluoresceEditor"
 		"%{IncludeDir.spdlog}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.imgui}",
-		"%{IncludeDir.entt}"
+		"%{IncludeDir.entt}",
+		"%{IncludeDir.ImGuizmo}"
    }
    
    -- 外部プロジェクトとリンク

@@ -4,11 +4,17 @@
     <Filter Include="dependencies">
       <UniqueIdentifier>{8CAD9F58-7810-2FFD-2196-67B30DD8FA7F}</UniqueIdentifier>
     </Filter>
+    <Filter Include="dependencies\ImGuizmo">
+      <UniqueIdentifier>{6C1DA30B-D889-5E06-A17D-F6630DA9806E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dependencies\ImGuizmo\src">
+      <UniqueIdentifier>{83B1A739-EF73-DBC3-3824-6A50A425B4A1}</UniqueIdentifier>
+    </Filter>
     <Filter Include="dependencies\stb_image">
       <UniqueIdentifier>{26BD49FD-12B7-724F-FB23-0960E7BCD8BB}</UniqueIdentifier>
     </Filter>
-    <Filter Include="dependencies\stb_image\include">
-      <UniqueIdentifier>{99AABC5A-85D0-86C1-6E16-0C8D5ADBAB8D}</UniqueIdentifier>
+    <Filter Include="dependencies\stb_image\src">
+      <UniqueIdentifier>{3D9EABD8-29AE-57A9-9267-BCC77E964642}</UniqueIdentifier>
     </Filter>
     <Filter Include="src">
       <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
@@ -48,8 +54,11 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="dependencies\stb_image\include\stb_image.h">
-      <Filter>dependencies\stb_image\include</Filter>
+    <ClInclude Include="dependencies\ImGuizmo\src\ImGuizmo.h">
+      <Filter>dependencies\ImGuizmo\src</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\stb_image\src\stb_image.h">
+      <Filter>dependencies\stb_image\src</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Core\Application.h">
       <Filter>src\Engine\Core</Filter>
@@ -112,6 +121,9 @@
       <Filter>src\Engine\Events</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Graphics\Camera.h">
+      <Filter>src\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Graphics\EditorCamera.h">
       <Filter>src\Engine\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Graphics\Framebuffer.h">
@@ -177,6 +189,12 @@
     <ClInclude Include="src\Engine\Scene\SceneCamera.h">
       <Filter>src\Engine\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Scene\SceneSerializer.h">
+      <Filter>src\Engine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Utils\FileUtil.h">
+      <Filter>src\Engine\Utils</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Utils\GlmUtil.h">
       <Filter>src\Engine\Utils</Filter>
     </ClInclude>
@@ -213,13 +231,13 @@
     <ClInclude Include="src\frpch.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Graphics\EditorCamera.h" />
-    <ClInclude Include="src\Engine\Scene\SceneSerializer.h" />
-    <ClInclude Include="src\Engine\Utils\FileUtil.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dependencies\stb_image\include\stb_image.cpp">
-      <Filter>dependencies\stb_image\include</Filter>
+    <ClCompile Include="dependencies\ImGuizmo\src\ImGuizmo.cpp">
+      <Filter>dependencies\ImGuizmo\src</Filter>
+    </ClCompile>
+    <ClCompile Include="dependencies\stb_image\src\stb_image.cpp">
+      <Filter>dependencies\stb_image\src</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Core\Application.cpp">
       <Filter>src\Engine\Core</Filter>
@@ -237,6 +255,9 @@
       <Filter>src\Engine\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Graphics\Camera.cpp">
+      <Filter>src\Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Graphics\EditorCamera.cpp">
       <Filter>src\Engine\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Graphics\Framebuffer.cpp">
@@ -302,6 +323,9 @@
     <ClCompile Include="src\Engine\Scene\SceneCamera.cpp">
       <Filter>src\Engine\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Scene\SceneSerializer.cpp">
+      <Filter>src\Engine\Scene</Filter>
+    </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\GLBuffer.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
@@ -326,6 +350,9 @@
     <ClCompile Include="src\Platform\OpenGL\GLVertexArray.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
+    <ClCompile Include="src\Platform\Win64\WinFileUtil.cpp">
+      <Filter>src\Platform\Win64</Filter>
+    </ClCompile>
     <ClCompile Include="src\Platform\Win64\WinGPUDataDefine.cpp">
       <Filter>src\Platform\Win64</Filter>
     </ClCompile>
@@ -338,8 +365,5 @@
     <ClCompile Include="src\frpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\Graphics\EditorCamera.cpp" />
-    <ClCompile Include="src\Engine\Scene\SceneSerializer.cpp" />
-    <ClCompile Include="src\Platform\Win64\WinFileUtil.cpp" />
   </ItemGroup>
 </Project>

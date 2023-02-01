@@ -11,24 +11,28 @@
   <ItemGroup>
     <ClInclude Include="src\EditorCore.h" />
     <ClInclude Include="src\EditorLayer.h" />
+    <ClInclude Include="src\Panel\ContentBrowserPanel.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
     <ClInclude Include="src\Panel\SceneHierarchyPanel.h">
       <Filter>Panel</Filter>
     </ClInclude>
     <ClInclude Include="src\UIWindow\MenuWindow.h">
       <Filter>UIWindow</Filter>
     </ClInclude>
-    <ClInclude Include="src\Panel\ContentBrowserPanel.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EditorCore.cpp" />
     <ClCompile Include="src\EditorLayer.cpp" />
     <ClCompile Include="src\FluoresceApp.cpp" />
+    <ClCompile Include="src\Panel\ContentBrowserPanel.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
     <ClCompile Include="src\Panel\SceneHierarchyPanel.cpp">
       <Filter>Panel</Filter>
     </ClCompile>
     <ClCompile Include="src\UIWindow\MenuWindow.cpp">
       <Filter>UIWindow</Filter>
     </ClCompile>
-    <ClCompile Include="src\Panel\ContentBrowserPanel.cpp" />
   </ItemGroup>
 </Project>

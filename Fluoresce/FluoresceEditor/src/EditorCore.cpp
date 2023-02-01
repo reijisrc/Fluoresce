@@ -3,13 +3,13 @@
 // Describe : 	エディターコア													// 
 // Author : Ding Qi																// 
 // Create Date : 2022/05/29														// 
-// Modify Date : 2023/01/09														// 
+// Modify Date : 2023/01/12														// 
 //==============================================================================//
 #include "EditorCore.h"
 #include "Engine/ImGui/ImguiSerializer.h"
 #include "Engine/Scene/SceneSerializer.h"
 
-#define EDITOR_VERSION               "0.60"
+#define EDITOR_VERSION               "0.61"
 
 namespace Fluoresce {
 
