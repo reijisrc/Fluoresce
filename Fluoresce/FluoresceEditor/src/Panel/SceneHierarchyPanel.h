@@ -3,7 +3,7 @@
 // Describe : 	シーンヒエラルキーパネル										// 
 // Author : Ding Qi																// 
 // Create Date : 2022/05/29														// 
-// Modify Date : 2023/01/07														// 
+// Modify Date : 2023/01/09														// 
 //==============================================================================//
 #pragma once
 
@@ -13,6 +13,7 @@ namespace Fluoresce {
 
 	namespace Editor
 	{
+		// シーンヒエラルキーパネル
 		class SceneHierarchyPanel
 		{
 		public:

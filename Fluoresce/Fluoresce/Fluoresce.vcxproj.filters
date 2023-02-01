@@ -214,6 +214,8 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Graphics\EditorCamera.h" />
+    <ClInclude Include="src\Engine\Scene\SceneSerializer.h" />
+    <ClInclude Include="src\Engine\Utils\FileUtil.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dependencies\stb_image\include\stb_image.cpp">
@@ -337,5 +339,7 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Graphics\EditorCamera.cpp" />
+    <ClCompile Include="src\Engine\Scene\SceneSerializer.cpp" />
+    <ClCompile Include="src\Platform\Win64\WinFileUtil.cpp" />
   </ItemGroup>
 </Project>

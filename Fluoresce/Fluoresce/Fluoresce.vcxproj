@@ -191,6 +191,8 @@
     <ClInclude Include="src\Engine\Scene\Entity.h" />
     <ClInclude Include="src\Engine\Scene\Scene.h" />
     <ClInclude Include="src\Engine\Scene\SceneCamera.h" />
+    <ClInclude Include="src\Engine\Scene\SceneSerializer.h" />
+    <ClInclude Include="src\Engine\Utils\FileUtil.h" />
     <ClInclude Include="src\Engine\Utils\GlmUtil.h" />
     <ClInclude Include="src\Fluoresce.h" />
     <ClInclude Include="src\Platform\OpenGL\GLBuffer.h" />
@@ -234,6 +236,7 @@
     <ClCompile Include="src\Engine\Scene\Entity.cpp" />
     <ClCompile Include="src\Engine\Scene\Scene.cpp" />
     <ClCompile Include="src\Engine\Scene\SceneCamera.cpp" />
+    <ClCompile Include="src\Engine\Scene\SceneSerializer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\GLBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\GLContext.cpp" />
     <ClCompile Include="src\Platform\OpenGL\GLCore.cpp" />
@@ -242,6 +245,7 @@
     <ClCompile Include="src\Platform\OpenGL\GLTexture.cpp" />
     <ClCompile Include="src\Platform\OpenGL\GLUniformBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\GLVertexArray.cpp" />
+    <ClCompile Include="src\Platform\Win64\WinFileUtil.cpp" />
     <ClCompile Include="src\Platform\Win64\WinGPUDataDefine.cpp" />
     <ClCompile Include="src\Platform\Win64\WinInput.cpp" />
     <ClCompile Include="src\Platform\Win64\WinWindow.cpp" />

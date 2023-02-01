@@ -3,12 +3,13 @@
 // Describe : 	エディターコア													// 
 // Author : Ding Qi																// 
 // Create Date : 2022/05/29														// 
-// Modify Date : 2022/10/15														// 
+// Modify Date : 2023/01/09														// 
 //==============================================================================//
 #include "EditorCore.h"
 #include "Engine/ImGui/ImguiSerializer.h"
+#include "Engine/Scene/SceneSerializer.h"
 
-#define EDITOR_VERSION               "0.40"
+#define EDITOR_VERSION               "0.60"
 
 namespace Fluoresce {
 
@@ -19,6 +20,9 @@ namespace Fluoresce {
 		static std::filesystem::path s_ConfigPath = "";
 		static std::filesystem::path s_UserDataPath = "";
 		static std::filesystem::path s_AssetPath = "";
+		static std::filesystem::path s_ScenePath = "";
+
+		static std::filesystem::path s_CurrentScenePath = "";
 
 		bool EditorCore::Init()
 		{
@@ -26,6 +30,7 @@ namespace Fluoresce {
 			static const std::filesystem::path defaultConfigPath = "config";
 			static const std::filesystem::path defaultUserDataPath = "userData";
 			static const std::filesystem::path defaultAssetPath = "assets";
+			static const std::filesystem::path defaultScenePath = "scene";
 
 			// エディターパス初期化
 			s_RootPath = std::filesystem::path(Application::Get().GetSpecification().WorkingDirectory.c_str());
@@ -43,7 +48,8 @@ namespace Fluoresce {
 				create_directory(s_UserDataPath);
 
 				s_AssetPath = s_UserDataPath / defaultAssetPath;
-
+				s_ScenePath = s_UserDataPath / defaultScenePath;
+				s_CurrentScenePath = std::filesystem::path();
 				if (!std::filesystem::exists(s_UserDataPath))
 				{
 					create_directory(s_UserDataPath);
@@ -80,6 +86,18 @@ namespace Fluoresce {
 			return EDITOR_VERSION;
 		}
 
+		void EditorCore::SceneSerialize(const Ref<Scene>& scene, const std::string& filepath, const std::string& scenename)
+		{
+			SceneSerializer serializer(scene);
+			serializer.Serialize(filepath, scenename);
+		}
+
+		bool EditorCore::SceneDeserialize(const Ref<Scene>& scene, const std::string& filepath)
+		{
+			SceneSerializer serializer(scene);
+			return serializer.Deserialize(filepath);
+		}
+
 		std::filesystem::path& EditorCore::GetPath(EditorPath path)
 		{
 			switch (path)
@@ -90,11 +108,23 @@ namespace Fluoresce {
 				return s_UserDataPath;
 			case Fluoresce::Editor::EditorPath::_EditorConfigPath:
 				return s_ConfigPath;
+			case Fluoresce::Editor::EditorPath::_EditorScenePath:
+				return s_ScenePath;
 			case Fluoresce::Editor::EditorPath::_AssetsPath:
 				return s_AssetPath;
 			default:
 				return s_RootPath;
 			}
+		}
+
+		std::filesystem::path& EditorCore::GetCurrentScenePath()
+		{
+			return s_CurrentScenePath;
+		}
+
+		void EditorCore::SetCurrentScenePath(const std::filesystem::path& path)
+		{
+			s_CurrentScenePath = path;
 		}
 
 		const std::string EditorCore::GetConfigPath()
@@ -103,6 +133,23 @@ namespace Fluoresce {
 			path += "/editor.config";
 
 			return path;
+		}
+
+		const std::string EditorCore::GetDragDropPayloadStr(DragDropPayloadType type)
+		{
+			switch (type)
+			{
+			case DragDropPayloadType::_Undefined:
+				return std::string();
+			case DragDropPayloadType::_SceneFile:
+				return std::string("CONTENT_ITEM_SCENE");
+			case DragDropPayloadType::_TextureFile:
+				return std::string("CONTENT_ITEM_TEXTURE");
+			case DragDropPayloadType::_TextureAsset:
+				return std::string("ASSET_ITEM_TEXTURE");
+			default:
+				return std::string();
+			}
 		}
 
 		Ref<Texture2D> EditorCore::LoadTextureAsset(const std::string& path)

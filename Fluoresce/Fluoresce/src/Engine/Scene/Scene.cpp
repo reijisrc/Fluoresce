@@ -51,8 +51,8 @@ namespace Fluoresce {
 
 	void Scene::DestroyEntity(Entity entity)
 	{
-		m_Registry.destroy(entity);
 		m_EntityMap.erase(entity.GetUID());
+		m_Registry.destroy(entity);
 	}
 
 	void Scene::OnUpdate(DeltaTime ts)

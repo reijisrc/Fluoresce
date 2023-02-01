@@ -3,7 +3,7 @@
 // Describe : 	エディターコア													// 
 // Author : Ding Qi																// 
 // Create Date : 2022/05/29														// 
-// Modify Date : 2023/01/07														// 
+// Modify Date : 2023/01/09														// 
 //==============================================================================//
 #pragma once
 
@@ -20,12 +20,15 @@ namespace Fluoresce {
 			_EditorResourcesPath,
 			_EditorConfigPath,
 			_EditorUserDataPath,
+			_EditorScenePath,
 			_AssetsPath,
 		};
 
 		enum class DragDropPayloadType
 		{
 			_Undefined = 0,
+			_SceneFile,
+			_TextureFile,
 			_TextureAsset,
 		};
 
@@ -39,10 +42,15 @@ namespace Fluoresce {
 
 			static const char* GetVersion();
 
+			static void SceneSerialize(const Ref<Scene>& scene, const std::string& filepath, const std::string& scenename);
+			static bool SceneDeserialize(const Ref<Scene>& scene, const std::string& filepath);
+
 			static std::filesystem::path& GetPath(EditorPath path);
 
-			static const std::string GetConfigPath();
+			static std::filesystem::path& GetCurrentScenePath();
+			static void SetCurrentScenePath(const std::filesystem::path& path);
 
+			static const std::string GetConfigPath();
 			static const std::string GetDragDropPayloadStr(DragDropPayloadType type);
 
 			static Ref<Texture2D> LoadTextureAsset(const std::string& path);

@@ -17,6 +17,7 @@
     <ClInclude Include="src\UIWindow\MenuWindow.h">
       <Filter>UIWindow</Filter>
     </ClInclude>
+    <ClInclude Include="src\Panel\ContentBrowserPanel.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EditorCore.cpp" />
@@ -28,5 +29,6 @@
     <ClCompile Include="src\UIWindow\MenuWindow.cpp">
       <Filter>UIWindow</Filter>
     </ClCompile>
+    <ClCompile Include="src\Panel\ContentBrowserPanel.cpp" />
   </ItemGroup>
 </Project>

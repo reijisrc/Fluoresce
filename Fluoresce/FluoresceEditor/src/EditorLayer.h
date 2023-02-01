@@ -3,12 +3,13 @@
 // Describe : 	エディターレイヤー												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/05/14														// 
-// Modify Date : 2023/01/07														// 
+// Modify Date : 2023/01/09														// 
 //==============================================================================//
 #pragma once
 
 #include "Fluoresce.h"
 #include "Panel/SceneHierarchyPanel.h"
+#include "Panel/ContentBrowserPanel.h"
 #include "UIWindow/MenuWindow.h"
 
 namespace Fluoresce {
@@ -20,6 +21,7 @@ namespace Fluoresce {
 			_EditorPanel_Viewport = 0,
 			_EditorPanel_SceneSettings,
 			_EditorPanel_SceneHierarchyPanel,
+			_EditorPanel_ContentBrowserPanel,
 			_EditorPanel_Max
 		};
 
@@ -42,10 +44,18 @@ namespace Fluoresce {
 			bool OnKeyPressed(KeyPressedEvent& e);
 			bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
 
+			void DuplicateEntity();
+
 			void DrawMenuBar();
 			void DrawPanels();
 			void DrawViewport();
 			void DrawSceneSettings();
+
+			void NewScene();
+			void OpenScene();
+			void OpenScene(const std::filesystem::path& path);
+			void SaveScene();
+			void SaveSceneAs();
 		private:
 			bool m_ViewportFocused = false;
 			bool m_ViewportHovered = false;
@@ -65,6 +75,7 @@ namespace Fluoresce {
 			PanelFlag	m_PanelFlag;
 
 			SceneHierarchyPanel m_SceneHierarchyPanel;
+			ContentBrowserPanel m_ContentBrowserPanel;
 			MenuWindow			m_MenuWindow;
 		};
 	}

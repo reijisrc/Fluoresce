@@ -3,10 +3,12 @@
 // Describe : 	エディターレイヤー												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/05/14														// 
-// Modify Date : 2023/01/07														// 
+// Modify Date : 2023/01/09														// 
 //==============================================================================//
 #include "EditorLayer.h"
 #include "EditorCore.h"
+
+#include "Engine/Utils/FileUtil.h"
 
 #include <imgui.h>
 
@@ -29,6 +31,8 @@ namespace Fluoresce {
 
 		void EditorLayer::OnAttach()
 		{
+			m_ContentBrowserPanel.Init();
+
 			FramebufferSpecification fbSpec;
 			fbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
 			fbSpec.Width = 1280;
@@ -40,16 +44,6 @@ namespace Fluoresce {
 			//m_Texture = EditorCore::LoadTextureAsset("brickwall.jpg");
 
 			m_Scene = CreateRef<Scene>();
-
-			auto camera = m_Scene->CreateEntity("Camera");
-			camera.AddComponent<CameraComponent>();
-			auto sceneCamera = camera.GetComponent<CameraComponent>();
-			sceneCamera.Camera.SetOrthographic(5.0f,-1.0f, 1.0f);
-
-			auto square = m_Scene->CreateEntity("Sprite");
-			square.GetComponent<TransformComponent>().Translation = Vec3(0.0f, 0.0f, -20.0f);
-			square.AddComponent<SpriteRendererComponent>(Vec4{ 0.0f, 1.0f, 1.0f, 1.0f });
-
 			m_SceneHierarchyPanel.SetContext(m_Scene);
 		}
 
@@ -144,6 +138,51 @@ namespace Fluoresce {
 
 		bool EditorLayer::OnKeyPressed(KeyPressedEvent& e)
 		{
+			// ショットカット
+			if (e.IsRepeat())
+				return false;
+
+			bool editmode = true;
+			bool control = Input::IsKeyPressed(Key::LeftControl) || Input::IsKeyPressed(Key::RightControl);
+			bool shift = Input::IsKeyPressed(Key::LeftShift) || Input::IsKeyPressed(Key::RightShift);
+
+			switch (e.GetKeyCode())
+			{
+			case Key::N:
+			{
+				if (control)
+					NewScene();
+				return true;
+			}
+			case Key::O:
+			{
+				if (control)
+					OpenScene();
+				return true;
+			}
+			case Key::S:
+			{
+				if (control)
+				{
+					if (shift)
+					{
+						SaveSceneAs();
+					}
+					else
+					{
+						SaveScene();
+					}
+				}
+				return true;
+			}
+			case Key::D:
+			{
+				if (control)
+					DuplicateEntity();
+
+				break;
+			}
+			}
 			return false;
 		}
 
@@ -157,6 +196,13 @@ namespace Fluoresce {
 			return false;
 		}
 
+		void EditorLayer::DuplicateEntity()
+		{
+			Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();
+			if (selectedEntity)
+				m_Scene->DuplicateEntity(selectedEntity);
+		}
+
 		void EditorLayer::DrawMenuBar()
 		{
 			static bool showCustomizeWindow = false;
@@ -168,6 +214,26 @@ namespace Fluoresce {
 			{
 				if (ImGui::BeginMenu("File"))
 				{
+					if (ImGui::MenuItem("New", "Ctrl+N"))
+					{
+						NewScene();
+					}
+
+					if (ImGui::MenuItem("Open...", "Ctrl+O"))
+					{
+						OpenScene();
+					}
+
+					if (ImGui::MenuItem("Save", "Ctrl+S"))
+					{
+						SaveScene();
+					}
+
+					if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
+					{
+						SaveSceneAs();
+					}
+
 					if (ImGui::MenuItem("Exit"))
 					{
 						Fluoresce::Application::Get().Close();
@@ -180,6 +246,7 @@ namespace Fluoresce {
 					ImGui::MenuItem("Viewport", NULL, &m_PanelFlag.at(EditorPanel::_EditorPanel_Viewport));
 					ImGui::MenuItem("SceneSetting", NULL, &m_PanelFlag.at(EditorPanel::_EditorPanel_SceneSettings));
 					ImGui::MenuItem("SceneHierarchyPanel", NULL, &m_PanelFlag.at(EditorPanel::_EditorPanel_SceneHierarchyPanel));
+					ImGui::MenuItem("ContentBrowserPanell", NULL, &m_PanelFlag.at(EditorPanel::_EditorPanel_ContentBrowserPanel));
 					ImGui::Separator();
 					ImGui::MenuItem("Customize", NULL, &showCustomizeWindow);
 					ImGui::EndMenu();
@@ -211,6 +278,11 @@ namespace Fluoresce {
 			{
 				m_SceneHierarchyPanel.OnImGuiRender();
 			}
+
+			if (m_PanelFlag.at(EditorPanel::_EditorPanel_ContentBrowserPanel))
+			{
+				m_ContentBrowserPanel.OnImGuiRender();
+			}
 		}
 
 		void EditorLayer::DrawViewport()
@@ -234,6 +306,17 @@ namespace Fluoresce {
 					m_ViewportSize = { viewport.x, viewport.y };
 					uint64_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
 					ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+				}
+
+				// ドロップシーン
+				if (ImGui::BeginDragDropTarget())
+				{
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(EditorCore::GetDragDropPayloadStr(DragDropPayloadType::_SceneFile).c_str()))
+					{
+						const wchar_t* path = (const wchar_t*)payload->Data;
+						OpenScene(path);
+					}
+					ImGui::EndDragDropTarget();
 				}
 				ImGui::End();
 				ImGui::PopStyleVar();
@@ -284,6 +367,71 @@ namespace Fluoresce {
 
 				ImGui::End();
 				ImGui::PopStyleVar();
+			}
+		}
+
+		void EditorLayer::NewScene()
+		{
+			m_Scene = CreateRef<Scene>();
+			m_Scene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+			m_SceneHierarchyPanel.SetContext(m_Scene);
+
+			EditorCore::SetCurrentScenePath(std::filesystem::path());
+		}
+
+		void EditorLayer::OpenScene()
+		{
+			std::string filepath = Fluoresce::FileUtil::OpenFile("Fluoresce Scene (*.scene)\0*.scene\0");
+			if (!filepath.empty())
+			{
+				OpenScene(filepath);
+			}
+		}
+
+		void EditorLayer::OpenScene(const std::filesystem::path& path)
+		{
+			if (path.extension().string() != ".scene")
+			{
+				FR_CLIENT_WARN("Could not load {0} - not a scene file", path.filename().string());
+				return;
+			}
+
+			Ref<Scene> newScene = CreateRef<Scene>();
+			if (EditorCore::SceneDeserialize(newScene, path.string()))
+			{
+				m_Scene = newScene;
+				m_Scene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+
+				m_SceneHierarchyPanel.SetContext(m_Scene);
+
+				EditorCore::SetCurrentScenePath(path);
+			}
+		}
+
+		void EditorLayer::SaveScene()
+		{
+			auto currentScenePath = EditorCore::GetCurrentScenePath();
+			if (currentScenePath.empty())
+			{
+				auto relativePath = std::filesystem::relative(currentScenePath, EditorCore::GetPath(EditorPath::_EditorScenePath));
+				std::string name = relativePath.stem().string();
+				EditorCore::SceneSerialize(m_Scene, currentScenePath.string(), name);
+			}
+			else
+			{
+				SaveSceneAs();
+			}
+		}
+
+		void EditorLayer::SaveSceneAs()
+		{
+			std::string filepath = Fluoresce::FileUtil::SaveFile("Fluoresce Scene (*.scene)\0*.scene\0");
+			if (!filepath.empty())
+			{
+				std::filesystem::path path = filepath;
+				auto relativePath = std::filesystem::relative(path, EditorCore::GetPath(EditorPath::_EditorScenePath));
+				std::string name = relativePath.stem().string();
+				EditorCore::SceneSerialize(m_Scene, filepath, name);
 			}
 		}
 	}

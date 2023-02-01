@@ -62,6 +62,7 @@ namespace Fluoresce {
 		bool m_IsPaused = false;
 
 		friend class Entity;
+		friend class SceneSerializer;
 		friend class Editor::SceneHierarchyPanel;
 	};
 };
