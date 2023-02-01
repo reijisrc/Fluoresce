@@ -60,6 +60,7 @@ namespace Fluoresce {
 			Ref<Framebuffer> m_Framebuffer;
 			Ref<Scene>		m_Scene;
 
+			EditorCamera m_EditorCamera;
 			Entity		m_HoveredEntity;
 			PanelFlag	m_PanelFlag;
 

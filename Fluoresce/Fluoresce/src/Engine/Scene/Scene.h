@@ -9,6 +9,7 @@
 
 #include "Engine/Core/UniqueID.h"
 #include "Engine/Core/DeltaTime.h"
+#include "Engine/Graphics/EditorCamera.h"
 
 #include <entt.hpp>
 
@@ -35,7 +36,7 @@ namespace Fluoresce {
 		void DestroyEntity(Entity entity);
 
 		void OnUpdate(DeltaTime ts);
-		void OnRender(DeltaTime ts);
+		void OnRender(DeltaTime ts, EditorCamera& camera);
 
 		void OnViewportResize(uint32 width, uint32 height);
 

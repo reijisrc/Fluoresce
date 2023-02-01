@@ -3,7 +3,7 @@
 // Describe : 	GLコンテキスト													// 
 // Author : Ding Qi																// 
 // Create Date : 2022/04/10														// 
-// Modify Date : 2022/04/10														// 
+// Modify Date : 2023/01/07														// 
 //==============================================================================//
 #include "frpch.h"
 #include "Platform/OpenGL/GLContext.h"
@@ -27,6 +27,7 @@ namespace Fluoresce
 
 		FR_CORE_INFO("OpenGL Version : {0}", (const char*)glGetString(GL_VERSION));
 		FR_CORE_INFO("Graphic Device : {0}", (const char*)glGetString(GL_RENDERER));
+		FR_CORE_INFO("GLFW Version : {0}", glfwGetVersionString());
 	}
 
 	void GLContext::SwapBuffer()

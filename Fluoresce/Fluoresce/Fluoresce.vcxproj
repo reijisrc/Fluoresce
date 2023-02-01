@@ -169,6 +169,7 @@
     <ClInclude Include="src\Engine\Events\KeyEvent.h" />
     <ClInclude Include="src\Engine\Events\MouseEvent.h" />
     <ClInclude Include="src\Engine\Graphics\Camera.h" />
+    <ClInclude Include="src\Engine\Graphics\EditorCamera.h" />
     <ClInclude Include="src\Engine\Graphics\Framebuffer.h" />
     <ClInclude Include="src\Engine\Graphics\GPUDataDefine.h" />
     <ClInclude Include="src\Engine\Graphics\GraphicsContext.h" />
@@ -211,6 +212,7 @@
     <ClCompile Include="src\Engine\Core\Log.cpp" />
     <ClCompile Include="src\Engine\Core\UniqueID.cpp" />
     <ClCompile Include="src\Engine\Graphics\Camera.cpp" />
+    <ClCompile Include="src\Engine\Graphics\EditorCamera.cpp" />
     <ClCompile Include="src\Engine\Graphics\Framebuffer.cpp" />
     <ClCompile Include="src\Engine\Graphics\GraphicsContext.cpp" />
     <ClCompile Include="src\Engine\Graphics\GraphicsCore.cpp" />

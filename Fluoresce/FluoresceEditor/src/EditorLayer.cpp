@@ -35,6 +35,8 @@ namespace Fluoresce {
 			fbSpec.Height = 720;
 			m_Framebuffer = Framebuffer::Create(fbSpec);
 
+			m_EditorCamera = EditorCamera(30.0f, 1600.0f / 900.0f, 0.1f, 1000.0f);
+
 			//m_Texture = EditorCore::LoadTextureAsset("brickwall.jpg");
 
 			m_Scene = CreateRef<Scene>();
@@ -45,8 +47,8 @@ namespace Fluoresce {
 			sceneCamera.Camera.SetOrthographic(5.0f,-1.0f, 1.0f);
 
 			auto square = m_Scene->CreateEntity("Sprite");
+			square.GetComponent<TransformComponent>().Translation = Vec3(0.0f, 0.0f, -20.0f);
 			square.AddComponent<SpriteRendererComponent>(Vec4{ 0.0f, 1.0f, 1.0f, 1.0f });
-
 
 			m_SceneHierarchyPanel.SetContext(m_Scene);
 		}
@@ -69,15 +71,18 @@ namespace Fluoresce {
 				(spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y))
 			{
 				m_Framebuffer->Resize((uint32)m_ViewportSize.x, (uint32)m_ViewportSize.y);
+				m_EditorCamera.SetViewportSize(m_ViewportSize.x, m_ViewportSize.y);
 				resize = true;
 			}
 
 			// シーンリサイズ
 			if (resize)
 			{
+				m_EditorCamera.SetViewportSize(m_ViewportSize.x, m_ViewportSize.y);
 				m_Scene->OnViewportResize((uint32)m_ViewportSize.x, (uint32)m_ViewportSize.y);
 			}
 
+			m_EditorCamera.OnUpdate(ts);
 			m_Scene->OnUpdate(ts);
 
 			lineRenderer.ResetStats();
@@ -89,6 +94,8 @@ namespace Fluoresce {
 
 			// カラーバッファ1:クリア
 			m_Framebuffer->ClearAttachment(1, -1);
+
+			m_Scene->OnRender(ts, m_EditorCamera);
 
 			auto [mx, my] = ImGui::GetMousePos();
 			mx -= m_ViewportBounds[0].x;
@@ -104,8 +111,6 @@ namespace Fluoresce {
 				sint32 pixelData = m_Framebuffer->ReadPixel(1, mouseX, mouseY);
 				m_HoveredEntity = (pixelData == -1) ? Entity() : Entity(static_cast<entt::entity>(pixelData), m_Scene.get());
 			}
-
-			m_Scene->OnRender(ts);
 
 			m_Framebuffer->Unbind();
 		}
@@ -130,6 +135,8 @@ namespace Fluoresce {
 
 		void EditorLayer::OnEvent(Event& e)
 		{
+			m_EditorCamera.OnEvent(e);
+
 			EventDispatcher dispatcher(e);
 			dispatcher.Dispatch<KeyPressedEvent>(FR_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
 			dispatcher.Dispatch<MouseButtonPressedEvent>(FR_BIND_EVENT_FN(EditorLayer::OnMouseButtonPressed));
@@ -144,7 +151,7 @@ namespace Fluoresce {
 		{
 			if (e.GetMouseButton() == Mouse::ButtonLeft)
 			{
-				if (m_ViewportHovered)
+				if (m_ViewportHovered && !Input::IsKeyPressed(Key::LeftAlt))
 					m_SceneHierarchyPanel.SetSelectedEntity(m_HoveredEntity);
 			}
 			return false;

@@ -3,11 +3,12 @@
 // Describe :	ƒ‰ƒCƒ“ƒŒƒ“ƒ_ƒ‰[												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/08/15														// 
-// Modify Date : 2022/08/15														// 
+// Modify Date : 2023/01/07														// 
 //==============================================================================//
 #pragma once
 
 #include "Engine/Graphics/Camera.h"
+#include "Engine/Graphics/EditorCamera.h"
 #include "Engine/Renderer/BatchRenderer.h"
 
 namespace Fluoresce {
@@ -24,6 +25,8 @@ namespace Fluoresce {
 		virtual void NextBatch() override;
 
 		void Begin(const Camera& camera, const Mat4& transform);
+		void Begin(const EditorCamera& camera);
+
 		void End();
 
 		void DrawLine(const Vec3& p0, const Vec3& p1, const Vec4& color);

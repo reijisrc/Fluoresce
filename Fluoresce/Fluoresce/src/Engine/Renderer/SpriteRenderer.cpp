@@ -156,6 +156,16 @@ namespace Fluoresce {
 		StartBatch();
 	}
 
+	void SpriteRenderer::Begin(const EditorCamera& camera)
+	{
+		if (auto ubo = RenderPipeline::GetUniformBuffer(RenderPipeline::UniformBufferIndex::Camera); ubo)
+		{
+			ubo->SetData(&camera.GetViewProjection(), sizeof(RenderPipeline::CameraData));
+		}
+
+		StartBatch();
+	}
+
 	void SpriteRenderer::End()
 	{
 		Submit();

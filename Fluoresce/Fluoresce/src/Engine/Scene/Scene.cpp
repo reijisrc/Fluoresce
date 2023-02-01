@@ -63,46 +63,41 @@ namespace Fluoresce {
 		}
 	}
 
-	void Scene::OnRender(DeltaTime ts)
+	void Scene::OnRender(DeltaTime ts, EditorCamera& camera)
 	{
-		static const Camera camera(glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f));
+		//// メインカメラ取得
+		//Camera* mainCamera = nullptr;
+		//Mat4 cameraTransform;
+		//{
+		//	auto view = m_Registry.view<TransformComponent, CameraComponent>();
+		//	for (auto entity : view)
+		//	{
+		//		auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
 
-		// メインカメラ取得
-		Camera* mainCamera = nullptr;
-		Mat4 cameraTransform;
+		//		if (camera.Primary)
+		//		{
+		//			mainCamera = &camera.Camera;
+		//			cameraTransform = transform.GetTransform();
+		//			break;
+		//		}
+		//	}
+		//}
+
+		auto& spriteRenderer = RenderPipeline::GetSpriteRenderer();
+
+		spriteRenderer.Begin(camera);
+
 		{
-			auto view = m_Registry.view<TransformComponent, CameraComponent>();
-			for (auto entity : view)
+			auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+			for (auto entity : group)
 			{
-				auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
+				auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 
-				if (camera.Primary)
-				{
-					mainCamera = &camera.Camera;
-					cameraTransform = transform.GetTransform();
-					break;
-				}
+				spriteRenderer.DrawSpriteEntity(transform.GetTransform(), sprite, (sint32)entity);
 			}
 		}
 
-		if (mainCamera)
-		{
-			auto& spriteRenderer = RenderPipeline::GetSpriteRenderer();
-
-			spriteRenderer.Begin(*mainCamera, Mat4(1.0f));
-
-			{
-				auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
-				for (auto entity : group)
-				{
-					auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-
-					spriteRenderer.DrawSpriteEntity(transform.GetTransform(), sprite, (sint32)entity);
-				}
-			}
-
-			spriteRenderer.End();
-		}
+		spriteRenderer.End();
 	}
 
 	void Scene::OnViewportResize(uint32 width, uint32 height)

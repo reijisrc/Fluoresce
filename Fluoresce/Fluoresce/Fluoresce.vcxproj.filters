@@ -213,6 +213,7 @@
     <ClInclude Include="src\frpch.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Graphics\EditorCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dependencies\stb_image\include\stb_image.cpp">
@@ -335,5 +336,6 @@
     <ClCompile Include="src\frpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Graphics\EditorCamera.cpp" />
   </ItemGroup>
 </Project>

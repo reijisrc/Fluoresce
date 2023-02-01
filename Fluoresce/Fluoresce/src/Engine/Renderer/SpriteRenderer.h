@@ -8,6 +8,8 @@
 #pragma once
 
 #include "Engine/Graphics/Camera.h"
+#include "Engine/Graphics/EditorCamera.h"
+
 #include "Engine/Graphics/Texture.h"
 #include "Engine/Renderer/BatchRenderer.h"
 #include "Engine/Scene/Components.h"
@@ -26,6 +28,8 @@ namespace Fluoresce {
 		virtual void NextBatch() override;
 
 		void Begin(const Camera& camera, const Mat4& transform);
+		void Begin(const EditorCamera& camera);
+
 		void End();
 
 		void DrawQuad(const Vec3& position, const Vec2& size, const Vec4& color, sint32 entityID = -1);
