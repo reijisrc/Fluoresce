@@ -33,7 +33,7 @@
 |[yaml-cpp](https://github.com/jbeder/yaml-cpp)| 0.7.0 |MIT License|
 |[Feather](https://feathericons.com)| v4.29.0 |MIT License|
 
-## 使用项目
+## 协议
 [协议 (MIT)](https://github.com/reijisrc/Fluoresce/blob/main/LICENSE)
 -------------------------------------------------------------------------------
 	Copyright (C) 2023 Ding Qi. 保留所有版权.
