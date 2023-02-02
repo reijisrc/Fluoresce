@@ -26,7 +26,7 @@
 |[spdlog](https://github.com/gabime/spdlog)| 1.110 |MIT License|
 |[glad](https://github.com/Dav1dde/glad)| 2021-01 |MIT License|
 |[glfw](https://github.com/glfw/glfw)| 3.3.8 |zlib/libpng license|
-|[stb_image](https://github.com/nothings/stb)| 2.28 |无|
+|[stb_image](https://github.com/nothings/stb)| 2.28 |无(Public Domain)|
 |[Dear ImGui](https://github.com/ocornut/imgui)| 1.89 |MIT License|
 |[ImGuizmo](https://github.com/CedricGuillemet/ImGuizmo)| v1.83 |MIT License|
 |[entt](https://github.com/skypjack/entt)| v3.11.1 |MIT License|
