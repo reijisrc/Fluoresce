@@ -3,11 +3,11 @@
 // Describe : 	コンテンツブラウザパネル										// 
 // Author : Ding Qi																// 
 // Create Date : 2023/01/08														// 
-// Modify Date : 2023/01/08														// 
+// Modify Date : 2023/01/22														// 
 //==============================================================================//
 #include "Panel/ContentBrowserPanel.h"
-#include "EditorCore.h"
 
+#include "EditorCore.h"
 #include <imgui.h>
 
 namespace Fluoresce {
@@ -90,6 +90,7 @@ namespace Fluoresce {
 				columnCount = 1;
 
 			ImGui::Columns(columnCount, 0, false);
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 			if (m_CurrentDirectory != EditorCore::GetPath(EditorPath::_EditorUserDataPath))
 			{
 				ImGui::ImageButton((ImTextureID)(uint64)m_DirectiryIcon->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
@@ -127,7 +128,6 @@ namespace Fluoresce {
 				}
 
 				ImGui::PushID(file.Name.c_str());
-				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 				ImGui::ImageButton((ImTextureID)(uint64)icon->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
 
 				if (file.Type != FileType::Directory)
@@ -140,8 +140,6 @@ namespace Fluoresce {
 						ImGui::EndDragDropSource();
 					}
 				}
-
-				ImGui::PopStyleColor();
 
 				if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
 				{
@@ -158,8 +156,9 @@ namespace Fluoresce {
 				ImGui::NextColumn();
 				ImGui::PopID();
 			}
-			ImGui::Columns(1);
 
+			ImGui::PopStyleColor();
+			ImGui::Columns(1);
 			ImGui::End();
 
 			if (reloadFlag)

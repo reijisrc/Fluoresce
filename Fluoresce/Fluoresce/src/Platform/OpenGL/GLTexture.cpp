@@ -3,7 +3,7 @@
 // Describe : 	GLテクスチャ													// 
 // Author : Ding Qi																// 
 // Create Date : 2022/10/15														// 
-// Modify Date : 2022/10/15														// 
+// Modify Date : 2023/01/22														// 
 //==============================================================================//
 #include "frpch.h"
 #include "Platform/OpenGL/GLTexture.h"
@@ -12,15 +12,37 @@
 
 namespace Fluoresce {
 
-	GLTexture2D::GLTexture2D(uint32 width, uint32 height)
-		: m_Width(width), m_Height(height)
+	static GLenum ConvertOpenGLTextureInternalFormat(TextureFormat format)
+	{
+		switch (format)
+		{
+		case Fluoresce::TextureFormat::RGB:     return GL_RGB8;
+		case Fluoresce::TextureFormat::RGBA:    return GL_RGBA8;
+		}
+		FR_CORE_ASSERT(false, "Unknown texture format!");
+		return 0;
+	}
+
+	static GLenum ConvertOpenGLTextureDataFormat(TextureFormat format)
+	{
+		switch (format)
+		{
+		case Fluoresce::TextureFormat::RGB:     return GL_RGB;
+		case Fluoresce::TextureFormat::RGBA:    return GL_RGBA;
+		}
+		FR_CORE_ASSERT(false, "Unknown texture format!");
+		return 0;
+	}
+
+
+	GLTexture2D::GLTexture2D(TextureFormat format, uint32 width, uint32 height)
+		: m_Format(format), m_Width(width), m_Height(height)
 
 	{
-		m_InternalFormat = GL_RGBA8;
-		m_DataFormat = GL_RGBA;
+		auto internalFormat = ConvertOpenGLTextureInternalFormat(m_Format);
 
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
-		glTextureStorage2D(m_RendererID, 1, m_InternalFormat, m_Width, m_Height);
+		glTextureStorage2D(m_RendererID, 1, internalFormat, m_Width, m_Height);
 
 		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -45,18 +67,18 @@ namespace Fluoresce {
 		{
 			internalFormat = GL_RGBA8;
 			dataFormat = GL_RGBA;
+			m_Format = TextureFormat::RGBA;
 		}
 		else if (channels == 3)
 		{
 			internalFormat = GL_RGB8;
 			dataFormat = GL_RGB;
+			m_Format = TextureFormat::RGB;
 		}
 		else
 		{
 			FR_CORE_ASSERT(false, "Format not supported!")
 		}
-		m_InternalFormat = internalFormat;
-		m_DataFormat = dataFormat;
 
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
 		glTextureStorage2D(m_RendererID, 1, internalFormat, m_Width, m_Height);
@@ -79,9 +101,10 @@ namespace Fluoresce {
 
 	void GLTexture2D::SetData(void* data, uint32 size)
 	{
-		uint32 bpc = m_DataFormat == GL_RGBA ? 4 : 3;
+		uint32 bpc = (m_Format == TextureFormat::RGBA) ? 4 : 3;
+		auto dataFormat = ConvertOpenGLTextureDataFormat(m_Format);
 		FR_CORE_ASSERT(size == m_Width * m_Height * bpc, "Data must be entire texture!");
-		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, data);
+		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, dataFormat, GL_UNSIGNED_BYTE, data);
 	}
 
 	void GLTexture2D::Bind(uint32 slot) const

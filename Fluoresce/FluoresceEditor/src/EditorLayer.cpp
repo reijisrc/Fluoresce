@@ -3,13 +3,15 @@
 // Describe : 	エディターレイヤー												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/05/14														// 
-// Modify Date : 2023/01/18														// 
+// Modify Date : 2023/01/22														// 
 //==============================================================================//
 #include "EditorLayer.h"
 #include "EditorCore.h"
 
 #include "Engine/Utils/FileUtil.h"
 #include "Engine/Utils/GlmUtil.h"
+
+#include "ImguiUtil/ImguiUtil.h"
 
 #include <imgui.h>
 #include <ImGuizmo.h>
@@ -96,8 +98,7 @@ namespace Fluoresce {
 				break;
 			}
 
-			lineRenderer.ResetStats();
-			spriteRenderer.ResetStats();
+			RenderPipeline::ResetAllBatchStats();
 
 			m_Framebuffer->Bind();
 			RenderCommand::SetClearColor(m_ViewportClearColor);
@@ -244,7 +245,7 @@ namespace Fluoresce {
 		{
 			if (e.GetMouseButton() == Mouse::ButtonLeft)
 			{
-				if (m_ViewportHovered && !Input::IsKeyPressed(Key::LeftAlt))
+				if (m_ViewportHovered && !ImGuizmo::IsOver() && !Input::IsKeyPressed(Key::LeftAlt))
 					m_SceneHierarchyPanel.SetSelectedEntity(m_HoveredEntity);
 			}
 			return false;
@@ -458,29 +459,68 @@ namespace Fluoresce {
 
 				ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
 				ImGui::Begin("ScenePanel", &m_PanelFlag.at(EditorPanel::_EditorPanel_SceneSettings));
+				Ref<Texture2D> icon = (EditorCore::GetEditorState() == EditorState::Edit) ? m_IconPlay : m_IconStop;
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+				if (ImGui::ImageButton((ImTextureID)(uint64)icon->GetRendererID(), ImVec2(24, 24), ImVec2(0, 0), ImVec2(1, 1), 0))
+				{
+					if (EditorCore::GetEditorState() == EditorState::Edit)
+						OnScenePlay();
+					else if (EditorCore::GetEditorState() == EditorState::Runtime)
+						OnSceneStop();
+				}
+				ImGui::PopStyleColor(1);
+				ImGui::Separator();
 
 				if (ImGui::TreeNodeEx((void*)2754597, treeNodeFlags, "Scene Setting"))
 				{
 					std::string name = "None";
-					Ref<Texture2D> icon = (EditorCore::GetEditorState() == EditorState::Edit) ? m_IconPlay : m_IconStop;
-					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
-					if (ImGui::ImageButton((ImTextureID)(uint64)icon->GetRendererID(), ImVec2(24, 24), ImVec2(0, 0), ImVec2(1, 1), 0))
-					{
-						if (EditorCore::GetEditorState() == EditorState::Edit)
-							OnScenePlay();
-						else if (EditorCore::GetEditorState() == EditorState::Runtime)
-							OnSceneStop();
-					}
 					ImGui::ColorEdit4("BgColor", glm::value_ptr(m_ViewportClearColor));
-					if (EditorCore::GetEditorState() == EditorState::Edit)
-					{
-						ImGui::Text("EditorCamera Pos: X: %.2f, Y: %.2f, Z: %.2f", m_EditorCamera.GetPosition().x, m_EditorCamera.GetPosition().y, m_EditorCamera.GetPosition().z);
-					}
 					if (m_HoveredEntity)
 						name = m_HoveredEntity.GetComponent<TagComponent>().Tag;
-
 					ImGui::Text("Hovered Entity: %s", name.c_str());
-					ImGui::PopStyleColor(1);
+					ImGui::TreePop();
+				}
+
+				if (ImGui::TreeNodeEx((void*)5654597, treeNodeFlags, "Main Camera"))
+				{
+					if (EditorCore::GetEditorState() == EditorState::Edit)
+					{
+						Vec3 pos = m_EditorCamera.GetFocusPoint();
+						if (ImguiUtil::DrawVec3Controller("FocusPoint", pos, 0.0f, 80.0f))
+						{
+							m_EditorCamera.SetFocusPoint(pos);
+						}
+						ImGui::Separator();
+						float32 dist = m_EditorCamera.GetDistance();
+						if (ImGui::DragFloat("Distance", &dist))
+						{
+							m_EditorCamera.SetDistance(dist);
+						}
+
+						auto dir = m_EditorCamera.GetForwardDirection();
+						ImGui::Text("Dir X: %.2f", dir.x);
+						ImGui::Text("Dir Y: %.2f", dir.y);
+						ImGui::Text("Dir Z: %.2f", dir.z);
+					}
+					else if (EditorCore::GetEditorState() == EditorState::Runtime)
+					{
+						bool moveComExist = false;
+						if (auto cameraEntity = m_RuntimeScene->GetPrimaryCameraEntity(); cameraEntity)
+						{
+							if (cameraEntity.HasComponent<TransformComponent>())
+							{
+								auto& transComponent = cameraEntity.GetComponent<TransformComponent>();
+								ImguiUtil::DrawVec3Controller("Position", transComponent.Translation, 0.0f, 80.0f);
+								ImGui::Separator();
+								moveComExist = true;
+							}
+						}
+						
+						if(!moveComExist)
+						{
+							ImGui::Text("Null");
+						}
+					}
 					ImGui::TreePop();
 				}
 
@@ -513,6 +553,7 @@ namespace Fluoresce {
 		{
 			m_EditorScene = CreateRef<Scene>();
 			m_EditorScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+			m_EditorCamera.ResetView(1600.0f / 900.0f);
 			m_SceneHierarchyPanel.SetContext(m_EditorScene);
 
 			EditorCore::SetCurrentScenePath(std::filesystem::path());
@@ -543,8 +584,9 @@ namespace Fluoresce {
 			{
 				m_EditorScene = newScene;
 				m_EditorScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-
+				m_EditorCamera.ResetView(1600.0f / 900.0f);
 				m_SceneHierarchyPanel.SetContext(m_EditorScene);
+
 				EditorCore::SetCurrentScenePath(path);
 			}
 		}

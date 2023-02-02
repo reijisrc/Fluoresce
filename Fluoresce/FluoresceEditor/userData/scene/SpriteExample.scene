@@ -1,20 +1,10 @@
-Scene: SampleSprite
+Scene: SpriteExample
 Entities:
-  - Entity: 3991693939405439928
-    TagComponent:
-      Tag: Sprite
-    TransformComponent:
-      Translation: [0, 0, -15]
-      Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
-    SpriteRendererComponent:
-      Color: [0, 1, 1, 1]
-      TilingFactor: 1
   - Entity: 14873560220487755467
     TagComponent:
       Tag: Camera
     TransformComponent:
-      Translation: [0, 0, 0]
+      Translation: [0, 0, 1]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     CameraComponent:
@@ -28,3 +18,13 @@ Entities:
         OrthographicFar: 1000
       Primary: true
       FixedAspectRatio: false
+  - Entity: 3991693939405439928
+    TagComponent:
+      Tag: Sprite
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [0, 1, 1, 1]
+      TilingFactor: 1

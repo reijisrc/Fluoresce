@@ -3,7 +3,7 @@
 // Describe : 	レンダーパイプライン											// 
 // Author : Ding Qi																// 
 // Create Date : 2022/04/23														// 
-// Modify Date : 2022/10/15														// 
+// Modify Date : 2023/01/22														// 
 //==============================================================================//
 #include "frpch.h"
 #include "Engine/Renderer/RenderPipeline.h"
@@ -20,7 +20,7 @@ namespace Fluoresce {
 	{
 		RenderCommand::Init();
 
-		s_WhiteTexture = Texture2D::Create(1, 1);
+		s_WhiteTexture = Texture2D::Create(TextureFormat::RGBA, 1, 1);
 		uint32 whiteData = 0xffffffff;
 		s_WhiteTexture->SetData(&whiteData, sizeof(whiteData));
 		s_UniformBuffers.push_back(UniformBuffer::Create(sizeof(CameraData), 0));
@@ -39,6 +39,12 @@ namespace Fluoresce {
 	void RenderPipeline::OnWindowResize(uint32 width, uint32 height)
 	{
 		RenderCommand::SetViewport(0, 0, width, height);
+	}
+
+	void RenderPipeline::ResetAllBatchStats()
+	{
+		s_LineRenderer->ResetStats();
+		s_SpriteRenderer->ResetStats();
 	}
 
 	Ref<Texture2D> RenderPipeline::GetWhiteTexture()

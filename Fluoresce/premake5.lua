@@ -2,7 +2,7 @@ include "Dependencies.lua"
 
 workspace "Fluoresce"
 	architecture "x86_64"
-	startproject "FluoresceEditorn"
+	startproject "FluoresceEditor"
 
 	configurations
 	{

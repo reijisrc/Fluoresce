@@ -3,7 +3,7 @@
 // Describe :	ƒ‰ƒCƒ“ƒŒƒ“ƒ_ƒ‰[												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/08/15														// 
-// Modify Date : 2022/08/15														// 
+// Modify Date : 2023/01/22														// 
 //==============================================================================//
 #include "frpch.h"
 #include "Engine/Renderer/LineRenderer.h"
@@ -49,8 +49,6 @@ namespace Fluoresce {
 		Ref<Shader>			Shader;
 
 		uint32 LineVertexCount = 0;
-		LineVertex* LineVertexBufferBase = nullptr;
-		LineVertex* LineVertexBufferPtr = nullptr;
 
 		float32 LineWidth = 4.0f;
 	};
@@ -68,12 +66,12 @@ namespace Fluoresce {
 			});
 
 		m_Data->VertexArray->AddVertexBuffer(m_Data->VertexBuffer);
-		m_Data->LineVertexBufferBase = new LineVertex[maxVectices];
+		m_Buffer.Allocate(maxVectices * sizeof(LineVertex));
 	}
 
 	void LineRenderer::ShutDown()
 	{
-		delete[] m_Data->LineVertexBufferBase;
+		m_Buffer.Free();
 		delete m_Data;
 	}
 
@@ -81,8 +79,8 @@ namespace Fluoresce {
 	{
 		if (m_Data->LineVertexCount)
 		{
-			uint32_t dataSize = (uint32_t)((uint8_t*)m_Data->LineVertexBufferPtr - (uint8_t*)m_Data->LineVertexBufferBase);
-			m_Data->VertexBuffer->SetData(m_Data->LineVertexBufferBase, dataSize);
+			uint32 dataSize = m_Buffer.GetValidOffset();
+			m_Data->VertexBuffer->SetData(&m_Buffer[0], dataSize);
 
 			m_Data->Shader->Bind();
 			RenderCommand::SetLineWidth(m_Data->LineWidth);
@@ -94,7 +92,7 @@ namespace Fluoresce {
 	void LineRenderer::StartBatch()
 	{
 		m_Data->LineVertexCount = 0;
-		m_Data->LineVertexBufferPtr = m_Data->LineVertexBufferBase;
+		m_Buffer.Reset(false);
 	}
 
 	void LineRenderer::NextBatch()
@@ -137,13 +135,15 @@ namespace Fluoresce {
 		if (m_Data->LineVertexCount >= maxVectices)
 			NextBatch();
 
-		m_Data->LineVertexBufferPtr->Position = p0;
-		m_Data->LineVertexBufferPtr->Color = color;
-		m_Data->LineVertexBufferPtr++;
+		Vec3 pos[2] = { p0, p1 };
 
-		m_Data->LineVertexBufferPtr->Position = p1;
-		m_Data->LineVertexBufferPtr->Color = color;
-		m_Data->LineVertexBufferPtr++;
+		for (size_t i = 0; i < lineVertexCount; i++)
+		{
+			LineVertex point;
+			point.Position = pos[i];
+			point.Color = color;
+			m_Buffer.PushData(&point, sizeof(LineVertex));
+		}
 
 		m_Data->LineVertexCount += 2;
 

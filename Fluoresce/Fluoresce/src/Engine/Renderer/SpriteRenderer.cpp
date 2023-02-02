@@ -3,7 +3,7 @@
 // Describe :	スプライトレンダラー											// 
 // Author : Ding Qi																// 
 // Create Date : 2022/08/15														// 
-// Modify Date : 2023/01/07														// 
+// Modify Date : 2023/01/22														// 
 //==============================================================================//
 #include "frpch.h"
 #include "Engine/Renderer/SpriteRenderer.h"
@@ -17,7 +17,7 @@
 namespace Fluoresce {
 
 	// バッチ上限
-	constexpr uint32 maxQuad = 10000;
+	constexpr uint32 maxQuad = 1024;
 	constexpr uint32 maxVectices = maxQuad * 4;
 	constexpr uint32 maxIndices = maxQuad * 6;
 	constexpr size_t quadVertexCount = 4;
@@ -58,8 +58,6 @@ namespace Fluoresce {
 		Ref<Shader>			Shader;
 
 		uint32 QuadIndexCount = 0;
-		QuadVertex* QuadVertexBufferBase = nullptr;
-		QuadVertex* QuadVertexBufferPtr = nullptr;
 
 		std::array<Ref<Texture2D>, maxTextureSlots> TextureSlots;
 		uint32_t TextureSlotIndex = 1;
@@ -82,7 +80,8 @@ namespace Fluoresce {
 			});
 
 		m_Data->VertexArray->AddVertexBuffer(m_Data->VertexBuffer);
-		m_Data->QuadVertexBufferBase = new QuadVertex[maxVectices];
+		
+		m_Buffer.Allocate(maxVectices * sizeof(QuadVertex));
 
 		uint32* quadIndices = new uint32[maxIndices];
 		uint32_t offset = 0;
@@ -108,7 +107,7 @@ namespace Fluoresce {
 
 	void SpriteRenderer::ShutDown()
 	{
-		delete[] m_Data->QuadVertexBufferBase;
+		m_Buffer.Free();
 		delete m_Data;
 	}
 
@@ -116,8 +115,8 @@ namespace Fluoresce {
 	{
 		if (m_Data->QuadIndexCount > 0)
 		{
-			uint32_t dataSize = (uint32_t)((uint8_t*)m_Data->QuadVertexBufferPtr - (uint8_t*)m_Data->QuadVertexBufferBase);
-			m_Data->VertexBuffer->SetData(m_Data->QuadVertexBufferBase, dataSize);
+			uint32 dataSize = m_Buffer.GetValidOffset();
+			m_Data->VertexBuffer->SetData(&m_Buffer[0], dataSize);
 
 			for (uint32_t i = 0; i < m_Data->TextureSlotIndex; i++)
 			{
@@ -133,7 +132,7 @@ namespace Fluoresce {
 	void SpriteRenderer::StartBatch()
 	{
 		m_Data->QuadIndexCount = 0;
-		m_Data->QuadVertexBufferPtr = m_Data->QuadVertexBufferBase;
+		m_Buffer.Reset(false);
 	}
 
 	void SpriteRenderer::NextBatch()
@@ -186,14 +185,15 @@ namespace Fluoresce {
 
 		for (size_t i = 0; i < quadVertexCount; i++)
 		{
+			QuadVertex vertex;
 			Vec3 pos = transform * s_DefaultVertexPositions[i];
-			m_Data->QuadVertexBufferPtr->Position = pos;
-			m_Data->QuadVertexBufferPtr->Color = color;
-			m_Data->QuadVertexBufferPtr->TexCoord = s_DefaultTexCoord[i];
-			m_Data->QuadVertexBufferPtr->TexIndex = 0.0f;
-			m_Data->QuadVertexBufferPtr->TilingFactor = 1.0f;
-			m_Data->QuadVertexBufferPtr->EntityID = entityID;
-			m_Data->QuadVertexBufferPtr++;
+			vertex.Position = pos;
+			vertex.Color = color;
+			vertex.TexCoord = s_DefaultTexCoord[i];
+			vertex.TexIndex = 0.0f;
+			vertex.TilingFactor = 1.0f;
+			vertex.EntityID = entityID;
+			m_Buffer.PushData(&vertex, sizeof(QuadVertex));
 		}
 
 		m_Data->QuadIndexCount += 6;
@@ -237,14 +237,15 @@ namespace Fluoresce {
 
 		for (size_t i = 0; i < quadVertexCount; i++)
 		{
+			QuadVertex vertex;
 			Vec3 pos = transform * s_DefaultVertexPositions[i];
-			m_Data->QuadVertexBufferPtr->Position = pos;
-			m_Data->QuadVertexBufferPtr->Color = color;
-			m_Data->QuadVertexBufferPtr->TexCoord = s_DefaultTexCoord[i];
-			m_Data->QuadVertexBufferPtr->TexIndex = textureIndex;
-			m_Data->QuadVertexBufferPtr->TilingFactor = tilingFactor;
-			m_Data->QuadVertexBufferPtr->EntityID = entityID;
-			m_Data->QuadVertexBufferPtr++;
+			vertex.Position = pos;
+			vertex.Color = color;
+			vertex.TexCoord = s_DefaultTexCoord[i];
+			vertex.TexIndex = textureIndex;
+			vertex.TilingFactor = tilingFactor;
+			vertex.EntityID = entityID;
+			m_Buffer.PushData(&vertex, sizeof(QuadVertex));
 		}
 
 		m_Data->QuadIndexCount += 6;

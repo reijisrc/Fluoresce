@@ -156,10 +156,10 @@
     <ClInclude Include="src\Engine\Graphics\VertexBuffer.h">
       <Filter>src\Engine\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\ImGui\ImguiLayer.h">
+    <ClInclude Include="src\Engine\Imgui\ImguiLayer.h">
       <Filter>src\Engine\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\ImGui\ImguiSerializer.h">
+    <ClInclude Include="src\Engine\Imgui\ImguiSerializer.h">
       <Filter>src\Engine\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Renderer\BatchRenderer.h">
@@ -287,13 +287,13 @@
     <ClCompile Include="src\Engine\Graphics\VertexBuffer.cpp">
       <Filter>src\Engine\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\ImGui\ImguiImpl.cpp">
+    <ClCompile Include="src\Engine\Imgui\ImguiImpl.cpp">
       <Filter>src\Engine\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\ImGui\ImguiLayer.cpp">
+    <ClCompile Include="src\Engine\Imgui\ImguiLayer.cpp">
       <Filter>src\Engine\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\ImGui\ImguiSerializer.cpp">
+    <ClCompile Include="src\Engine\Imgui\ImguiSerializer.cpp">
       <Filter>src\Engine\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Renderer\BatchRenderer.cpp">

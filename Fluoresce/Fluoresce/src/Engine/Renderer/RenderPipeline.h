@@ -36,6 +36,8 @@ namespace Fluoresce
 
 		static void OnWindowResize(uint32 width, uint32 height);
 
+		static void ResetAllBatchStats();
+
 		static Ref<Texture2D> GetWhiteTexture();
 		static Ref<UniformBuffer> GetUniformBuffer(UniformBufferIndex index);
 		static LineRenderer& GetLineRenderer();

@@ -3,7 +3,7 @@
 // Describe : 	エディターカメラ												// 
 // Author : Ding Qi																// 
 // Create Date : 2023/01/07														// 
-// Modify Date : 2023/01/08														// 
+// Modify Date : 2023/01/22														// 
 //==============================================================================//
 
 #include "frpch.h"
@@ -18,11 +18,9 @@
 
 namespace Fluoresce {
 
-	EditorCamera::EditorCamera(float fov, float aspectRatio, float nearClip, float farClip)
-		: m_FOV(fov), m_AspectRatio(aspectRatio), m_NearClip(nearClip), m_FarClip(farClip), Camera(Mat4(1.0f))
+	EditorCamera::EditorCamera(float32 fov, float32 aspectRatio, float32 nearClip, float32 farClip)
+		: m_FOV(fov), m_AspectRatio(aspectRatio), m_NearClip(nearClip), m_FarClip(farClip), Camera(glm::perspective(glm::radians(fov), aspectRatio, nearClip, farClip))
 	{
-		Mat4 proj = glm::perspective(glm::radians(fov), aspectRatio, nearClip, farClip);
-		SetProjection(proj);
 		UpdateView();
 	}
 
@@ -49,6 +47,31 @@ namespace Fluoresce {
 	{
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<MouseScrolledEvent>(FR_BIND_EVENT_FN(EditorCamera::OnMouseScroll));
+	}
+
+	void EditorCamera::SetFocusPoint(const Vec3& focuspoint, bool recalculateView)
+	{
+		m_FocusPoint = focuspoint;
+		if (recalculateView)
+		{
+			UpdateView();
+		}
+	}
+
+	void EditorCamera::ResetView(float32 aspect)
+	{
+		m_AspectRatio = aspect;
+		m_FOV = 45.0f;
+		m_NearClip = 0.1f;
+		m_FarClip = 1000.0f;
+		m_Position = { 0.0f, 0.0f, 0.0f };
+		m_FocusPoint = { 0.0f, 0.0f, 0.0f };
+		m_InitialMousePosition = { 0.0f, 0.0f };
+		m_Distance = 10.0f;
+		m_Pitch = 0.0f;
+		m_Yaw = 0.0f;
+		m_RotationSpeed = 0.8f;
+		UpdateView();
 	}
 
 	Mat4 EditorCamera::GetViewProjection() const
@@ -82,26 +105,26 @@ namespace Fluoresce {
 
 	void EditorCamera::UpdateView()
 	{
-		Vec3 position = CalculatePosition();
+		m_Position = CalculatePosition();
 		glm::quat orientation = glm::quat(glm::vec3(-m_Pitch, -m_Yaw, 0.0f));
 
-		m_ViewMatrix = glm::translate(Mat4(1.0f), position) * glm::toMat4(orientation);
+		m_ViewMatrix = glm::translate(Mat4(1.0f), m_Position) * glm::toMat4(orientation);
+		m_ViewMatrix = glm::inverse(m_ViewMatrix);
 	}
 
 	bool EditorCamera::OnMouseScroll(MouseScrolledEvent& e)
 	{
-		float delta = e.GetYOffset() * 0.1f;
+		float32 delta = e.GetYOffset() * 0.1f;
 		MouseZoom(delta);
 		UpdateView();
 		return false;
 	}
 
-
 	void EditorCamera::MousePan(const Vec2& delta)
 	{
 		auto [xSpeed, ySpeed] = PanSpeed();
-		m_FocalPoint += -GetRightDirection() * delta.x * xSpeed * m_Distance;
-		m_FocalPoint += GetUpDirection() * delta.y * ySpeed * m_Distance;
+		m_FocusPoint += -GetRightDirection() * delta.x * xSpeed * m_Distance;
+		m_FocusPoint += GetUpDirection() * delta.y * ySpeed * m_Distance;
 	}
 
 	void EditorCamera::MouseRotate(const Vec2& delta)
@@ -116,14 +139,14 @@ namespace Fluoresce {
 		m_Distance -= delta * ZoomSpeed();
 		if (m_Distance < 1.0f)
 		{
-			m_FocalPoint += GetForwardDirection();
+			m_FocusPoint += GetForwardDirection();
 			m_Distance = 1.0f;
 		}
 	}
 
 	Vec3 EditorCamera::CalculatePosition() const
 	{
-		return m_FocalPoint - GetForwardDirection() * m_Distance;
+		return m_FocusPoint - GetForwardDirection() * m_Distance;
 	}
 
 	std::pair<float32, float32> EditorCamera::PanSpeed() const
@@ -137,12 +160,7 @@ namespace Fluoresce {
 		return { xFactor, yFactor };
 	}
 
-	float EditorCamera::RotationSpeed() const
-	{
-		return 0.8f;
-	}
-
-	float EditorCamera::ZoomSpeed() const
+	float32 EditorCamera::ZoomSpeed() const
 	{
 		float32 distance = m_Distance * 0.2f;
 		distance = std::max(distance, 0.0f);
