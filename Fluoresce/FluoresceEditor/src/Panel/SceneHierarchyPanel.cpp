@@ -3,7 +3,7 @@
 // Describe : 	シーンヒエラルキーパネル										// 
 // Author : Ding Qi																// 
 // Create Date : 2022/05/29														// 
-// Modify Date : 2023/01/26														// 
+// Modify Date : 2023/02/01														// 
 //==============================================================================//
 #include "Panel/SceneHierarchyPanel.h"
 
@@ -278,6 +278,34 @@ namespace Fluoresce {
 			DrawComponent<SpriteRendererComponent>("Sprite Renderer", entity, [](auto& component)
 			{
 				ImGui::ColorEdit4("Color", glm::value_ptr(component.Color));
+				ImGui::Button("Texture Slot", ImVec2(100.0f, 0.0f));
+				if (ImGui::BeginDragDropTarget())
+				{
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(EditorCore::GetDragDropPayloadStr(DragDropPayloadType::_TextureFile).c_str()))
+					{
+						const wchar_t* path = (const wchar_t*)payload->Data;
+						std::filesystem::path texturePath = path;
+						std::string filename = texturePath.filename().string();
+						if (auto tex = EditorCore::LoadTextureAsset(filename); tex)
+						{
+							component.TextureName = filename;
+							component.Texture = tex;
+							component.EnableTexture = true;
+						}
+						else
+						{
+							FR_CLIENT_WARN("Could not set texture {0}", filename);
+						}
+					}
+					ImGui::EndDragDropTarget();
+				}
+
+				if (component.Texture)
+				{
+					ImGui::Checkbox("Enable", &component.EnableTexture);
+					ImGui::SameLine();
+					ImGui::Text(": %s", component.TextureName.c_str());
+				}
 				ImGui::DragFloat("Tiling Factor", &component.TilingFactor, 0.1f, 0.0f, 100.0f);
 			});
 

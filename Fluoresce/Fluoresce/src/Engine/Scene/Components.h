@@ -65,7 +65,7 @@ namespace Fluoresce {
 		Vec4 Color{ 1.0f, 1.0f, 1.0f, 1.0f };
 		float32 TilingFactor = 1.0f;
 		std::string		 TextureName;
-		WeakRef<Texture2D> Texture;
+		Ref<Texture2D>	 Texture;
 		bool EnableTexture = false;
 
 		SpriteRendererComponent() = default;

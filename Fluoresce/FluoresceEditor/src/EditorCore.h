@@ -3,7 +3,7 @@
 // Describe : 	エディターコア													// 
 // Author : Ding Qi																// 
 // Create Date : 2022/05/29														// 
-// Modify Date : 2023/01/18														// 
+// Modify Date : 2023/02/01														// 
 //==============================================================================//
 #pragma once
 
@@ -29,7 +29,6 @@ namespace Fluoresce {
 			_Undefined = 0,
 			_SceneFile,
 			_TextureFile,
-			_TextureAsset,
 		};
 
 		enum class EditorState

@@ -256,9 +256,9 @@ namespace Fluoresce {
 
 	void SpriteRenderer::DrawSpriteEntity(const Mat4& transform, SpriteRendererComponent& src, sint32 entityID)
 	{
-		if (!src.Texture.expired() && src.EnableTexture)
+		if (src.EnableTexture)
 		{
-			auto texture = src.Texture.lock();
+			auto texture = src.Texture;
 			DrawSprite(transform, src.Color, texture, src.TilingFactor, entityID);
 		}
 		else

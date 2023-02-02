@@ -3,13 +3,13 @@
 // Describe : 	エディターコア													// 
 // Author : Ding Qi																// 
 // Create Date : 2022/05/29														// 
-// Modify Date : 2023/01/26														// 
+// Modify Date : 2023/02/01														// 
 //==============================================================================//
 #include "EditorCore.h"
 #include "Engine/ImGui/ImguiSerializer.h"
 #include "Engine/Scene/SceneSerializer.h"
 
-#define EDITOR_VERSION               "0.80"
+#define EDITOR_VERSION               "0.81"
 
 namespace Fluoresce {
 
@@ -157,8 +157,6 @@ namespace Fluoresce {
 				return std::string("CONTENT_ITEM_SCENE");
 			case DragDropPayloadType::_TextureFile:
 				return std::string("CONTENT_ITEM_TEXTURE");
-			case DragDropPayloadType::_TextureAsset:
-				return std::string("ASSET_ITEM_TEXTURE");
 			default:
 				return std::string();
 			}

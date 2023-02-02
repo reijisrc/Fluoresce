@@ -3,7 +3,7 @@
 // Describe : 	エディターレイヤー												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/05/14														// 
-// Modify Date : 2023/01/22														// 
+// Modify Date : 2023/02/01														// 
 //==============================================================================//
 #include "EditorLayer.h"
 #include "EditorCore.h"
@@ -498,11 +498,6 @@ namespace Fluoresce {
 						{
 							m_EditorCamera.SetDistance(dist);
 						}
-
-						auto dir = m_EditorCamera.GetForwardDirection();
-						ImGui::Text("Dir X: %.2f", dir.x);
-						ImGui::Text("Dir Y: %.2f", dir.y);
-						ImGui::Text("Dir Z: %.2f", dir.z);
 					}
 					else if (EditorCore::GetEditorState() == EditorState::Runtime)
 					{
