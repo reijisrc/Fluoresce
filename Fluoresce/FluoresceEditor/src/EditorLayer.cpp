@@ -3,7 +3,7 @@
 // Describe : 	エディターレイヤー												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/05/14														// 
-// Modify Date : 2023/01/12														// 
+// Modify Date : 2023/01/18														// 
 //==============================================================================//
 #include "EditorLayer.h"
 #include "EditorCore.h"
@@ -18,6 +18,9 @@ namespace Fluoresce {
 
 	namespace Editor
 	{
+		static const std::string s_PlayIconPath = "icons/play.png";
+		static const std::string s_StopIconPath = "icons/stop.png";
+
 		EditorLayer::EditorLayer() :
 			Layer("EditorLayer")
 		{
@@ -33,6 +36,13 @@ namespace Fluoresce {
 
 		void EditorLayer::OnAttach()
 		{
+			{
+				std::string resourcespath = EditorCore::GetPath(EditorPath::_EditorResourcesPath).string();
+				resourcespath += "/";
+				m_IconPlay = Texture2D::Create(resourcespath + s_PlayIconPath);
+				m_IconStop = Texture2D::Create(resourcespath + s_StopIconPath);
+			}
+
 			m_ContentBrowserPanel.Init();
 
 			FramebufferSpecification fbSpec;
@@ -43,10 +53,8 @@ namespace Fluoresce {
 
 			m_EditorCamera = EditorCamera(30.0f, 1600.0f / 900.0f, 0.1f, 1000.0f);
 
-			//m_Texture = EditorCore::LoadTextureAsset("brickwall.jpg");
-
-			m_Scene = CreateRef<Scene>();
-			m_SceneHierarchyPanel.SetContext(m_Scene);
+			m_EditorScene = CreateRef<Scene>();
+			m_SceneHierarchyPanel.SetContext(m_EditorScene);
 		}
 
 		void EditorLayer::OnDetach()
@@ -55,8 +63,6 @@ namespace Fluoresce {
 
 		void EditorLayer::OnUpdate(DeltaTime ts)
 		{
-			static const Camera camera(glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f));
-
 			auto& lineRenderer = RenderPipeline::GetLineRenderer();
 			auto& spriteRenderer = RenderPipeline::GetSpriteRenderer();
 
@@ -67,19 +73,28 @@ namespace Fluoresce {
 				(spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y))
 			{
 				m_Framebuffer->Resize((uint32)m_ViewportSize.x, (uint32)m_ViewportSize.y);
-				m_EditorCamera.SetViewportSize(m_ViewportSize.x, m_ViewportSize.y);
 				resize = true;
 			}
 
-			// シーンリサイズ
-			if (resize)
+			switch (EditorCore::GetEditorState())
 			{
-				m_EditorCamera.SetViewportSize(m_ViewportSize.x, m_ViewportSize.y);
-				m_Scene->OnViewportResize((uint32)m_ViewportSize.x, (uint32)m_ViewportSize.y);
+			case EditorState::Edit:
+				if (resize)
+				{
+					m_EditorCamera.SetViewportSize(m_ViewportSize.x, m_ViewportSize.y);
+					m_EditorScene->OnViewportResize((uint32)m_ViewportSize.x, (uint32)m_ViewportSize.y);
+				}
+				m_EditorCamera.OnUpdate(ts);
+				m_EditorScene->OnEditorUpdate(ts);
+				break;
+			case EditorState::Runtime:
+				if (resize)
+				{
+					m_RuntimeScene->OnViewportResize((uint32)m_ViewportSize.x, (uint32)m_ViewportSize.y);
+				}
+				m_RuntimeScene->OnRuntimeUpdate(ts);
+				break;
 			}
-
-			m_EditorCamera.OnUpdate(ts);
-			m_Scene->OnUpdate(ts);
 
 			lineRenderer.ResetStats();
 			spriteRenderer.ResetStats();
@@ -91,7 +106,15 @@ namespace Fluoresce {
 			// カラーバッファ1:クリア
 			m_Framebuffer->ClearAttachment(1, -1);
 
-			m_Scene->OnRender(ts, m_EditorCamera);
+			switch (EditorCore::GetEditorState())
+			{
+			case EditorState::Edit:
+				m_EditorScene->OnEditorRender(ts, m_EditorCamera);
+				break;
+			case EditorState::Runtime:
+				m_RuntimeScene->OnRuntimeRender(ts);
+				break;
+			}
 
 			auto [mx, my] = ImGui::GetMousePos();
 			mx -= m_ViewportBounds[0].x;
@@ -105,7 +128,8 @@ namespace Fluoresce {
 			if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
 			{
 				sint32 pixelData = m_Framebuffer->ReadPixel(1, mouseX, mouseY);
-				m_HoveredEntity = (pixelData == -1) ? Entity() : Entity(static_cast<entt::entity>(pixelData), m_Scene.get());
+				auto currentscene = (EditorCore::GetEditorState() == EditorState::Edit) ? m_EditorScene.get() : m_RuntimeScene.get();
+				m_HoveredEntity = (pixelData == -1) ? Entity() : Entity(static_cast<entt::entity>(pixelData), currentscene);
 			}
 
 			m_Framebuffer->Unbind();
@@ -131,7 +155,10 @@ namespace Fluoresce {
 
 		void EditorLayer::OnEvent(Event& e)
 		{
-			m_EditorCamera.OnEvent(e);
+			if (EditorCore::GetEditorState() == EditorState::Edit)
+			{
+				m_EditorCamera.OnEvent(e);
+			}
 
 			EventDispatcher dispatcher(e);
 			dispatcher.Dispatch<KeyPressedEvent>(FR_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
@@ -144,7 +171,7 @@ namespace Fluoresce {
 			if (e.IsRepeat())
 				return false;
 
-			bool editmode = true;
+			bool editmode = (EditorCore::GetEditorState() == EditorState::Edit) ? true : false;
 			bool control = Input::IsKeyPressed(Key::LeftControl) || Input::IsKeyPressed(Key::RightControl);
 			bool shift = Input::IsKeyPressed(Key::LeftShift) || Input::IsKeyPressed(Key::RightShift);
 
@@ -223,11 +250,34 @@ namespace Fluoresce {
 			return false;
 		}
 
+		void EditorLayer::OnScenePlay()
+		{
+			EditorCore::SetEditorState(EditorState::Runtime);
+			m_GizmoType = -1;
+
+			m_RuntimeScene = Scene::Copy(m_EditorScene);
+			m_RuntimeScene->OnRuntimeStart();
+
+			m_SceneHierarchyPanel.SetContext(m_RuntimeScene);
+		}
+
+		void EditorLayer::OnSceneStop()
+		{
+			EditorCore::SetEditorState(EditorState::Edit);
+
+			m_RuntimeScene->OnRuntimeStop();
+
+			m_SceneHierarchyPanel.SetContext(m_EditorScene);
+		}
+
 		void EditorLayer::DuplicateEntity()
 		{
+			if (EditorCore::GetEditorState() != EditorState::Edit)
+				return;
+
 			Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();
 			if (selectedEntity)
-				m_Scene->DuplicateEntity(selectedEntity);
+				m_EditorScene->DuplicateEntity(selectedEntity);
 		}
 
 		void EditorLayer::DrawMenuBar()
@@ -336,14 +386,17 @@ namespace Fluoresce {
 				}
 
 				// ドロップシーン
-				if (ImGui::BeginDragDropTarget())
+				if (EditorCore::GetEditorState() == EditorState::Edit)
 				{
-					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(EditorCore::GetDragDropPayloadStr(DragDropPayloadType::_SceneFile).c_str()))
+					if (ImGui::BeginDragDropTarget())
 					{
-						const wchar_t* path = (const wchar_t*)payload->Data;
-						OpenScene(path);
+						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(EditorCore::GetDragDropPayloadStr(DragDropPayloadType::_SceneFile).c_str()))
+						{
+							const wchar_t* path = (const wchar_t*)payload->Data;
+							OpenScene(path);
+						}
+						ImGui::EndDragDropTarget();
 					}
-					ImGui::EndDragDropTarget();
 				}
 
 				// ImGizmos
@@ -409,10 +462,25 @@ namespace Fluoresce {
 				if (ImGui::TreeNodeEx((void*)2754597, treeNodeFlags, "Scene Setting"))
 				{
 					std::string name = "None";
+					Ref<Texture2D> icon = (EditorCore::GetEditorState() == EditorState::Edit) ? m_IconPlay : m_IconStop;
+					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+					if (ImGui::ImageButton((ImTextureID)(uint64)icon->GetRendererID(), ImVec2(24, 24), ImVec2(0, 0), ImVec2(1, 1), 0))
+					{
+						if (EditorCore::GetEditorState() == EditorState::Edit)
+							OnScenePlay();
+						else if (EditorCore::GetEditorState() == EditorState::Runtime)
+							OnSceneStop();
+					}
 					ImGui::ColorEdit4("BgColor", glm::value_ptr(m_ViewportClearColor));
+					if (EditorCore::GetEditorState() == EditorState::Edit)
+					{
+						ImGui::Text("EditorCamera Pos: X: %.2f, Y: %.2f, Z: %.2f", m_EditorCamera.GetPosition().x, m_EditorCamera.GetPosition().y, m_EditorCamera.GetPosition().z);
+					}
 					if (m_HoveredEntity)
 						name = m_HoveredEntity.GetComponent<TagComponent>().Tag;
+
 					ImGui::Text("Hovered Entity: %s", name.c_str());
+					ImGui::PopStyleColor(1);
 					ImGui::TreePop();
 				}
 
@@ -443,9 +511,9 @@ namespace Fluoresce {
 
 		void EditorLayer::NewScene()
 		{
-			m_Scene = CreateRef<Scene>();
-			m_Scene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-			m_SceneHierarchyPanel.SetContext(m_Scene);
+			m_EditorScene = CreateRef<Scene>();
+			m_EditorScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+			m_SceneHierarchyPanel.SetContext(m_EditorScene);
 
 			EditorCore::SetCurrentScenePath(std::filesystem::path());
 		}
@@ -461,6 +529,9 @@ namespace Fluoresce {
 
 		void EditorLayer::OpenScene(const std::filesystem::path& path)
 		{
+			if (EditorCore::GetEditorState() == EditorState::Runtime)
+				OnSceneStop();
+
 			if (path.extension().string() != ".scene")
 			{
 				FR_CLIENT_WARN("Could not load {0} - not a scene file", path.filename().string());
@@ -470,11 +541,10 @@ namespace Fluoresce {
 			Ref<Scene> newScene = CreateRef<Scene>();
 			if (EditorCore::SceneDeserialize(newScene, path.string()))
 			{
-				m_Scene = newScene;
-				m_Scene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+				m_EditorScene = newScene;
+				m_EditorScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 
-				m_SceneHierarchyPanel.SetContext(m_Scene);
-
+				m_SceneHierarchyPanel.SetContext(m_EditorScene);
 				EditorCore::SetCurrentScenePath(path);
 			}
 		}
@@ -486,7 +556,8 @@ namespace Fluoresce {
 			{
 				auto relativePath = std::filesystem::relative(currentScenePath, EditorCore::GetPath(EditorPath::_EditorScenePath));
 				std::string name = relativePath.stem().string();
-				EditorCore::SceneSerialize(m_Scene, currentScenePath.string(), name);
+				auto currentscene = (EditorCore::GetEditorState() == EditorState::Edit) ? m_EditorScene : m_RuntimeScene;
+				EditorCore::SceneSerialize(currentscene, currentScenePath.string(), name);
 			}
 			else
 			{
@@ -502,7 +573,8 @@ namespace Fluoresce {
 				std::filesystem::path path = filepath;
 				auto relativePath = std::filesystem::relative(path, EditorCore::GetPath(EditorPath::_EditorScenePath));
 				std::string name = relativePath.stem().string();
-				EditorCore::SceneSerialize(m_Scene, filepath, name);
+				auto currentscene = (EditorCore::GetEditorState() == EditorState::Edit) ? m_EditorScene : m_RuntimeScene;
+				EditorCore::SceneSerialize(currentscene, filepath, name);
 			}
 		}
 	}

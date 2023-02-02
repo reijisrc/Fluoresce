@@ -3,7 +3,7 @@
 // Describe : 	ÉVÅ[Éì															// 
 // Author : Ding Qi																// 
 // Create Date : 2022/12/29														// 
-// Modify Date : 2023/01/07														// 
+// Modify Date : 2023/01/18														// 
 //==============================================================================//
 #pragma once
 
@@ -30,13 +30,21 @@ namespace Fluoresce {
 		Scene();
 		~Scene();
 
+		static Ref<Scene> Copy(Ref<Scene> other);
+
 		Entity CreateEntity(const std::string& name = std::string());
 		Entity CreateEntityWithUID(UniqueID uid, const std::string& name = std::string());
 
 		void DestroyEntity(Entity entity);
 
-		void OnUpdate(DeltaTime ts);
-		void OnRender(DeltaTime ts, EditorCamera& camera);
+		void OnRuntimeStart();
+		void OnRuntimeStop();
+
+		void OnEditorUpdate(DeltaTime ts);
+		void OnRuntimeUpdate(DeltaTime ts);
+
+		void OnEditorRender(DeltaTime ts, EditorCamera& camera);
+		void OnRuntimeRender(DeltaTime ts);
 
 		void OnViewportResize(uint32 width, uint32 height);
 

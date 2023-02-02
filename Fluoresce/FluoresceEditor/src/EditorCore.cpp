@@ -3,18 +3,20 @@
 // Describe : 	エディターコア													// 
 // Author : Ding Qi																// 
 // Create Date : 2022/05/29														// 
-// Modify Date : 2023/01/12														// 
+// Modify Date : 2023/01/18														// 
 //==============================================================================//
 #include "EditorCore.h"
 #include "Engine/ImGui/ImguiSerializer.h"
 #include "Engine/Scene/SceneSerializer.h"
 
-#define EDITOR_VERSION               "0.61"
+#define EDITOR_VERSION               "0.70"
 
 namespace Fluoresce {
 
 	namespace Editor
 	{
+		static EditorState s_State = EditorState::Edit;
+
 		static std::filesystem::path s_RootPath = "";
 		static std::filesystem::path s_ResourcesPath = "";
 		static std::filesystem::path s_ConfigPath = "";
@@ -96,6 +98,16 @@ namespace Fluoresce {
 		{
 			SceneSerializer serializer(scene);
 			return serializer.Deserialize(filepath);
+		}
+
+		EditorState EditorCore::GetEditorState()
+		{
+			return s_State;
+		}
+
+		void EditorCore::SetEditorState(EditorState state)
+		{
+			s_State = state;
 		}
 
 		std::filesystem::path& EditorCore::GetPath(EditorPath path)

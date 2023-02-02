@@ -3,7 +3,7 @@
 // Describe : 	エディターコア													// 
 // Author : Ding Qi																// 
 // Create Date : 2022/05/29														// 
-// Modify Date : 2023/01/09														// 
+// Modify Date : 2023/01/18														// 
 //==============================================================================//
 #pragma once
 
@@ -32,6 +32,11 @@ namespace Fluoresce {
 			_TextureAsset,
 		};
 
+		enum class EditorState
+		{
+			Edit = 0,
+			Runtime = 1
+		};
 
 		// エディターコア
 		class EditorCore
@@ -44,6 +49,9 @@ namespace Fluoresce {
 
 			static void SceneSerialize(const Ref<Scene>& scene, const std::string& filepath, const std::string& scenename);
 			static bool SceneDeserialize(const Ref<Scene>& scene, const std::string& filepath);
+
+			static EditorState GetEditorState();
+			static void SetEditorState(EditorState state);
 
 			static std::filesystem::path& GetPath(EditorPath path);
 

@@ -3,7 +3,7 @@
 // Describe : 	シーン															// 
 // Author : Ding Qi																// 
 // Create Date : 2022/12/29														// 
-// Modify Date : 2023/01/07														// 
+// Modify Date : 2023/01/18														// 
 //==============================================================================//
 #include "frpch.h"
 #include "Engine/Scene/Scene.h"
@@ -13,6 +13,21 @@
 #include "Engine/Renderer/RenderPipeline.h"
 
 namespace Fluoresce {
+
+	template<typename Component>
+	static void CopyComponent(entt::registry& dst, entt::registry& src, const std::unordered_map<UniqueID, entt::entity>& enttMap)
+	{
+		auto view = src.view<Component>();
+		for (auto e : view)
+		{
+			UniqueID uuid = src.get<IDComponent>(e).ID;
+			FR_CORE_ASSERT(enttMap.find(uuid) != enttMap.end(), "Can not find uid!");
+			entt::entity dstEnttID = enttMap.at(uuid);
+
+			auto& component = src.get<Component>(e);
+			dst.emplace_or_replace<Component>(dstEnttID, component);
+		}
+	}
 
 	template<typename Component>
 	static void CopyComponentIfExists(Entity dst, Entity src)
@@ -29,6 +44,35 @@ namespace Fluoresce {
 	Scene::~Scene()
 	{
 
+	}
+
+	Ref<Scene> Scene::Copy(Ref<Scene> other)
+	{
+		Ref<Scene> newScene = CreateRef<Scene>();
+
+		newScene->m_ViewportWidth = other->m_ViewportWidth;
+		newScene->m_ViewportHeight = other->m_ViewportHeight;
+
+		auto& srcSceneRegistry = other->m_Registry;
+		auto& dstSceneRegistry = newScene->m_Registry;
+		std::unordered_map<UniqueID, entt::entity> enttMap;
+
+		// エンティティ再作成
+		auto idView = srcSceneRegistry.view<IDComponent>();
+		for (auto e : idView)
+		{
+			UniqueID uuid = srcSceneRegistry.get<IDComponent>(e).ID;
+			const auto& name = srcSceneRegistry.get<TagComponent>(e).Tag;
+			Entity newEntity = newScene->CreateEntityWithUID(uuid, name);
+			enttMap[uuid] = (entt::entity)newEntity;
+		}
+
+		// コンポーネントコピー
+		CopyComponent<TransformComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+		CopyComponent<CameraComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+		CopyComponent<SpriteRendererComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+
+		return newScene;
 	}
 
 	Entity Scene::CreateEntity(const std::string& name)
@@ -55,7 +99,15 @@ namespace Fluoresce {
 		m_Registry.destroy(entity);
 	}
 
-	void Scene::OnUpdate(DeltaTime ts)
+	void Scene::OnRuntimeStart()
+	{
+	}
+
+	void Scene::OnRuntimeStop()
+	{
+	}
+
+	void Scene::OnEditorUpdate(DeltaTime ts)
 	{
 		if (m_IsPaused)
 		{
@@ -63,26 +115,16 @@ namespace Fluoresce {
 		}
 	}
 
-	void Scene::OnRender(DeltaTime ts, EditorCamera& camera)
+	void Scene::OnRuntimeUpdate(DeltaTime ts)
 	{
-		//// メインカメラ取得
-		//Camera* mainCamera = nullptr;
-		//Mat4 cameraTransform;
-		//{
-		//	auto view = m_Registry.view<TransformComponent, CameraComponent>();
-		//	for (auto entity : view)
-		//	{
-		//		auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
+		if (m_IsPaused)
+		{
+			return;
+		}
+	}
 
-		//		if (camera.Primary)
-		//		{
-		//			mainCamera = &camera.Camera;
-		//			cameraTransform = transform.GetTransform();
-		//			break;
-		//		}
-		//	}
-		//}
-
+	void Scene::OnEditorRender(DeltaTime ts, EditorCamera& camera)
+	{
 		auto& spriteRenderer = RenderPipeline::GetSpriteRenderer();
 
 		spriteRenderer.Begin(camera);
@@ -98,6 +140,47 @@ namespace Fluoresce {
 		}
 
 		spriteRenderer.End();
+	}
+
+	void Scene::OnRuntimeRender(DeltaTime ts)
+	{
+		// メインカメラ取得
+		Camera* mainCamera = nullptr;
+		Mat4 cameraTransform;
+		{
+			auto view = m_Registry.view<TransformComponent, CameraComponent>();
+			for (auto entity : view)
+			{
+				auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
+
+				if (camera.Primary)
+				{
+					mainCamera = &camera.Camera;
+					cameraTransform = transform.GetTransform();
+					break;
+				}
+			}
+		}
+
+		if (mainCamera)
+		{
+			auto& spriteRenderer = RenderPipeline::GetSpriteRenderer();
+
+			spriteRenderer.Begin(*mainCamera, cameraTransform);
+
+			{
+				auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+				for (auto entity : group)
+				{
+					auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+
+					spriteRenderer.DrawSpriteEntity(transform.GetTransform(), sprite, (sint32)entity);
+				}
+			}
+
+			spriteRenderer.End();
+		}
+
 	}
 
 	void Scene::OnViewportResize(uint32 width, uint32 height)

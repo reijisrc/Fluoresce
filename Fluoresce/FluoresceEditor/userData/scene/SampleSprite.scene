@@ -1,23 +1,5 @@
 Scene: SampleSprite
 Entities:
-  - Entity: 14873560220487755467
-    TagComponent:
-      Tag: Camera
-    TransformComponent:
-      Translation: [0, 0, 20]
-      Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
-    CameraComponent:
-      Camera:
-        ProjectionType: 1
-        PerspectiveFOV: 0.785398185
-        PerspectiveNear: 0.00999999978
-        PerspectiveFar: 1000
-        OrthographicSize: 10
-        OrthographicNear: -1
-        OrthographicFar: 1
-      Primary: true
-      FixedAspectRatio: false
   - Entity: 3991693939405439928
     TagComponent:
       Tag: Sprite
@@ -28,3 +10,21 @@ Entities:
     SpriteRendererComponent:
       Color: [0, 1, 1, 1]
       TilingFactor: 1
+  - Entity: 14873560220487755467
+    TagComponent:
+      Tag: Camera
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      Camera:
+        ProjectionType: 1
+        PerspectiveFOV: 0.785398185
+        PerspectiveNear: 0.00999999978
+        PerspectiveFar: 1000
+        OrthographicSize: 10
+        OrthographicNear: 1
+        OrthographicFar: 1000
+      Primary: true
+      FixedAspectRatio: false

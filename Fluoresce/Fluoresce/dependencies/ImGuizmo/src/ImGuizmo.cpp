@@ -641,19 +641,19 @@ namespace IMGUIZMO_NAMESPACE
       TranslationLineArrowSize   = 6.0f;
       RotationLineThickness      = 2.0f;
       RotationOuterLineThickness = 3.0f;
-      ScaleLineThickness         = 3.0f;
-      ScaleLineCircleSize        = 6.0f;
+      ScaleLineThickness         = 6.0f;
+      ScaleLineCircleSize        = 12.0f;
       HatchedAxisLineThickness   = 6.0f;
       CenterCircleSize           = 6.0f;
 
       // initialize default colors
-      Colors[DIRECTION_X]           = ImVec4(0.666f, 0.000f, 0.000f, 1.000f);
-      Colors[DIRECTION_Y]           = ImVec4(0.000f, 0.666f, 0.000f, 1.000f);
-      Colors[DIRECTION_Z]           = ImVec4(0.000f, 0.000f, 0.666f, 1.000f);
+      Colors[DIRECTION_X]           = ImVec4(0.800f, 0.100f, 0.150f, 1.000f);
+      Colors[DIRECTION_Y]           = ImVec4(0.200f, 0.800f, 0.200f, 1.000f);
+      Colors[DIRECTION_Z]           = ImVec4(0.150f, 0.100f, 0.800f, 1.000f);
       Colors[PLANE_X]               = ImVec4(0.666f, 0.000f, 0.000f, 0.380f);
       Colors[PLANE_Y]               = ImVec4(0.000f, 0.666f, 0.000f, 0.380f);
       Colors[PLANE_Z]               = ImVec4(0.000f, 0.000f, 0.666f, 0.380f);
-      Colors[SELECTION]             = ImVec4(1.000f, 0.500f, 0.062f, 0.541f);
+      Colors[SELECTION]             = ImVec4(0.120f, 0.880f, 0.062f, 0.541f);
       Colors[INACTIVE]              = ImVec4(0.600f, 0.600f, 0.600f, 0.600f);
       Colors[TRANSLATION_LINE]      = ImVec4(0.666f, 0.666f, 0.666f, 0.666f);
       Colors[SCALE_LINE]            = ImVec4(0.250f, 0.250f, 0.250f, 1.000f);
@@ -2872,7 +2872,7 @@ namespace IMGUIZMO_NAMESPACE
                   {
                      gContext.mDrawList->AddConvexPolyFilled(faceCoordsScreen, 4, IM_COL32(0xF0, 0xA0, 0x60, 0x80));
 
-                     if (io.MouseDown[0] && !isClicking && !isDraging && GImGui->ActiveId == 0) {
+                     if (io.MouseDown[0] && !isClicking && !isDraging) {
                         overBox = boxCoordInt;
                         isClicking = true;
                         isDraging = true;

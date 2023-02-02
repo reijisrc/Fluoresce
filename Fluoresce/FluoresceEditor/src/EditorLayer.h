@@ -3,7 +3,7 @@
 // Describe : 	エディターレイヤー												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/05/14														// 
-// Modify Date : 2023/01/12														// 
+// Modify Date : 2023/01/18														// 
 //==============================================================================//
 #pragma once
 
@@ -44,6 +44,8 @@ namespace Fluoresce {
 			bool OnKeyPressed(KeyPressedEvent& e);
 			bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
 
+			void OnScenePlay();
+			void OnSceneStop();
 			void DuplicateEntity();
 
 			void DrawMenuBar();
@@ -69,7 +71,12 @@ namespace Fluoresce {
 			sint32 m_GizmoType = -1;
 
 			Ref<Framebuffer> m_Framebuffer;
-			Ref<Scene>		m_Scene;
+
+			Ref<Scene> m_EditorScene;
+			Ref<Scene> m_RuntimeScene;
+
+			Ref<Texture2D> m_IconPlay; 
+			Ref<Texture2D> m_IconStop;
 
 			EditorCamera m_EditorCamera;
 			Entity		m_HoveredEntity;
