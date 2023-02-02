@@ -3,7 +3,7 @@
 // Describe : 	シーン															// 
 // Author : Ding Qi																// 
 // Create Date : 2022/12/29														// 
-// Modify Date : 2023/01/18														// 
+// Modify Date : 2023/01/26														// 
 //==============================================================================//
 #include "frpch.h"
 #include "Engine/Scene/Scene.h"
@@ -11,6 +11,7 @@
 #include "Engine/Scene/Entity.h"
 #include "Engine/Scene/Components.h"
 #include "Engine/Renderer/RenderPipeline.h"
+#include "Engine/Scene/ScriptableEntity.h"
 
 namespace Fluoresce {
 
@@ -71,8 +72,19 @@ namespace Fluoresce {
 		CopyComponent<TransformComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
 		CopyComponent<CameraComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
 		CopyComponent<SpriteRendererComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+		CopyComponent<ScriptComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
 
 		return newScene;
+	}
+
+	void Scene::BuildNativeScript(const ScriptBindFn& func)
+	{
+		auto view = m_Registry.view<ScriptComponent>();
+		for (auto e : view)
+		{
+			Entity entity = { e, this };
+			func(entity);
+		}
 	}
 
 	Entity Scene::CreateEntity(const std::string& name)
@@ -101,10 +113,33 @@ namespace Fluoresce {
 
 	void Scene::OnRuntimeStart()
 	{
+		// スクリプトコンストラクタ
+		{
+			m_Registry.view<ScriptComponent>().each([=](auto entity, auto& nsc)
+			{
+				if (nsc.ScriptID != 0 && nsc.Instance == nullptr)
+				{
+					nsc.Instance = nsc.InstantiateScript();
+					nsc.Instance->m_Entity = Entity{ entity, this };
+					nsc.Instance->OnCreate();
+				}
+			});
+		}
 	}
 
 	void Scene::OnRuntimeStop()
 	{
+		// スクリプトデストラクタ
+		{
+			m_Registry.view<ScriptComponent>().each([=](auto entity, auto& nsc)
+			{
+				if (nsc.Instance != nullptr)
+				{
+					nsc.Instance->OnDestroy();
+					nsc.DestroyScript(&nsc);
+				}
+			});
+		}
 	}
 
 	void Scene::OnEditorUpdate(DeltaTime ts)
@@ -121,6 +156,15 @@ namespace Fluoresce {
 		{
 			return;
 		}
+
+		// スクリプト更新
+		m_Registry.view<ScriptComponent>().each([=](auto entity, auto& nsc)
+		{
+			if (nsc.Instance != nullptr)
+			{
+				nsc.Instance->OnUpdate(ts);
+			}
+		});
 	}
 
 	void Scene::OnEditorRender(DeltaTime ts, EditorCamera& camera)
@@ -207,6 +251,7 @@ namespace Fluoresce {
 		CopyComponentIfExists<TransformComponent>(newEntity, entity);
 		CopyComponentIfExists<SpriteRendererComponent>(newEntity, entity);
 		CopyComponentIfExists<CameraComponent>(newEntity, entity);
+		CopyComponentIfExists<ScriptComponent>(newEntity, entity);
 	}
 
 	Entity Scene::FindEntityByName(std::string_view name)
@@ -274,6 +319,12 @@ namespace Fluoresce {
 
 	template<>
 	void Scene::OnComponentAdded<SpriteRendererComponent>(Entity entity, SpriteRendererComponent& component)
+	{
+
+	}
+
+	template<>
+	void Scene::OnComponentAdded<ScriptComponent>(Entity entity, ScriptComponent& component)
 	{
 
 	}

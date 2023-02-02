@@ -193,6 +193,7 @@
     <ClInclude Include="src\Engine\Scene\Scene.h" />
     <ClInclude Include="src\Engine\Scene\SceneCamera.h" />
     <ClInclude Include="src\Engine\Scene\SceneSerializer.h" />
+    <ClInclude Include="src\Engine\Scene\ScriptableEntity.h" />
     <ClInclude Include="src\Engine\Utils\FileUtil.h" />
     <ClInclude Include="src\Engine\Utils\GlmUtil.h" />
     <ClInclude Include="src\Fluoresce.h" />

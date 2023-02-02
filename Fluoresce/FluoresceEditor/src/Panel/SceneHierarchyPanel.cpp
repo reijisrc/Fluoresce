@@ -3,13 +3,15 @@
 // Describe : 	シーンヒエラルキーパネル										// 
 // Author : Ding Qi																// 
 // Create Date : 2022/05/29														// 
-// Modify Date : 2023/01/22														// 
+// Modify Date : 2023/01/26														// 
 //==============================================================================//
 #include "Panel/SceneHierarchyPanel.h"
 
 #include "Engine/Scene/Components.h"
+
 #include "EditorCore.h"
 #include "ImguiUtil/ImguiUtil.h"
+#include "NativeScript/EditorScriptUtil.h"
 
 #include <imgui.h>
 #include <imgui_internal.h>
@@ -164,6 +166,8 @@ namespace Fluoresce {
 		void SceneHierarchyPanel::DrawComponents(Entity entity)
 		{
 			static sint32 textureSelection = 0;
+			static sint32 scriptSelection = 0;
+
 			const ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowItemOverlap;
 
 			if (entity.HasComponent<TagComponent>())
@@ -189,6 +193,7 @@ namespace Fluoresce {
 			{
 				DisplayAddComponentEntry<CameraComponent>("Camera");
 				DisplayAddComponentEntry<SpriteRendererComponent>("Sprite Renderer");
+				DisplayAddComponentEntry<ScriptComponent>("Script");
 				ImGui::EndPopup();
 			}
 
@@ -275,7 +280,34 @@ namespace Fluoresce {
 				ImGui::ColorEdit4("Color", glm::value_ptr(component.Color));
 				ImGui::DragFloat("Tiling Factor", &component.TilingFactor, 0.1f, 0.0f, 100.0f);
 			});
+
+			DrawComponent<ScriptComponent>("Script", entity, [](auto& component)
+			{
+				bool runtime = (EditorCore::GetEditorState() == EditorState::Runtime) ? true : false;
+				if (runtime)
+				{
+					ImGui::Text("Script: %s", EditorScriptUtil::GetScriptName(component.ScriptID));
+				}
+				else
+				{
+					auto currentName = EditorScriptUtil::GetScriptName(component.ScriptID);
+					if (ImGui::BeginCombo("Script", currentName))
+					{
+						for (int n = 0; n < EditorScriptID::_ID_Max; n++)
+						{
+							auto name = EditorScriptUtil::GetScriptName(n);
+							ImGui::PushID((void*)name);
+							if (ImGui::Selectable(name, name == currentName))
+							{
+								scriptSelection = n;
+								component.ScriptID = scriptSelection;
+							}
+							ImGui::PopID();
+						}
+						ImGui::EndCombo();
+					}
+				}
+			});
 		}
 	}
-
 }

@@ -231,6 +231,7 @@
     <ClInclude Include="src\frpch.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Scene\ScriptableEntity.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dependencies\ImGuizmo\src\ImGuizmo.cpp">

@@ -3,7 +3,7 @@
 // Describe : 	シーンシリアライザ												// 
 // Author : Ding Qi																// 
 // Create Date : 2023/01/08														// 
-// Modify Date : 2023/01/08														// 
+// Modify Date : 2023/01/26														// 
 //==============================================================================//
 #include "frpch.h"
 #include "Engine/Scene/SceneSerializer.h"
@@ -203,6 +203,17 @@ namespace Fluoresce {
 			out << YAML::EndMap; // SpriteRendererComponent
 		}
 
+		if (entity.HasComponent<ScriptComponent>())
+		{
+			out << YAML::Key << "ScriptComponent";
+			out << YAML::BeginMap; // ScriptComponent
+
+			auto& nativescriptComponent = entity.GetComponent<ScriptComponent>();
+			out << YAML::Key << "ScriptID" << YAML::Value << nativescriptComponent.ScriptID;
+
+			out << YAML::EndMap; // ScriptComponent
+		}
+
 		out << YAML::EndMap; // Entity
 	}
 
@@ -309,6 +320,13 @@ namespace Fluoresce {
 
 					if (spriteRendererComponent["TilingFactor"])
 						src.TilingFactor = spriteRendererComponent["TilingFactor"].as<float>();
+				}
+
+				auto scriptComponent = entity["ScriptComponent"];
+				if (scriptComponent)
+				{
+					auto& src = deserializedEntity.AddComponent<ScriptComponent>();
+					src.ScriptID = scriptComponent["ScriptID"].as<uint32_t>();
 				}
 			}
 		}

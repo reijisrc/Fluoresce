@@ -3,7 +3,7 @@
 // Describe : 	コンポーネント													// 
 // Author : Ding Qi																// 
 // Create Date : 2022/12/29														// 
-// Modify Date : 2022/12/29														// 
+// Modify Date : 2023/01/26														// 
 //==============================================================================//
 #pragma once
 
@@ -72,6 +72,25 @@ namespace Fluoresce {
 		SpriteRendererComponent(const SpriteRendererComponent&) = default;
 		SpriteRendererComponent(const Vec4& color)
 			: Color(color) {}
+	};
+
+	class ScriptableEntity;
+
+	// スクリプトコンポーネント
+	struct ScriptComponent
+	{
+		uint32	ScriptID = 0;
+		ScriptableEntity* Instance = nullptr;
+
+		ScriptableEntity* (*InstantiateScript)();
+		void (*DestroyScript)(ScriptComponent*);
+
+		template<typename T>
+		void Bind()
+		{
+			InstantiateScript = []() { return static_cast<ScriptableEntity*>(new T()); };
+			DestroyScript = [](ScriptComponent* nsc) { delete nsc->Instance; nsc->Instance = nullptr; };
+		}
 	};
 
 };

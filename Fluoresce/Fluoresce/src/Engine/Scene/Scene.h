@@ -3,7 +3,7 @@
 // Describe : 	ÉVÅ[Éì															// 
 // Author : Ding Qi																// 
 // Create Date : 2022/12/29														// 
-// Modify Date : 2023/01/18														// 
+// Modify Date : 2023/01/26														// 
 //==============================================================================//
 #pragma once
 
@@ -31,6 +31,8 @@ namespace Fluoresce {
 		~Scene();
 
 		static Ref<Scene> Copy(Ref<Scene> other);
+
+		void BuildNativeScript(const ScriptBindFn& func);
 
 		Entity CreateEntity(const std::string& name = std::string());
 		Entity CreateEntityWithUID(UniqueID uid, const std::string& name = std::string());

@@ -21,6 +21,9 @@
       <Filter>UIWindow</Filter>
     </ClInclude>
     <ClInclude Include="src\ImguiUtil\ImguiUtil.h" />
+    <ClInclude Include="src\NativeScript\EditorScriptUtil.h" />
+    <ClInclude Include="src\NativeScript\MoveController2D.h" />
+    <ClInclude Include="src\NativeScript\AutoRotation2D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EditorCore.cpp" />
@@ -36,5 +39,8 @@
       <Filter>UIWindow</Filter>
     </ClCompile>
     <ClCompile Include="src\ImguiUtil\ImguiUtil.cpp" />
+    <ClCompile Include="src\NativeScript\EditorScriptUtil.cpp" />
+    <ClCompile Include="src\NativeScript\MoveController2D.cpp" />
+    <ClCompile Include="src\NativeScript\AutoRotation2D.cpp" />
   </ItemGroup>
 </Project>

@@ -12,6 +12,7 @@
 #include "Engine/Utils/GlmUtil.h"
 
 #include "ImguiUtil/ImguiUtil.h"
+#include "NativeScript/EditorScriptUtil.h"
 
 #include <imgui.h>
 #include <ImGuizmo.h>
@@ -257,6 +258,7 @@ namespace Fluoresce {
 			m_GizmoType = -1;
 
 			m_RuntimeScene = Scene::Copy(m_EditorScene);
+			m_RuntimeScene->BuildNativeScript(EditorScriptUtil::BindScript);
 			m_RuntimeScene->OnRuntimeStart();
 
 			m_SceneHierarchyPanel.SetContext(m_RuntimeScene);
