@@ -16,7 +16,7 @@ ECSアーキテクチャのゲームエンジン「Fluoresce」
 ## ソリューション作成方法
   premakeでソリューションを生成します。
 
-フォルダ内の `scripts/GenerateProject_VS2019_Win64` もしくは `scripts/GenerateProject_VS2019_Win64` をダブルクリックすれば、
+フォルダ内の `scripts/GenerateProject_VS2017_Win64` もしくは `scripts/GenerateProject_VS2019_Win64` をダブルクリックすれば、
 ソリューションが生成されます
 
 ## 使用ライブラリ
