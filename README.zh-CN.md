@@ -16,7 +16,7 @@
 ## 构建项目
    本项目使用premake来生成解决方案
 
-双击`scripts/GenerateProject_VS2019_Win64`或`scripts/GenerateProject_VS2019_Win64`即可生成解决方案
+双击`scripts/GenerateProject_VS2017_Win64`或`scripts/GenerateProject_VS2019_Win64`即可生成解决方案
 
 ## 使用项目
 本引擎使用了以下开源项目
