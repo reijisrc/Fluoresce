@@ -2,10 +2,8 @@
 
 [日本語](README.md) | 简体中文
 
-使用ECS(Entity Component System)架构的游戏引擎
-
 ## 简介
-   基于 `C++17` 和 `OpenGL4`的小型游戏引擎
+   基于 `C++17` 和 `OpenGL4`的小型游戏引擎，使用了使用ECS(Entity Component System)架构
 
 ## 支持
 * 操作系统
