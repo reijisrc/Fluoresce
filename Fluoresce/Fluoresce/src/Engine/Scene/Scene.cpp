@@ -3,15 +3,15 @@
 // Describe : 	シーン															// 
 // Author : Ding Qi																// 
 // Create Date : 2022/12/29														// 
-// Modify Date : 2023/01/26														// 
+// Modify Date : 2023/02/05														// 
 //==============================================================================//
 #include "frpch.h"
 #include "Engine/Scene/Scene.h"
 
+#include "Engine/Renderer/RenderPipeline.h"
 #include "Engine/Scene/Entity.h"
 #include "Engine/Scene/Components.h"
-#include "Engine/Renderer/RenderPipeline.h"
-#include "Engine/Scene/ScriptableEntity.h"
+#include "Engine/Scene/SceneScriptTask.h"
 
 namespace Fluoresce {
 
@@ -21,9 +21,9 @@ namespace Fluoresce {
 		auto view = src.view<Component>();
 		for (auto e : view)
 		{
-			UniqueID uuid = src.get<IDComponent>(e).ID;
-			FR_CORE_ASSERT(enttMap.find(uuid) != enttMap.end(), "Can not find uid!");
-			entt::entity dstEnttID = enttMap.at(uuid);
+			UniqueID uid = src.get<IDComponent>(e).ID;
+			FR_CORE_ASSERT(enttMap.find(uid) != enttMap.end(), "Can not find uid!");
+			entt::entity dstEnttID = enttMap.at(uid);
 
 			auto& component = src.get<Component>(e);
 			dst.emplace_or_replace<Component>(dstEnttID, component);
@@ -62,10 +62,10 @@ namespace Fluoresce {
 		auto idView = srcSceneRegistry.view<IDComponent>();
 		for (auto e : idView)
 		{
-			UniqueID uuid = srcSceneRegistry.get<IDComponent>(e).ID;
+			UniqueID uid = srcSceneRegistry.get<IDComponent>(e).ID;
 			const auto& name = srcSceneRegistry.get<TagComponent>(e).Tag;
-			Entity newEntity = newScene->CreateEntityWithUID(uuid, name);
-			enttMap[uuid] = (entt::entity)newEntity;
+			Entity newEntity = newScene->CreateEntityWithUID(uid, name);
+			enttMap[uid] = (entt::entity)newEntity;
 		}
 
 		// コンポーネントコピー
@@ -77,30 +77,20 @@ namespace Fluoresce {
 		return newScene;
 	}
 
-	void Scene::BuildNativeScript(const ScriptBindFn& func)
-	{
-		auto view = m_Registry.view<ScriptComponent>();
-		for (auto e : view)
-		{
-			Entity entity = { e, this };
-			func(entity);
-		}
-	}
-
 	Entity Scene::CreateEntity(const std::string& name)
 	{
 		return CreateEntityWithUID(UniqueID(), name);
 	}
 
-	Entity Scene::CreateEntityWithUID(UniqueID uuid, const std::string& name)
+	Entity Scene::CreateEntityWithUID(UniqueID uid, const std::string& name)
 	{
 		Entity entity = { m_Registry.create(), this };
-		entity.AddComponent<IDComponent>(uuid);
+		entity.AddComponent<IDComponent>(uid);
 		entity.AddComponent<TransformComponent>();
 		auto& tag = entity.AddComponent<TagComponent>();
 		tag.Tag = name.empty() ? "Entity" : name;
 
-		m_EntityMap[uuid] = entity;
+		m_EntityMap[uid] = entity;
 
 		return entity;
 	}
@@ -113,33 +103,14 @@ namespace Fluoresce {
 
 	void Scene::OnRuntimeStart()
 	{
-		// スクリプトコンストラクタ
-		{
-			m_Registry.view<ScriptComponent>().each([=](auto entity, auto& nsc)
-			{
-				if (nsc.ScriptID != 0 && nsc.Instance == nullptr)
-				{
-					nsc.Instance = nsc.InstantiateScript();
-					nsc.Instance->m_Entity = Entity{ entity, this };
-					nsc.Instance->OnCreate();
-				}
-			});
-		}
+		auto& sceneScriptTask = SceneScriptTask::Get();
+		sceneScriptTask.OnSceneStart();
 	}
 
 	void Scene::OnRuntimeStop()
 	{
-		// スクリプトデストラクタ
-		{
-			m_Registry.view<ScriptComponent>().each([=](auto entity, auto& nsc)
-			{
-				if (nsc.Instance != nullptr)
-				{
-					nsc.Instance->OnDestroy();
-					nsc.DestroyScript(&nsc);
-				}
-			});
-		}
+		auto& sceneScriptTask = SceneScriptTask::Get();
+		sceneScriptTask.OnSceneEnd();
 	}
 
 	void Scene::OnEditorUpdate(DeltaTime ts)
@@ -157,14 +128,8 @@ namespace Fluoresce {
 			return;
 		}
 
-		// スクリプト更新
-		m_Registry.view<ScriptComponent>().each([=](auto entity, auto& nsc)
-		{
-			if (nsc.Instance != nullptr)
-			{
-				nsc.Instance->OnUpdate(ts);
-			}
-		});
+		auto& sceneScriptTask = SceneScriptTask::Get();
+		sceneScriptTask.OnSceneUpdate(ts);
 	}
 
 	void Scene::OnEditorRender(DeltaTime ts, EditorCamera& camera)
@@ -266,10 +231,10 @@ namespace Fluoresce {
 		return {};
 	}
 
-	Entity Scene::GetEntityByUID(UniqueID uuid)
+	Entity Scene::GetEntityByUID(UniqueID uid)
 	{
-		if (m_EntityMap.find(uuid) != m_EntityMap.end())
-			return { m_EntityMap.at(uuid), this };
+		if (m_EntityMap.find(uid) != m_EntityMap.end())
+			return { m_EntityMap.at(uid), this };
 
 		return {};
 	}

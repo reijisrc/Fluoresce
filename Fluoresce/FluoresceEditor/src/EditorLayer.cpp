@@ -3,7 +3,7 @@
 // Describe : 	エディターレイヤー												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/05/14														// 
-// Modify Date : 2023/02/01														// 
+// Modify Date : 2023/02/05														// 
 //==============================================================================//
 #include "EditorLayer.h"
 #include "EditorCore.h"
@@ -11,8 +11,8 @@
 #include "Engine/Utils/FileUtil.h"
 #include "Engine/Utils/GlmUtil.h"
 
-#include "ImguiUtil/ImguiUtil.h"
-#include "NativeScript/EditorScriptUtil.h"
+#include "ImguiUtil/ImguiUI.h"
+#include "NativeScript/ScriptTaskHandle.h"
 
 #include <imgui.h>
 #include <ImGuizmo.h>
@@ -23,6 +23,7 @@ namespace Fluoresce {
 	{
 		static const std::string s_PlayIconPath = "icons/play.png";
 		static const std::string s_StopIconPath = "icons/stop.png";
+		static const std::string s_PauseIconPath = "icons/pause.png";
 
 		EditorLayer::EditorLayer() :
 			Layer("EditorLayer")
@@ -44,6 +45,7 @@ namespace Fluoresce {
 				resourcespath += "/";
 				m_IconPlay = Texture2D::Create(resourcespath + s_PlayIconPath);
 				m_IconStop = Texture2D::Create(resourcespath + s_StopIconPath);
+				m_IconPause = Texture2D::Create(resourcespath + s_PauseIconPath);
 			}
 
 			m_ContentBrowserPanel.Init();
@@ -258,7 +260,8 @@ namespace Fluoresce {
 			m_GizmoType = -1;
 
 			m_RuntimeScene = Scene::Copy(m_EditorScene);
-			m_RuntimeScene->BuildNativeScript(EditorScriptUtil::BindScript);
+			
+			SceneScriptTask::Get().BuildNativeScript(m_RuntimeScene, ScriptTaskHandle::BindScript);
 			m_RuntimeScene->OnRuntimeStart();
 
 			m_SceneHierarchyPanel.SetContext(m_RuntimeScene);
@@ -470,6 +473,14 @@ namespace Fluoresce {
 					else if (EditorCore::GetEditorState() == EditorState::Runtime)
 						OnSceneStop();
 				}
+				if (EditorCore::GetEditorState() == EditorState::Runtime)
+				{
+					ImGui::SameLine();
+					if (ImGui::ImageButton((ImTextureID)(uint64)m_IconPause->GetRendererID(), ImVec2(24, 24), ImVec2(0, 0), ImVec2(1, 1), 0))
+					{
+						m_RuntimeScene->IsPaused() ? m_RuntimeScene->SetPaused(false) : m_RuntimeScene->SetPaused(true);
+					}
+				}
 				ImGui::PopStyleColor(1);
 				ImGui::Separator();
 
@@ -488,7 +499,7 @@ namespace Fluoresce {
 					if (EditorCore::GetEditorState() == EditorState::Edit)
 					{
 						Vec3 pos = m_EditorCamera.GetFocusPoint();
-						if (ImguiUtil::DrawVec3Controller("FocusPoint", pos, 0.0f, 80.0f))
+						if (ImguiUI::DrawVec3Controller("FocusPoint", pos, 0.0f, 80.0f))
 						{
 							m_EditorCamera.SetFocusPoint(pos);
 						}
@@ -507,7 +518,7 @@ namespace Fluoresce {
 							if (cameraEntity.HasComponent<TransformComponent>())
 							{
 								auto& transComponent = cameraEntity.GetComponent<TransformComponent>();
-								ImguiUtil::DrawVec3Controller("Position", transComponent.Translation, 0.0f, 80.0f);
+								ImguiUI::DrawVec3Controller("Position", transComponent.Translation, 0.0f, 80.0f);
 								ImGui::Separator();
 								moveComExist = true;
 							}

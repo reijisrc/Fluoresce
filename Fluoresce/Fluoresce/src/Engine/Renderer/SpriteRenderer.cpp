@@ -3,7 +3,7 @@
 // Describe :	スプライトレンダラー											// 
 // Author : Ding Qi																// 
 // Create Date : 2022/08/15														// 
-// Modify Date : 2023/01/22														// 
+// Modify Date : 2023/02/05														// 
 //==============================================================================//
 #include "frpch.h"
 #include "Engine/Renderer/SpriteRenderer.h"
@@ -256,14 +256,17 @@ namespace Fluoresce {
 
 	void SpriteRenderer::DrawSpriteEntity(const Mat4& transform, SpriteRendererComponent& src, sint32 entityID)
 	{
-		if (src.EnableTexture)
+		if (src.Visible)
 		{
-			auto texture = src.Texture;
-			DrawSprite(transform, src.Color, texture, src.TilingFactor, entityID);
-		}
-		else
-		{
-			DrawQuad(transform, src.Color, entityID);
+			if (src.EnableTexture)
+			{
+				auto texture = src.Texture;
+				DrawSprite(transform, src.Color, texture, src.TilingFactor, entityID);
+			}
+			else
+			{
+				DrawQuad(transform, src.Color, entityID);
+			}
 		}
 	}
 }

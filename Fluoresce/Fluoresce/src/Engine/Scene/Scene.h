@@ -3,7 +3,7 @@
 // Describe : 	ÉVÅ[Éì															// 
 // Author : Ding Qi																// 
 // Create Date : 2022/12/29														// 
-// Modify Date : 2023/01/26														// 
+// Modify Date : 2023/02/05														// 
 //==============================================================================//
 #pragma once
 
@@ -25,14 +25,10 @@ namespace Fluoresce {
 	class Scene
 	{
 	public:
-		using ScriptBindFn = std::function<void(Entity)>;
-	public:
 		Scene();
 		~Scene();
 
 		static Ref<Scene> Copy(Ref<Scene> other);
-
-		void BuildNativeScript(const ScriptBindFn& func);
 
 		Entity CreateEntity(const std::string& name = std::string());
 		Entity CreateEntityWithUID(UniqueID uid, const std::string& name = std::string());
@@ -73,6 +69,7 @@ namespace Fluoresce {
 
 		friend class Entity;
 		friend class SceneSerializer;
+		friend class SceneScriptTask;
 		friend class Editor::SceneHierarchyPanel;
 	};
 };

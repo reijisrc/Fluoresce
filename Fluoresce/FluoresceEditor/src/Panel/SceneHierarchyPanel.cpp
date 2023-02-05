@@ -3,15 +3,15 @@
 // Describe : 	シーンヒエラルキーパネル										// 
 // Author : Ding Qi																// 
 // Create Date : 2022/05/29														// 
-// Modify Date : 2023/02/01														// 
+// Modify Date : 2023/02/05														// 
 //==============================================================================//
 #include "Panel/SceneHierarchyPanel.h"
 
 #include "Engine/Scene/Components.h"
 
 #include "EditorCore.h"
-#include "ImguiUtil/ImguiUtil.h"
-#include "NativeScript/EditorScriptUtil.h"
+#include "ImguiUtil/ImguiUI.h"
+#include "NativeScript/ScriptTaskHandle.h"
 
 #include <imgui.h>
 #include <imgui_internal.h>
@@ -201,19 +201,19 @@ namespace Fluoresce {
 
 			DrawComponent<TransformComponent>("Transform", entity, [](auto& component)
 			{
-				ImguiUtil::DrawVec3Controller("Translation", component.Translation);
+				ImguiUI::DrawVec3Controller("Translation", component.Translation);
 				Vec3 rotation = Vec3{ glm::degrees(component.Rotation.x),
 						glm::degrees(component.Rotation.y),
 						glm::degrees(component.Rotation.z)
 				};
-				if (ImguiUtil::DrawVec3Controller("Rotation", rotation))
+				if (ImguiUI::DrawVec3Controller("Rotation", rotation))
 				{
 					component.Rotation = Vec3{ glm::radians(rotation.x),
 								glm::radians(rotation.y),
 								glm::radians(rotation.z)
 					};
 				}
-				ImguiUtil::DrawVec3Controller("Scale", component.Scale, 1.0f);
+				ImguiUI::DrawVec3Controller("Scale", component.Scale, 1.0f);
 			});
 
 			DrawComponent<CameraComponent>("Camera", entity, [](auto& component)
@@ -277,6 +277,7 @@ namespace Fluoresce {
 
 			DrawComponent<SpriteRendererComponent>("Sprite Renderer", entity, [](auto& component)
 			{
+				ImGui::Checkbox("Visible", &component.Visible);
 				ImGui::ColorEdit4("Color", glm::value_ptr(component.Color));
 				ImGui::Button("Texture Slot", ImVec2(100.0f, 0.0f));
 				if (ImGui::BeginDragDropTarget())
@@ -314,16 +315,16 @@ namespace Fluoresce {
 				bool runtime = (EditorCore::GetEditorState() == EditorState::Runtime) ? true : false;
 				if (runtime)
 				{
-					ImGui::Text("Script: %s", EditorScriptUtil::GetScriptName(component.ScriptID));
+					ImGui::Text("Script: %s", ScriptTaskHandle::GetScriptName(component.ScriptID));
 				}
 				else
 				{
-					auto currentName = EditorScriptUtil::GetScriptName(component.ScriptID);
+					auto currentName = ScriptTaskHandle::GetScriptName(component.ScriptID);
 					if (ImGui::BeginCombo("Script", currentName))
 					{
-						for (int n = 0; n < EditorScriptID::_ID_Max; n++)
+						for (int n = 0; n < ScriptID::_ID_Max; n++)
 						{
-							auto name = EditorScriptUtil::GetScriptName(n);
+							auto name = ScriptTaskHandle::GetScriptName(n);
 							ImGui::PushID((void*)name);
 							if (ImGui::Selectable(name, name == currentName))
 							{

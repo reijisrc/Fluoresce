@@ -3,7 +3,7 @@
 // Describe : 	コンポーネント													// 
 // Author : Ding Qi																// 
 // Create Date : 2022/12/29														// 
-// Modify Date : 2023/01/26														// 
+// Modify Date : 2023/02/05														// 
 //==============================================================================//
 #pragma once
 
@@ -66,6 +66,7 @@ namespace Fluoresce {
 		float32 TilingFactor = 1.0f;
 		std::string		 TextureName;
 		Ref<Texture2D>	 Texture;
+		bool Visible = true;
 		bool EnableTexture = false;
 
 		SpriteRendererComponent() = default;

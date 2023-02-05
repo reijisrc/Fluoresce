@@ -3,7 +3,7 @@
 // Describe : 	エディターレイヤー												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/05/14														// 
-// Modify Date : 2023/01/18														// 
+// Modify Date : 2023/02/05														// 
 //==============================================================================//
 #pragma once
 
@@ -77,6 +77,7 @@ namespace Fluoresce {
 
 			Ref<Texture2D> m_IconPlay; 
 			Ref<Texture2D> m_IconStop;
+			Ref<Texture2D> m_IconPause;
 
 			EditorCamera m_EditorCamera;
 			Entity		m_HoveredEntity;

@@ -3,7 +3,7 @@
 // Describe : 	シーンシリアライザ												// 
 // Author : Ding Qi																// 
 // Create Date : 2023/01/08														// 
-// Modify Date : 2023/01/26														// 
+// Modify Date : 2023/02/05														// 
 //==============================================================================//
 #include "frpch.h"
 #include "Engine/Scene/SceneSerializer.h"
@@ -91,16 +91,16 @@ namespace YAML {
 	template<>
 	struct convert<Fluoresce::UniqueID>
 	{
-		static Node encode(const Fluoresce::UniqueID& uuid)
+		static Node encode(const Fluoresce::UniqueID& uid)
 		{
 			Node node;
-			node.push_back((uint64_t)uuid);
+			node.push_back((uint64_t)uid);
 			return node;
 		}
 
-		static bool decode(const Node& node, Fluoresce::UniqueID& uuid)
+		static bool decode(const Node& node, Fluoresce::UniqueID& uid)
 		{
-			uuid = node.as<uint64_t>();
+			uid = node.as<uint64_t>();
 			return true;
 		}
 	};
@@ -191,15 +191,15 @@ namespace Fluoresce {
 			out << YAML::BeginMap; // SpriteRendererComponent
 
 			auto& spriteRendererComponent = entity.GetComponent<SpriteRendererComponent>();
+			out << YAML::Key << "Visible" << YAML::Value << spriteRendererComponent.Visible;
 			out << YAML::Key << "Color" << YAML::Value << spriteRendererComponent.Color;
 
-			if (spriteRendererComponent.EnableTexture)
-			{
-				out << YAML::Key << "TextureName" << YAML::Value << spriteRendererComponent.TextureName;
-			}
+			//if (spriteRendererComponent.EnableTexture)
+			//{
+				//out << YAML::Key << "TextureName" << YAML::Value << spriteRendererComponent.TextureName;
+			//}
 
 			out << YAML::Key << "TilingFactor" << YAML::Value << spriteRendererComponent.TilingFactor;
-
 			out << YAML::EndMap; // SpriteRendererComponent
 		}
 
@@ -272,16 +272,16 @@ namespace Fluoresce {
 		{
 			for (auto entity : entities)
 			{
-				uint64 uuid = entity["Entity"].as<uint64>();
+				uint64 uid = entity["Entity"].as<uint64>();
 
 				std::string name;
 				auto tagComponent = entity["TagComponent"];
 				if (tagComponent)
 					name = tagComponent["Tag"].as<std::string>();
 
-				FR_CORE_TRACE("Deserialized entity with ID = {0}, name = {1}", uuid, name);
+				FR_CORE_TRACE("Deserialized entity with ID = {0}, name = {1}", uid, name);
 
-				Entity deserializedEntity = m_Scene->CreateEntityWithUID(uuid, name);
+				Entity deserializedEntity = m_Scene->CreateEntityWithUID(uid, name);
 
 				auto transformComponent = entity["TransformComponent"];
 				if (transformComponent)
@@ -317,6 +317,9 @@ namespace Fluoresce {
 				{
 					auto& src = deserializedEntity.AddComponent<SpriteRendererComponent>();
 					src.Color = spriteRendererComponent["Color"].as<Vec4>();
+
+					if (spriteRendererComponent["Visible"])
+						src.TilingFactor = spriteRendererComponent["Visible"].as<bool>();
 
 					if (spriteRendererComponent["TilingFactor"])
 						src.TilingFactor = spriteRendererComponent["TilingFactor"].as<float>();

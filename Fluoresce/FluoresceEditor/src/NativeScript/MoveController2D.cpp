@@ -6,6 +6,7 @@
 // Modify Date : 2023/01/26														// 
 //==============================================================================//
 #include "NativeScript/MoveController2D.h"
+#include "NativeScript/ScriptTaskHandle.h"
 
 namespace Fluoresce {
 

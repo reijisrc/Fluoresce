@@ -20,10 +20,10 @@
     <ClInclude Include="src\UIWindow\MenuWindow.h">
       <Filter>UIWindow</Filter>
     </ClInclude>
-    <ClInclude Include="src\ImguiUtil\ImguiUtil.h" />
-    <ClInclude Include="src\NativeScript\EditorScriptUtil.h" />
     <ClInclude Include="src\NativeScript\MoveController2D.h" />
     <ClInclude Include="src\NativeScript\AutoRotation2D.h" />
+    <ClInclude Include="src\ImguiUtil\ImguiUI.h" />
+    <ClInclude Include="src\NativeScript\ScriptTaskHandle.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EditorCore.cpp" />
@@ -38,9 +38,9 @@
     <ClCompile Include="src\UIWindow\MenuWindow.cpp">
       <Filter>UIWindow</Filter>
     </ClCompile>
-    <ClCompile Include="src\ImguiUtil\ImguiUtil.cpp" />
-    <ClCompile Include="src\NativeScript\EditorScriptUtil.cpp" />
     <ClCompile Include="src\NativeScript\MoveController2D.cpp" />
     <ClCompile Include="src\NativeScript\AutoRotation2D.cpp" />
+    <ClCompile Include="src\ImguiUtil\ImguiUI.cpp" />
+    <ClCompile Include="src\NativeScript\ScriptTaskHandle.cpp" />
   </ItemGroup>
 </Project>

@@ -232,6 +232,7 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Scene\ScriptableEntity.h" />
+    <ClInclude Include="src\Engine\Scene\SceneScriptTask.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dependencies\ImGuizmo\src\ImGuizmo.cpp">
@@ -366,5 +367,7 @@
     <ClCompile Include="src\frpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Scene\SceneScriptTask.cpp" />
+    <ClCompile Include="src\Engine\Scene\ScriptableEntity.cpp" />
   </ItemGroup>
 </Project>

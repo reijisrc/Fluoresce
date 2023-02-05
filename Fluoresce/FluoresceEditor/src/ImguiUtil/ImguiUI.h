@@ -1,9 +1,9 @@
 //==============================================================================//
-// Name : ImguiUtil.h															// 
-// Describe : 	Imgui汎用機能													// 
+// Name : ImguiUI.h																// 
+// Describe : 	Imgui汎用UI														// 
 // Author : Ding Qi																// 
 // Create Date : 2023/01/22														// 
-// Modify Date : 2023/01/22														// 
+// Modify Date : 2023/02/05														// 
 //==============================================================================//
 #pragma once
 
@@ -13,8 +13,8 @@ namespace Fluoresce {
 
 	namespace Editor
 	{
-		// Imgui汎用機能
-		class ImguiUtil
+		// Imgui汎用UI
+		class ImguiUI
 		{
 		public:
 			static bool DrawVec2Controller(const std::string& label, Vec2& values, float32 resetValue = 0.0f, float32 columnWidth = 100.0f);

@@ -1,11 +1,11 @@
 //==============================================================================//
-// Name : ImguiUtil.cpp															// 
-// Describe : 	Imgui汎用機能													// 
+// Name : ImguiUI.cpp															// 
+// Describe : 	Imgui汎用UI														// 
 // Author : Ding Qi																// 
 // Create Date : 2023/01/22														// 
-// Modify Date : 2023/01/22														// 
+// Modify Date : 2023/02/05														// 
 //==============================================================================//
-#include "ImguiUtil/ImguiUtil.h"
+#include "ImguiUtil/ImguiUI.h"
 
 #include <imgui.h>
 #include <imgui_internal.h>
@@ -14,7 +14,7 @@ namespace Fluoresce {
 
 	namespace Editor
 	{
-		bool ImguiUtil::DrawVec2Controller(const std::string& label, Vec2& values, float32 resetValue, float32 columnWidth)
+		bool ImguiUI::DrawVec2Controller(const std::string& label, Vec2& values, float32 resetValue, float32 columnWidth)
 		{
 			bool result = false;
 			ImGuiIO& io = ImGui::GetIO();
@@ -78,7 +78,7 @@ namespace Fluoresce {
 			return result;
 		}
 
-		bool ImguiUtil::DrawVec3Controller(const std::string& label, Vec3& values, float32 resetValue, float32 columnWidth)
+		bool ImguiUI::DrawVec3Controller(const std::string& label, Vec3& values, float32 resetValue, float32 columnWidth)
 		{
 			bool result = false;
 			ImGuiIO& io = ImGui::GetIO();

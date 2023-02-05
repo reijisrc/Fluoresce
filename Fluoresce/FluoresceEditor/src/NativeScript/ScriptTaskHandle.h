@@ -1,9 +1,9 @@
 //==============================================================================//
-// Name : EditorScriptUtil.h													// 
-// Describe : 	エディタースクリプト汎用機能									// 
+// Name : ScriptTaskHandle.h													// 
+// Describe : 	スクリプトタスクハンドル										// 
 // Author : Ding Qi																// 
 // Create Date : 2023/01/26														// 
-// Modify Date : 2023/01/26														// 
+// Modify Date : 2023/02/05														// 
 //==============================================================================//
 #pragma once
 
@@ -13,7 +13,7 @@ namespace Fluoresce {
 
 	namespace Editor
 	{
-		enum EditorScriptID : uint32
+		enum ScriptID : uint32
 		{
 			_Null = 0,
 			_MoveController2D,
@@ -21,15 +21,15 @@ namespace Fluoresce {
 			_ID_Max
 		};
 
-		// エディタースクリプト汎用機能
-		class EditorScriptUtil
+		// スクリプトタスクハンドル
+		class ScriptTaskHandle
 		{
 		public:
-			using NameArray = std::array<const char*, EditorScriptID::_ID_Max>;
-
 			static void BindScript(Entity entity);
 
 			static const char* GetScriptName(uint32 index);
+
+			static void SetDebugInfoFlag(bool flag);
 		};
 	}
 }
