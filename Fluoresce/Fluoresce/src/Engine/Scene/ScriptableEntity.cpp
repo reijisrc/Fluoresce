@@ -10,23 +10,6 @@
 
 namespace Fluoresce {
 
-	ScriptableEntity::ScriptableEntity()
-	{
-		m_UpdatePriority = GetUpdatePriority();
-	}
-
-	Entity ScriptableEntity::CreateEntity(const std::string& name)
-	{
-		auto& scriptTask = SceneScriptTask::Get();
-		return scriptTask.m_Context->CreateEntity(name);
-	}
-
-	void ScriptableEntity::DestroyEntity(Entity entity)
-	{
-		auto& scriptTask = SceneScriptTask::Get();
-		scriptTask.m_Context->DestroyEntity(entity);
-	}
-
 	void ScriptableEntity::BindScript(Entity entity, uint32 scriptId, const SceneScriptTask::ScriptBindFn& func)
 	{
 		auto& scriptTask = SceneScriptTask::Get();
@@ -41,9 +24,10 @@ namespace Fluoresce {
 			{
 				nativescriptComponent.Instance = nativescriptComponent.InstantiateScript();
 				nativescriptComponent.Instance->m_Entity = Entity{ entity, scriptTask.m_Context.get() };
-				nativescriptComponent.Instance->m_State = ScriptableEntityState::Initializated;
+				nativescriptComponent.Instance->Init();
 			}
 
+			scriptTask.m_SortUpdateTask = true;
 		}
 	}
 
@@ -57,7 +41,21 @@ namespace Fluoresce {
 			{
 				nativescriptComponent.Instance->m_State = ScriptableEntityState::Destroy;
 			}
+
+			scriptTask.m_SortUpdateTask = true;
 		}
+	}
+
+	Entity ScriptableEntity::CreateEntity(const std::string& name)
+	{
+		auto& scriptTask = SceneScriptTask::Get();
+		return scriptTask.m_Context->CreateEntity(name);
+	}
+
+	void ScriptableEntity::DestroyEntity(Entity entity)
+	{
+		auto& scriptTask = SceneScriptTask::Get();
+		scriptTask.m_Context->DestroyEntity(entity);
 	}
 
 	Entity ScriptableEntity::FindEntityByName(std::string_view name)
@@ -80,6 +78,18 @@ namespace Fluoresce {
 
 	void ScriptableEntity::SetUpdatePriority(uint32 prio)
 	{
+		auto& scriptTask = SceneScriptTask::Get();
+
 		m_UpdatePriority = prio;
+		scriptTask.m_SortUpdateTask = true;
+	}
+
+	void ScriptableEntity::Init()
+	{
+		if (m_Entity)
+		{
+			m_UpdatePriority = GetDefaultUpdatePriority();
+			m_State = ScriptableEntityState::Initializated;
+		}
 	}
 }

@@ -24,7 +24,6 @@ namespace Fluoresce {
 	class ScriptableEntity
 	{
 	public:
-		ScriptableEntity();
 		virtual ~ScriptableEntity() {}
 
 		template<typename T>
@@ -33,11 +32,11 @@ namespace Fluoresce {
 			return m_Entity.GetComponent<T>();
 		}
 
-		Entity CreateEntity(const std::string& name = std::string());
-		void DestroyEntity(Entity entity);
-
 		void BindScript(Entity entity, uint32 scriptId, const SceneScriptTask::ScriptBindFn& func);
 		void DestoryScriptableEntity(Entity entity);
+
+		Entity CreateEntity(const std::string& name = std::string());
+		void DestroyEntity(Entity entity);
 
 		Entity FindEntityByName(std::string_view name);
 		Entity GetEntityByUID(UniqueID uid);
@@ -48,12 +47,14 @@ namespace Fluoresce {
 		{
 			return m_UpdatePriority;
 		}
-	protected:
-		virtual void OnCreate() {};
-		virtual void OnDestroy() {};
-		virtual void OnUpdate(DeltaTime ts) {}
 
-		virtual uint32 GetDefaultUpdatePriority() { return 0; }
+		virtual uint32 GetDefaultUpdatePriority() const { return 0; }
+	protected:
+		virtual void Init();
+
+		virtual void OnCreate() {}
+		virtual void OnDestroy() {}
+		virtual void OnUpdate(DeltaTime ts) {}
 	private:
 		Entity m_Entity;
 		ScriptableEntityState m_State = ScriptableEntityState::Undefine;
