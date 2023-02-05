@@ -3,11 +3,12 @@
 // Describe : 	エディターレイヤー												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/05/14														// 
-// Modify Date : 2023/02/05														// 
+// Modify Date : 2023/02/06														// 
 //==============================================================================//
 #pragma once
 
 #include "Fluoresce.h"
+#include "Panel/AssetsPanel.h"
 #include "Panel/SceneHierarchyPanel.h"
 #include "Panel/ContentBrowserPanel.h"
 #include "UIWindow/MenuWindow.h"
@@ -18,18 +19,19 @@ namespace Fluoresce {
 	{
 		enum EditorPanel : uint32
 		{
-			_EditorPanel_Viewport = 0,
-			_EditorPanel_SceneSettings,
-			_EditorPanel_SceneHierarchyPanel,
-			_EditorPanel_ContentBrowserPanel,
-			_EditorPanel_Max
+			_Viewport = 0,
+			_Panel_SceneSettings,
+			_Panel_SceneHierarchyPanel,
+			_Panel_ContentBrowserPanel,
+			_Panel_AssetsPanel,
+			_Panel_Max
 		};
 
 		// エディターレイヤー
 		class EditorLayer : public Layer
 		{
 		public:
-			using PanelFlag = std::array<bool, EditorPanel::_EditorPanel_Max>;
+			using PanelFlag = std::array<bool, EditorPanel::_Panel_Max>;
 		public:
 			EditorLayer();
 			virtual ~EditorLayer();
@@ -83,6 +85,7 @@ namespace Fluoresce {
 			Entity		m_HoveredEntity;
 			PanelFlag	m_PanelFlag;
 
+			AssetsPanel			m_AssetsPanel;
 			SceneHierarchyPanel m_SceneHierarchyPanel;
 			ContentBrowserPanel m_ContentBrowserPanel;
 			MenuWindow			m_MenuWindow;

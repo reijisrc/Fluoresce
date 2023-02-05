@@ -43,17 +43,12 @@ namespace Fluoresce {
 				}
 			});
 
-			m_SortUpdateTask = true;
+			m_RemapUpdateTask = true;
 		}
 	}
 
 	void SceneScriptTask::OnSceneUpdate(DeltaTime ts)
 	{
-		if (m_SortUpdateTask)
-		{
-			m_UpdateTask.clear();
-		}
-
 		// スクリプト更新
 		if (m_Context)
 		{
@@ -67,36 +62,38 @@ namespace Fluoresce {
 						nativeScript.Instance->m_State = ScriptableEntityState::Active;
 					}
 					
-					//if(nativeScript.Instance->m_State == ScriptableEntityState::Active)
-					//{
-					//	nativeScript.Instance->OnUpdate(ts);
-					//}
-					
 					if(nativeScript.Instance->m_State == ScriptableEntityState::Destroy)
 					{
 						nativeScript.Instance->OnDestroy();
 						nativeScript.DestroyScript(&nativeScript);
+						m_Context->DestroyEntity(Entity{ entity, m_Context.get() });
+						m_RemapUpdateTask = true;
 					}
+				}
+			});
 
-					if (m_SortUpdateTask)
+			if (m_RemapUpdateTask)
+			{
+				// 更新タスクソート
+				m_UpdateTask.clear();
+
+				m_Context->m_Registry.view<ScriptComponent>().each([=](auto entity, auto& nativeScript)
+				{
+					if (nativeScript.Instance != nullptr)
 					{
 						if (nativeScript.Instance->m_State == ScriptableEntityState::Active)
 						{
 							m_UpdateTask.push_back(nativeScript.Instance);
 						}
 					}
-				}
-			});
+				});
 
-			// 更新タスクソート
-			if (m_SortUpdateTask)
-			{
 				std::sort(m_UpdateTask.begin(), m_UpdateTask.end(), [](ScriptableEntity* l, ScriptableEntity* r)
 				{
 					return l->GetUpdatePriority() < r->GetUpdatePriority();
 				});
 
-				m_SortUpdateTask = false;
+				m_RemapUpdateTask = false;
 			}
 
 			// 更新

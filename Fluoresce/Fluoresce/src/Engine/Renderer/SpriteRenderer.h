@@ -40,6 +40,7 @@ namespace Fluoresce {
 
 		void DrawSpriteEntity(const Mat4& transform, SpriteRendererComponent& src, sint32 entityID);
 
+		void RequestClearTextureSlots();
 	private:
 		struct RendererData;
 		RendererData* m_Data;

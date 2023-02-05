@@ -141,6 +141,9 @@
     <ClInclude Include="src\NativeScript\AutoRotation2D.h" />
     <ClInclude Include="src\NativeScript\MoveController2D.h" />
     <ClInclude Include="src\NativeScript\ScriptTaskHandle.h" />
+    <ClInclude Include="src\NativeScript\SnowParticle.h" />
+    <ClInclude Include="src\NativeScript\SnowParticleManager.h" />
+    <ClInclude Include="src\Panel\AssetsPanel.h" />
     <ClInclude Include="src\Panel\ContentBrowserPanel.h" />
     <ClInclude Include="src\Panel\SceneHierarchyPanel.h" />
     <ClInclude Include="src\UIWindow\MenuWindow.h" />
@@ -153,6 +156,9 @@
     <ClCompile Include="src\NativeScript\AutoRotation2D.cpp" />
     <ClCompile Include="src\NativeScript\MoveController2D.cpp" />
     <ClCompile Include="src\NativeScript\ScriptTaskHandle.cpp" />
+    <ClCompile Include="src\NativeScript\SnowParticle.cpp" />
+    <ClCompile Include="src\NativeScript\SnowParticleManager.cpp" />
+    <ClCompile Include="src\Panel\AssetsPanel.cpp" />
     <ClCompile Include="src\Panel\ContentBrowserPanel.cpp" />
     <ClCompile Include="src\Panel\SceneHierarchyPanel.cpp" />
     <ClCompile Include="src\UIWindow\MenuWindow.cpp" />

@@ -3,7 +3,7 @@
 // Describe : 	スクリプトタスクハンドル										// 
 // Author : Ding Qi																// 
 // Create Date : 2023/01/26														// 
-// Modify Date : 2023/02/05														// 
+// Modify Date : 2023/02/06														// 
 //==============================================================================//
 #pragma once
 
@@ -18,6 +18,8 @@ namespace Fluoresce {
 			_Null = 0,
 			_MoveController2D,
 			_AutoRotation2D,
+			_SnowParticle,
+			_SnowParticleManager,
 			_ID_Max
 		};
 

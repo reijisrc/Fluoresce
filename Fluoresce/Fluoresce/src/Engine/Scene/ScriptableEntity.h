@@ -51,6 +51,7 @@ namespace Fluoresce {
 		virtual uint32 GetDefaultUpdatePriority() const { return 0; }
 	protected:
 		virtual void Init();
+		virtual void SetRemove();
 
 		virtual void OnCreate() {}
 		virtual void OnDestroy() {}

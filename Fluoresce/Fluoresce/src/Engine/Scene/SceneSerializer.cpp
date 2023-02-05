@@ -3,13 +3,14 @@
 // Describe : 	シーンシリアライザ												// 
 // Author : Ding Qi																// 
 // Create Date : 2023/01/08														// 
-// Modify Date : 2023/02/05														// 
+// Modify Date : 2023/02/06														// 
 //==============================================================================//
 #include "frpch.h"
 #include "Engine/Scene/SceneSerializer.h"
 
 #include "Engine/Scene/Entity.h"
 #include "Engine/Scene/Components.h"
+#include "Engine/Asset/AssetsManager.h"
 
 #include <fstream>
 #include <yaml-cpp/yaml.h>
@@ -194,10 +195,10 @@ namespace Fluoresce {
 			out << YAML::Key << "Visible" << YAML::Value << spriteRendererComponent.Visible;
 			out << YAML::Key << "Color" << YAML::Value << spriteRendererComponent.Color;
 
-			//if (spriteRendererComponent.EnableTexture)
-			//{
-				//out << YAML::Key << "TextureName" << YAML::Value << spriteRendererComponent.TextureName;
-			//}
+			if (spriteRendererComponent.EnableTexture)
+			{
+				out << YAML::Key << "TextureName" << YAML::Value << spriteRendererComponent.TextureName;
+			}
 
 			out << YAML::Key << "TilingFactor" << YAML::Value << spriteRendererComponent.TilingFactor;
 			out << YAML::EndMap; // SpriteRendererComponent
@@ -225,27 +226,35 @@ namespace Fluoresce {
 
 	void SceneSerializer::Serialize(const std::string& filepath, const std::string& scenename)
 	{
-		YAML::Emitter out;
+		std::string str;
+		Serialize(filepath, scenename, str);
 
-		out << YAML::BeginMap;
-		out << YAML::Key << "Scene" << YAML::Value << scenename;
-		out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
+		std::ofstream fout(filepath);
+		fout << str;
+	}
+
+	void SceneSerializer::Serialize(const std::string& filepath, const std::string& scenename, std::string& outstr)
+	{
+		YAML::Emitter emitter;
+
+		emitter << YAML::BeginMap;
+		emitter << YAML::Key << "Scene" << YAML::Value << scenename;
+		emitter << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
 		m_Scene->m_Registry.each([&](auto entityID)
 		{
 			Entity entity = { entityID, m_Scene.get() };
 			if (!entity)
 				return;
 
-			SerializeEntity(out, entity);
+			SerializeEntity(emitter, entity);
 		});
-		out << YAML::EndSeq;
-		out << YAML::Newline;
-		out << YAML::EndMap;
+		emitter << YAML::EndSeq;
+		emitter << YAML::Newline;
+		emitter << YAML::EndMap;
 
 		FR_CORE_TRACE("Serialized Scene name = {0}, path = {1}", scenename, filepath);
 
-		std::ofstream fout(filepath);
-		fout << out.c_str();
+		outstr = emitter.c_str();
 	}
 
 	bool SceneSerializer::Deserialize(const std::string& filepath)
@@ -319,7 +328,18 @@ namespace Fluoresce {
 					src.Color = spriteRendererComponent["Color"].as<Vec4>();
 
 					if (spriteRendererComponent["Visible"])
-						src.TilingFactor = spriteRendererComponent["Visible"].as<bool>();
+						src.Visible = spriteRendererComponent["Visible"].as<bool>();
+
+					if (spriteRendererComponent["TextureName"])
+					{
+						src.EnableTexture = true;
+						src.TextureName = spriteRendererComponent["TextureName"].as<std::string>();
+						src.Texture = AssetsManager::Get().GetTextureInstance(src.TextureName);
+					}
+					else
+					{
+						src.EnableTexture = false;
+					}
 
 					if (spriteRendererComponent["TilingFactor"])
 						src.TilingFactor = spriteRendererComponent["TilingFactor"].as<float>();

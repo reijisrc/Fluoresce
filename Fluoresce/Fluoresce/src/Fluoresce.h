@@ -30,5 +30,8 @@
 #include "Engine/Scene/Components.h"
 #include "Engine/Scene/ScriptableEntity.h"
 
+// アセット
+#include "Engine/Asset/AssetsManager.h"
+
 // ImGui
 #include "Engine/ImGui/ImGuiLayer.h"

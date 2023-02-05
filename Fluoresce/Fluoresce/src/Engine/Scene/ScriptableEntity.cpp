@@ -27,7 +27,7 @@ namespace Fluoresce {
 				nativescriptComponent.Instance->Init();
 			}
 
-			scriptTask.m_SortUpdateTask = true;
+			scriptTask.m_RemapUpdateTask = true;
 		}
 	}
 
@@ -42,7 +42,7 @@ namespace Fluoresce {
 				nativescriptComponent.Instance->m_State = ScriptableEntityState::Destroy;
 			}
 
-			scriptTask.m_SortUpdateTask = true;
+			scriptTask.m_RemapUpdateTask = true;
 		}
 	}
 
@@ -56,6 +56,7 @@ namespace Fluoresce {
 	{
 		auto& scriptTask = SceneScriptTask::Get();
 		scriptTask.m_Context->DestroyEntity(entity);
+		scriptTask.m_RemapUpdateTask = true;
 	}
 
 	Entity ScriptableEntity::FindEntityByName(std::string_view name)
@@ -81,7 +82,7 @@ namespace Fluoresce {
 		auto& scriptTask = SceneScriptTask::Get();
 
 		m_UpdatePriority = prio;
-		scriptTask.m_SortUpdateTask = true;
+		scriptTask.m_RemapUpdateTask = true;
 	}
 
 	void ScriptableEntity::Init()
@@ -90,6 +91,14 @@ namespace Fluoresce {
 		{
 			m_UpdatePriority = GetDefaultUpdatePriority();
 			m_State = ScriptableEntityState::Initializated;
+		}
+	}
+
+	void ScriptableEntity::SetRemove()
+	{
+		if (m_Entity)
+		{
+			m_State = ScriptableEntityState::Destroy;
 		}
 	}
 }

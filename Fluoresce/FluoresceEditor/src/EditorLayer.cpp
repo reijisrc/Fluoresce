@@ -28,7 +28,7 @@ namespace Fluoresce {
 		EditorLayer::EditorLayer() :
 			Layer("EditorLayer")
 		{
-			for (uint32 i = 0; i < EditorPanel::_EditorPanel_Max; i++)
+			for (uint32 i = 0; i < EditorPanel::_Panel_Max; i++)
 			{
 				m_PanelFlag.at(i) = true;
 			}
@@ -326,10 +326,10 @@ namespace Fluoresce {
 
 				if (ImGui::BeginMenu("Setting"))
 				{
-					ImGui::MenuItem("Viewport", NULL, &m_PanelFlag.at(EditorPanel::_EditorPanel_Viewport));
-					ImGui::MenuItem("SceneSetting", NULL, &m_PanelFlag.at(EditorPanel::_EditorPanel_SceneSettings));
-					ImGui::MenuItem("SceneHierarchyPanel", NULL, &m_PanelFlag.at(EditorPanel::_EditorPanel_SceneHierarchyPanel));
-					ImGui::MenuItem("ContentBrowserPanell", NULL, &m_PanelFlag.at(EditorPanel::_EditorPanel_ContentBrowserPanel));
+					ImGui::MenuItem("Viewport", NULL, &m_PanelFlag.at(EditorPanel::_Viewport));
+					ImGui::MenuItem("SceneSetting", NULL, &m_PanelFlag.at(EditorPanel::_Panel_SceneSettings));
+					ImGui::MenuItem("SceneHierarchyPanel", NULL, &m_PanelFlag.at(EditorPanel::_Panel_SceneHierarchyPanel));
+					ImGui::MenuItem("ContentBrowserPanell", NULL, &m_PanelFlag.at(EditorPanel::_Panel_ContentBrowserPanel));
 					ImGui::Separator();
 					ImGui::MenuItem("Customize", NULL, &showCustomizeWindow);
 					ImGui::EndMenu();
@@ -357,12 +357,17 @@ namespace Fluoresce {
 
 		void EditorLayer::DrawPanels()
 		{
-			if (m_PanelFlag.at(EditorPanel::_EditorPanel_SceneHierarchyPanel))
+			if (m_PanelFlag.at(EditorPanel::_Panel_SceneHierarchyPanel))
 			{
 				m_SceneHierarchyPanel.OnImGuiRender();
 			}
 
-			if (m_PanelFlag.at(EditorPanel::_EditorPanel_ContentBrowserPanel))
+			if (m_PanelFlag.at(EditorPanel::_Panel_AssetsPanel))
+			{
+				m_AssetsPanel.OnImGuiRender();
+			}
+
+			if (m_PanelFlag.at(EditorPanel::_Panel_ContentBrowserPanel))
 			{
 				m_ContentBrowserPanel.OnImGuiRender();
 			}
@@ -370,10 +375,10 @@ namespace Fluoresce {
 
 		void EditorLayer::DrawViewport()
 		{
-			if (m_PanelFlag.at(EditorPanel::_EditorPanel_Viewport))
+			if (m_PanelFlag.at(EditorPanel::_Viewport))
 			{
 				ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
-				ImGui::Begin("Viewport", &m_PanelFlag.at(EditorPanel::_EditorPanel_Viewport));
+				ImGui::Begin("Viewport", &m_PanelFlag.at(EditorPanel::_Viewport));
 				{
 					auto viewportMinRegion = ImGui::GetWindowContentRegionMin();
 					auto viewportMaxRegion = ImGui::GetWindowContentRegionMax();
@@ -455,15 +460,15 @@ namespace Fluoresce {
 
 		void EditorLayer::DrawSceneSettings()
 		{
-			const ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
+			const ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
 
-			if (m_PanelFlag.at(EditorPanel::_EditorPanel_SceneSettings))
+			if (m_PanelFlag.at(EditorPanel::_Panel_SceneSettings))
 			{
 				auto& lineRenderer = RenderPipeline::GetLineRenderer();
 				auto& spriteRenderer = RenderPipeline::GetSpriteRenderer();
 
 				ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
-				ImGui::Begin("ScenePanel", &m_PanelFlag.at(EditorPanel::_EditorPanel_SceneSettings));
+				ImGui::Begin("ScenePanel", &m_PanelFlag.at(EditorPanel::_Panel_SceneSettings));
 				Ref<Texture2D> icon = (EditorCore::GetEditorState() == EditorState::Edit) ? m_IconPlay : m_IconStop;
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 				if (ImGui::ImageButton((ImTextureID)(uint64)icon->GetRendererID(), ImVec2(24, 24), ImVec2(0, 0), ImVec2(1, 1), 0))
@@ -484,7 +489,7 @@ namespace Fluoresce {
 				ImGui::PopStyleColor(1);
 				ImGui::Separator();
 
-				if (ImGui::TreeNodeEx((void*)2754597, treeNodeFlags, "Scene Setting"))
+				if (ImGui::TreeNodeEx((void*)2754597, ImGuiTreeNodeFlags_DefaultOpen | treeNodeFlags, "Scene Setting"))
 				{
 					std::string name = "None";
 					ImGui::ColorEdit4("BgColor", glm::value_ptr(m_ViewportClearColor));
@@ -494,7 +499,7 @@ namespace Fluoresce {
 					ImGui::TreePop();
 				}
 
-				if (ImGui::TreeNodeEx((void*)5654597, treeNodeFlags, "Main Camera"))
+				if (ImGui::TreeNodeEx((void*)5654597, ImGuiTreeNodeFlags_DefaultOpen | treeNodeFlags, "Main Camera"))
 				{
 					if (EditorCore::GetEditorState() == EditorState::Edit)
 					{
@@ -563,6 +568,8 @@ namespace Fluoresce {
 			m_EditorScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 			m_EditorCamera.ResetView(1600.0f / 900.0f);
 			m_SceneHierarchyPanel.SetContext(m_EditorScene);
+			m_AssetsPanel.ClearTextureAssets();
+			m_AssetsPanel.ReloadTextureAssetInfo();
 
 			EditorCore::SetCurrentScenePath(std::filesystem::path());
 		}
@@ -588,12 +595,14 @@ namespace Fluoresce {
 			}
 
 			Ref<Scene> newScene = CreateRef<Scene>();
+			m_AssetsPanel.ClearTextureAssets();
 			if (EditorCore::SceneDeserialize(newScene, path.string()))
 			{
 				m_EditorScene = newScene;
 				m_EditorScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 				m_EditorCamera.ResetView(1600.0f / 900.0f);
 				m_SceneHierarchyPanel.SetContext(m_EditorScene);
+				m_AssetsPanel.ReloadTextureAssetInfo();
 
 				EditorCore::SetCurrentScenePath(path);
 			}

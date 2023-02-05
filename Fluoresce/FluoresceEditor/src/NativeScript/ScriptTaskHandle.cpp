@@ -3,12 +3,14 @@
 // Describe : 	スクリプトタスクハンドル										// 
 // Author : Ding Qi																// 
 // Create Date : 2023/01/26														// 
-// Modify Date : 2023/02/05														// 
+// Modify Date : 2023/02/06														// 
 //==============================================================================//
 #include "NativeScript/ScriptTaskHandle.h"
 
 #include "NativeScript/MoveController2D.h"
 #include "NativeScript/AutoRotation2D.h"
+#include "NativeScript/SnowParticle.h"
+#include "NativeScript/SnowParticleManager.h"
 
 namespace Fluoresce {
 
@@ -24,7 +26,9 @@ namespace Fluoresce {
 		{
 			"null",
 			"MoveController2D",
-			"AutoRotation2D"
+			"AutoRotation2D",
+			"SnowParticle",
+			"SnowParticleManager"
 		};
 
 		void ScriptTaskHandle::BindScript(Entity entity)
@@ -38,6 +42,12 @@ namespace Fluoresce {
 				break;
 			case ScriptID::_AutoRotation2D:
 				scriptComponent.Bind<ScriptAutoRotation2D>();
+				break;
+			case ScriptID::_SnowParticle:
+				scriptComponent.Bind<ScriptSnowParticle>();
+				break;
+			case ScriptID::_SnowParticleManager:
+				scriptComponent.Bind<SnowParticleManager>();
 				break;
 			default:
 				break;

@@ -3,7 +3,7 @@
 // Describe : 	シーンヒエラルキーパネル										// 
 // Author : Ding Qi																// 
 // Create Date : 2022/05/29														// 
-// Modify Date : 2023/02/05														// 
+// Modify Date : 2023/02/06														// 
 //==============================================================================//
 #include "Panel/SceneHierarchyPanel.h"
 
@@ -282,26 +282,15 @@ namespace Fluoresce {
 				ImGui::Button("Texture Slot", ImVec2(100.0f, 0.0f));
 				if (ImGui::BeginDragDropTarget())
 				{
-					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(EditorCore::GetDragDropPayloadStr(DragDropPayloadType::_TextureFile).c_str()))
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(EditorCore::GetDragDropPayloadStr(DragDropPayloadType::_TextureAsset).c_str()))
 					{
-						const wchar_t* path = (const wchar_t*)payload->Data;
-						std::filesystem::path texturePath = path;
-						std::string filename = texturePath.filename().string();
-						if (auto tex = EditorCore::LoadTextureAsset(filename); tex)
-						{
-							component.TextureName = filename;
-							component.Texture = tex;
-							component.EnableTexture = true;
-						}
-						else
-						{
-							FR_CLIENT_WARN("Could not set texture {0}", filename);
-						}
+						const char* name = (const char*)payload->Data;
+						component.SetTextureAsset(name);
 					}
 					ImGui::EndDragDropTarget();
 				}
 
-				if (component.Texture)
+				if (!component.Texture.expired())
 				{
 					ImGui::Checkbox("Enable", &component.EnableTexture);
 					ImGui::SameLine();

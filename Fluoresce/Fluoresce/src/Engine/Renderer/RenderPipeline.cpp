@@ -47,6 +47,11 @@ namespace Fluoresce {
 		s_SpriteRenderer->ResetStats();
 	}
 
+	void RenderPipeline::RequestClearAllBatchAssets()
+	{
+		s_SpriteRenderer->RequestClearTextureSlots();
+	}
+
 	Ref<Texture2D> RenderPipeline::GetWhiteTexture()
 	{
 		return s_WhiteTexture;

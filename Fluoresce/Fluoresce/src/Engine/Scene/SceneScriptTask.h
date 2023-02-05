@@ -27,7 +27,7 @@ namespace Fluoresce {
 		static SceneScriptTask& Get();
 	private:
 		Ref<Scene> m_Context;
-		bool m_SortUpdateTask;
+		bool m_RemapUpdateTask;
 		std::vector<ScriptableEntity*> m_UpdateTask;
 		friend class ScriptableEntity;
 	};

@@ -3,7 +3,7 @@
 // Describe :	スプライトレンダラー											// 
 // Author : Ding Qi																// 
 // Create Date : 2022/08/15														// 
-// Modify Date : 2023/02/05														// 
+// Modify Date : 2023/02/06														// 
 //==============================================================================//
 #include "frpch.h"
 #include "Engine/Renderer/SpriteRenderer.h"
@@ -61,6 +61,8 @@ namespace Fluoresce {
 
 		std::array<Ref<Texture2D>, maxTextureSlots> TextureSlots;
 		uint32_t TextureSlotIndex = 1;
+
+		bool ClearTextureSlots = false;
 	};
 
     void SpriteRenderer::Init(const std::string& shaderPath)
@@ -168,6 +170,21 @@ namespace Fluoresce {
 	void SpriteRenderer::End()
 	{
 		Submit();
+
+		// テクスチャスロットリセット
+		if (m_Data->ClearTextureSlots)
+		{
+			for (uint32_t i = 1; i < maxTextureSlots; i++)
+			{
+				if (m_Data->TextureSlots[i] != nullptr)
+				{
+					m_Data->TextureSlots[i] = nullptr;
+				}
+			}
+
+			m_Data->TextureSlotIndex = 1;
+			m_Data->ClearTextureSlots = false;
+		}
 	}
 
 	void SpriteRenderer::DrawQuad(const Vec3& position, const Vec2& size, const Vec4& color, sint32 entityID)
@@ -218,7 +235,7 @@ namespace Fluoresce {
 		float32 textureIndex = 0.0f;
 		for (uint32_t i = 1; i < m_Data->TextureSlotIndex; i++)
 		{
-			if (*m_Data->TextureSlots[i] == *texture)
+			if (*m_Data->TextureSlots[i].get() == *texture)
 			{
 				textureIndex = (float32)i;
 				break;
@@ -258,9 +275,9 @@ namespace Fluoresce {
 	{
 		if (src.Visible)
 		{
-			if (src.EnableTexture)
+			if (!src.Texture.expired() && src.EnableTexture)
 			{
-				auto texture = src.Texture;
+				auto texture = src.Texture.lock();
 				DrawSprite(transform, src.Color, texture, src.TilingFactor, entityID);
 			}
 			else
@@ -268,5 +285,10 @@ namespace Fluoresce {
 				DrawQuad(transform, src.Color, entityID);
 			}
 		}
+	}
+
+	void SpriteRenderer::RequestClearTextureSlots()
+	{
+		m_Data->ClearTextureSlots = true;		
 	}
 }

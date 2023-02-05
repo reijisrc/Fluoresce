@@ -3,13 +3,14 @@
 // Describe : 	エディターコア													// 
 // Author : Ding Qi																// 
 // Create Date : 2022/05/29														// 
-// Modify Date : 2023/02/01														// 
+// Modify Date : 2023/02/06														// 
 //==============================================================================//
 #include "EditorCore.h"
 #include "Engine/ImGui/ImguiSerializer.h"
 #include "Engine/Scene/SceneSerializer.h"
+#include "Engine/Asset/AssetSerializer.h"
 
-#define EDITOR_VERSION               "0.81"
+#define EDITOR_VERSION               "0.85"
 
 namespace Fluoresce {
 
@@ -80,7 +81,7 @@ namespace Fluoresce {
 
 		void EditorCore::ShutDown()
 		{
-
+			AssetsManager::Get().ReleaseAssets();
 		}
 
 		const char* EditorCore::GetVersion()
@@ -90,14 +91,31 @@ namespace Fluoresce {
 
 		void EditorCore::SceneSerialize(const Ref<Scene>& scene, const std::string& filepath, const std::string& scenename)
 		{
-			SceneSerializer serializer(scene);
-			serializer.Serialize(filepath, scenename);
+			std::string str;
+			AssetSerializer assetSerializer;
+			assetSerializer.Serialize(filepath, scenename, str);
+
+			std::string scenestr;
+			SceneSerializer sceneSerializer(scene);
+			sceneSerializer.Serialize(filepath, scenename, scenestr);
+
+			str += scenestr;
+
+			std::ofstream fout(filepath);
+			fout << str;
 		}
 
 		bool EditorCore::SceneDeserialize(const Ref<Scene>& scene, const std::string& filepath)
 		{
-			SceneSerializer serializer(scene);
-			return serializer.Deserialize(filepath);
+			bool assetresult = false;
+			bool sceneresult = false;
+			AssetSerializer assetDeserializer;
+			assetresult = assetDeserializer.Deserialize(filepath);
+
+			SceneSerializer sceneDeserializer(scene);
+			sceneresult = sceneDeserializer.Deserialize(filepath);
+
+			return assetresult && sceneresult;
 		}
 
 		EditorState EditorCore::GetEditorState()
@@ -157,12 +175,14 @@ namespace Fluoresce {
 				return std::string("CONTENT_ITEM_SCENE");
 			case DragDropPayloadType::_TextureFile:
 				return std::string("CONTENT_ITEM_TEXTURE");
+			case DragDropPayloadType::_TextureAsset:
+				return std::string("ASSET_ITEM_TEXTURE");
 			default:
 				return std::string();
 			}
 		}
 
-		Ref<Texture2D> EditorCore::LoadTextureAsset(const std::string& path)
+		Ref<Texture2D> EditorCore::LoadTextureFile(const std::string& path)
 		{
 			std::string texturePath = EditorCore::GetPath(EditorPath::_AssetsPath).string();
 			texturePath += "/textures/";

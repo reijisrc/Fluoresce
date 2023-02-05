@@ -3,7 +3,7 @@
 // Describe : 	エディターコア													// 
 // Author : Ding Qi																// 
 // Create Date : 2022/05/29														// 
-// Modify Date : 2023/02/01														// 
+// Modify Date : 2023/02/06														// 
 //==============================================================================//
 #pragma once
 
@@ -29,6 +29,7 @@ namespace Fluoresce {
 			_Undefined = 0,
 			_SceneFile,
 			_TextureFile,
+			_TextureAsset,
 		};
 
 		enum class EditorState
@@ -60,7 +61,7 @@ namespace Fluoresce {
 			static const std::string GetConfigPath();
 			static const std::string GetDragDropPayloadStr(DragDropPayloadType type);
 
-			static Ref<Texture2D> LoadTextureAsset(const std::string& path);
+			static Ref<Texture2D> LoadTextureFile(const std::string& path);
 		};
 	}
 };
