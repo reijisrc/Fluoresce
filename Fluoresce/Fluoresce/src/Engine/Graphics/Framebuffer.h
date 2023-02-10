@@ -3,7 +3,7 @@
 // Describe : 	フレームバッファ												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/10/15														// 
-// Modify Date : 2022/10/15														// 
+// Modify Date : 2023/02/10														// 
 //==============================================================================//
 #pragma once
 
@@ -16,6 +16,7 @@ namespace Fluoresce {
 
 		// カラーバッファ
 		RGBA8,
+		RGBA16F,
 		RED_INTEGER,
 
 		// デプスバッファ

@@ -8,6 +8,7 @@
 #pragma once
 
 #include "Fluoresce.h"
+#include "Scene/EditorScene.h"
 
 namespace Fluoresce {
 
@@ -18,9 +19,9 @@ namespace Fluoresce {
 		{
 		public:
 			SceneHierarchyPanel() = default;
-			SceneHierarchyPanel(const  Ref<Scene>& scene);
+			SceneHierarchyPanel(const  Ref<EditorScene>& scene);
 
-			void SetContext(const Ref<Scene>& scene);
+			void SetContext(const Ref<EditorScene>& scene);
 
 			void OnImGuiRender();
 
@@ -33,7 +34,7 @@ namespace Fluoresce {
 			void DrawEntityNode(Entity entity);
 			void DrawComponents(Entity entity);
 		private:
-			Ref<Scene> m_Context;
+			Ref<EditorScene> m_Context;
 			Entity m_SelectionContext;
 		};
 

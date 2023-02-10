@@ -60,12 +60,12 @@ namespace Fluoresce {
 			}
 		}
 
-		SceneHierarchyPanel::SceneHierarchyPanel(const Ref<Scene>& scene)
+		SceneHierarchyPanel::SceneHierarchyPanel(const Ref<EditorScene>& scene)
 		{
 			SetContext(scene);
 		}
 
-		void SceneHierarchyPanel::SetContext(const Ref<Scene>& context)
+		void SceneHierarchyPanel::SetContext(const Ref<EditorScene>& context)
 		{
 			m_Context = context;
 			m_SelectionContext = {};
@@ -78,7 +78,7 @@ namespace Fluoresce {
 
 			if (m_Context)
 			{
-				m_Context->m_Registry.each([&](auto entityID)
+				m_Context->GetRegistry().each([&](auto entityID)
 				{
 					Entity entity{ entityID , m_Context.get() };
 					DrawEntityNode(entity);

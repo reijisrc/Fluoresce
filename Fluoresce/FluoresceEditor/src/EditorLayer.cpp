@@ -3,7 +3,7 @@
 // Describe : 	エディターレイヤー												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/05/14														// 
-// Modify Date : 2023/02/05														// 
+// Modify Date : 2023/02/10														// 
 //==============================================================================//
 #include "EditorLayer.h"
 #include "EditorCore.h"
@@ -51,14 +51,14 @@ namespace Fluoresce {
 			m_ContentBrowserPanel.Init();
 
 			FramebufferSpecification fbSpec;
-			fbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
+			fbSpec.Attachments = { FramebufferTextureFormat::RGBA16F, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
 			fbSpec.Width = 1280;
 			fbSpec.Height = 720;
 			m_Framebuffer = Framebuffer::Create(fbSpec);
 
 			m_EditorCamera = EditorCamera(30.0f, 1600.0f / 900.0f, 0.1f, 1000.0f);
 
-			m_EditorScene = CreateRef<Scene>();
+			m_EditorScene = CreateRef<EditorScene>();
 			m_SceneHierarchyPanel.SetContext(m_EditorScene);
 		}
 
@@ -259,7 +259,7 @@ namespace Fluoresce {
 			EditorCore::SetEditorState(EditorState::Runtime);
 			m_GizmoType = -1;
 
-			m_RuntimeScene = Scene::Copy(m_EditorScene);
+			m_RuntimeScene = EditorScene::Copy(m_EditorScene);
 			
 			SceneScriptTask::Get().BuildNativeScript(m_RuntimeScene, ScriptTaskHandle::BindScript);
 			m_RuntimeScene->OnRuntimeStart();
@@ -564,7 +564,7 @@ namespace Fluoresce {
 
 		void EditorLayer::NewScene()
 		{
-			m_EditorScene = CreateRef<Scene>();
+			m_EditorScene = CreateRef<EditorScene>();
 			m_EditorScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 			m_EditorCamera.ResetView(1600.0f / 900.0f);
 			m_SceneHierarchyPanel.SetContext(m_EditorScene);
@@ -594,7 +594,7 @@ namespace Fluoresce {
 				return;
 			}
 
-			Ref<Scene> newScene = CreateRef<Scene>();
+			Ref<EditorScene> newScene = CreateRef<EditorScene>();
 			m_AssetsPanel.ClearTextureAssets();
 			if (EditorCore::SceneDeserialize(newScene, path.string()))
 			{

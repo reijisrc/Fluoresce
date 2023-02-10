@@ -27,6 +27,7 @@
     <ClInclude Include="src\Panel\AssetsPanel.h" />
     <ClInclude Include="src\NativeScript\SnowParticleManager.h" />
     <ClInclude Include="src\NativeScript\SnowParticle.h" />
+    <ClInclude Include="src\Scene\EditorScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EditorCore.cpp" />
@@ -48,5 +49,6 @@
     <ClCompile Include="src\Panel\AssetsPanel.cpp" />
     <ClCompile Include="src\NativeScript\SnowParticleManager.cpp" />
     <ClCompile Include="src\NativeScript\SnowParticle.cpp" />
+    <ClCompile Include="src\Scene\EditorScene.cpp" />
   </ItemGroup>
 </Project>

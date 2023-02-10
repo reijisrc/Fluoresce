@@ -146,6 +146,7 @@
     <ClInclude Include="src\Panel\AssetsPanel.h" />
     <ClInclude Include="src\Panel\ContentBrowserPanel.h" />
     <ClInclude Include="src\Panel\SceneHierarchyPanel.h" />
+    <ClInclude Include="src\Scene\EditorScene.h" />
     <ClInclude Include="src\UIWindow\MenuWindow.h" />
   </ItemGroup>
   <ItemGroup>
@@ -161,6 +162,7 @@
     <ClCompile Include="src\Panel\AssetsPanel.cpp" />
     <ClCompile Include="src\Panel\ContentBrowserPanel.cpp" />
     <ClCompile Include="src\Panel\SceneHierarchyPanel.cpp" />
+    <ClCompile Include="src\Scene\EditorScene.cpp" />
     <ClCompile Include="src\UIWindow\MenuWindow.cpp" />
   </ItemGroup>
   <ItemGroup>

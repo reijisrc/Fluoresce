@@ -3,11 +3,12 @@
 // Describe : 	エディターレイヤー												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/05/14														// 
-// Modify Date : 2023/02/06														// 
+// Modify Date : 2023/02/10														// 
 //==============================================================================//
 #pragma once
 
 #include "Fluoresce.h"
+#include "Scene/EditorScene.h"
 #include "Panel/AssetsPanel.h"
 #include "Panel/SceneHierarchyPanel.h"
 #include "Panel/ContentBrowserPanel.h"
@@ -74,8 +75,8 @@ namespace Fluoresce {
 
 			Ref<Framebuffer> m_Framebuffer;
 
-			Ref<Scene> m_EditorScene;
-			Ref<Scene> m_RuntimeScene;
+			Ref<EditorScene> m_EditorScene;
+			Ref<EditorScene> m_RuntimeScene;
 
 			Ref<Texture2D> m_IconPlay; 
 			Ref<Texture2D> m_IconStop;
