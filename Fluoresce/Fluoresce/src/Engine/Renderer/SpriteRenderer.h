@@ -3,7 +3,7 @@
 // Describe :	スプライトレンダラー											// 
 // Author : Ding Qi																// 
 // Create Date : 2022/08/15														// 
-// Modify Date : 2023/01/22														// 
+// Modify Date : 2023/02/12														// 
 //==============================================================================//
 #pragma once
 
@@ -32,13 +32,13 @@ namespace Fluoresce {
 
 		void End();
 
-		void DrawQuad(const Vec3& position, const Vec2& size, const Vec4& color, sint32 entityID = -1);
-		void DrawQuad(const Mat4& transform, const Vec4& color, sint32 entityID = -1);
+		void DrawQuad(const Vec3& position, const Vec2& size, const Vec4& color);
+		void DrawQuad(const Mat4& transform, const Vec4& color);
 
-		void DrawSprite(const Vec3& positon, const Vec2& size, const Vec4& color, const Ref<Texture2D>& texture, float32 tilingFactor = 1.0f, sint32 entityID = -1);
-		void DrawSprite(const Mat4& transform, const Vec4& color, const Ref<Texture2D>& texture, float32 tilingFactor = 1.0f, sint32 entityID = -1);
+		void DrawSprite(const Vec3& positon, const Vec2& size, const Vec4& color, const Ref<Texture2D>& texture, float32 tilingFactor = 1.0f);
+		void DrawSprite(const Mat4& transform, const Vec4& color, const Ref<Texture2D>& texture, float32 tilingFactor = 1.0f);
 
-		void DrawSpriteEntity(const Mat4& transform, SpriteRendererComponent& src, sint32 entityID);
+		void DrawSpriteEntity(const Mat4& transform, SpriteRendererComponent& src);
 
 		void RequestClearTextureSlots();
 	private:

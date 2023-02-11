@@ -17,8 +17,8 @@ namespace Fluoresce {
 	class GLTexture2D : public Texture2D
 	{
 	public:
-		GLTexture2D(TextureFormat format, uint32 width, uint32 height, TextureWrap wrap);
-		GLTexture2D(const std::string& path, TextureWrap wrap);
+		GLTexture2D(uint32 width, uint32 height, const TexturetOption& option);
+		GLTexture2D(const std::string& path, const TexturetOption& option);
 		virtual ~GLTexture2D();
 
 		virtual TextureFormat GetFormat() const override { return m_Format; }
@@ -30,24 +30,32 @@ namespace Fluoresce {
 
 		virtual void Bind(uint32 slot) const override;
 
+		virtual bool IsHDR() const override
+		{
+			return m_IsHDR;
+		}
+
 		virtual bool operator==(const Texture& other) const override
 		{
 			return m_RendererID == other.GetRendererID();
 		}
 	private:
+		void LoadLDRImage(const std::string& path, const TexturetOption& option);
+		void LoadHDRImage(const std::string& path, const TexturetOption& option);
+	private:
 		std::string m_Path;
 		uint32 m_Width, m_Height;
 		uint32 m_RendererID = 0;
 		TextureFormat m_Format;
-		TextureWrap m_Wrap = TextureWrap::Clamp;
+		bool m_IsHDR = false;
 	};
 
 	// キューブテクスチャ
 	class GLTextureCube : public TextureCube
 	{
 	public:
-		GLTextureCube(TextureFormat format, uint32 width, uint32 height);
-		GLTextureCube(const std::string& path);
+		GLTextureCube(uint32 width, uint32 height, const TexturetOption& option);
+		GLTextureCube(const std::string& path, const TexturetOption& option);
 		virtual ~GLTextureCube();
 
 		virtual TextureFormat GetFormat() const override { return m_Format; }
@@ -59,14 +67,24 @@ namespace Fluoresce {
 
 		virtual void Bind(uint32 slot) const override;
 
+		virtual bool IsHDR() const override 
+		{
+			return m_IsHDR;
+		}
+
 		virtual bool operator==(const Texture& other) const override
 		{
 			return m_RendererID == other.GetRendererID();
 		}
 	private:
+		void LoadLDRImage(const std::string& path, const TexturetOption& option);
+		void LoadHDRImage(const std::string& path, const TexturetOption& option);
+
+	private:
 		std::string m_Path;
 		uint32 m_Width, m_Height;
 		uint32 m_RendererID = 0;
 		TextureFormat m_Format;
+		bool m_IsHDR = false;
 	};
 }

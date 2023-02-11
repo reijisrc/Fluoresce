@@ -3,7 +3,7 @@
 // Describe :	シェーダ														// 
 // Author : Ding Qi																// 
 // Create Date : 2022/08/13														// 
-// Modify Date : 2023/01/22														// 
+// Modify Date : 2023/02/11														// 
 //==============================================================================//
 #include "frpch.h"
 #include "Engine/Graphics/Texture.h"
@@ -13,12 +13,12 @@
 
 namespace Fluoresce {
 
-	Ref<Texture2D> Texture2D::Create(TextureFormat format, uint32 width, uint32 height, TextureWrap wrap)
+	Ref<Texture2D> Texture2D::Create(uint32 width, uint32 height, const TexturetOption& option)
 	{
 		switch (GraphicsCore::GetAPI())
 		{
 		case GraphicsCore::API::None: FR_CORE_ASSERT(false, "RenderAPI: None is currently not supported!") return nullptr;
-		case GraphicsCore::API::OpenGL4: return CreateRef<GLTexture2D>(format, width, height, wrap);
+		case GraphicsCore::API::OpenGL4: return CreateRef<GLTexture2D>(width, height, option);
 		default:
 			break;
 		}
@@ -27,12 +27,12 @@ namespace Fluoresce {
 		return nullptr;
 	}
 
-	Ref<Texture2D> Texture2D::Create(const std::string& path, TextureWrap wrap)
+	Ref<Texture2D> Texture2D::Create(const std::string& path, const TexturetOption& option)
 	{
 		switch (GraphicsCore::GetAPI())
 		{
 		case GraphicsCore::API::None: FR_CORE_ASSERT(false, "RenderAPI: None is currently not supported!") return nullptr;
-		case GraphicsCore::API::OpenGL4: return CreateRef<GLTexture2D>(path, wrap);
+		case GraphicsCore::API::OpenGL4: return CreateRef<GLTexture2D>(path, option);
 		default:
 			break;
 		}
@@ -42,12 +42,12 @@ namespace Fluoresce {
 	}
 
 
-	Ref<TextureCube> TextureCube::Create(TextureFormat format, uint32 width, uint32 height)
+	Ref<TextureCube> TextureCube::Create(uint32 width, uint32 height, const TexturetOption& option)
 	{
 		switch (GraphicsCore::GetAPI())
 		{
 		case GraphicsCore::API::None: FR_CORE_ASSERT(false, "RenderAPI: None is currently not supported!") return nullptr;
-		case GraphicsCore::API::OpenGL4: return  CreateRef<GLTextureCube>(format, width, height);
+		case GraphicsCore::API::OpenGL4: return  CreateRef<GLTextureCube>(width, height, option);
 		default:
 			break;
 		}
@@ -56,12 +56,12 @@ namespace Fluoresce {
 		return nullptr;
 	}
 	
-	Ref<TextureCube> TextureCube::Create(const std::string& path)
+	Ref<TextureCube> TextureCube::Create(const std::string& path, const TexturetOption& option)
 	{
 		switch (GraphicsCore::GetAPI())
 		{
 		case GraphicsCore::API::None: FR_CORE_ASSERT(false, "RenderAPI: None is currently not supported!") return nullptr;
-		case GraphicsCore::API::OpenGL4: return CreateRef<GLTextureCube>(path);
+		case GraphicsCore::API::OpenGL4: return CreateRef<GLTextureCube>(path, option);
 		default:
 			break;
 		}

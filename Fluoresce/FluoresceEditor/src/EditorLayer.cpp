@@ -50,15 +50,24 @@ namespace Fluoresce {
 
 			m_ContentBrowserPanel.Init();
 
+			// MSAAフレームバッファ
 			FramebufferSpecification baseFBSpec;
-			baseFBSpec.Attachments = { FramebufferTextureFormat::RGBA16F, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
+			baseFBSpec.Attachments = { FramebufferTextureFormat::RGBA16F, FramebufferTextureFormat::Depth };
 			baseFBSpec.Width = 1280;
 			baseFBSpec.Height = 720;
+			baseFBSpec.Samples = 4;
 			m_HDRBuffer = Framebuffer::Create(baseFBSpec);
 
+			// MSAAコピー用中間バッファ
+			FramebufferSpecification intermediateFBSpec;
+			intermediateFBSpec.Attachments = { FramebufferTextureFormat::RGBA16F };
+			intermediateFBSpec.Width = 1280;
+			intermediateFBSpec.Height = 720;
+			m_IntermediateBuffer = Framebuffer::Create(intermediateFBSpec);
 
+			// ポストプロセスバッファ
 			FramebufferSpecification postprocessingSpec;
-			postprocessingSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::Depth };
+			postprocessingSpec.Attachments = { FramebufferTextureFormat::RGBA8 };
 			postprocessingSpec.Width = 1280;
 			postprocessingSpec.Height = 720;
 			m_PostProcessingBuffer = Framebuffer::Create(postprocessingSpec);
@@ -84,6 +93,7 @@ namespace Fluoresce {
 				(spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y))
 			{
 				m_HDRBuffer->Resize((uint32)m_ViewportSize.x, (uint32)m_ViewportSize.y);
+				m_IntermediateBuffer->Resize((uint32)m_ViewportSize.x, (uint32)m_ViewportSize.y);
 				resize = true;
 			}
 
@@ -114,9 +124,6 @@ namespace Fluoresce {
 			RenderCommand::SetClearColor(m_ViewportClearColor);
 			RenderCommand::Clear();
 
-			// カラーバッファ1:クリア
-			m_HDRBuffer->ClearAttachment(1, -1);
-
 			switch (EditorCore::GetEditorState())
 			{
 			case EditorState::Edit:
@@ -127,28 +134,13 @@ namespace Fluoresce {
 				break;
 			}
 
-			auto [mx, my] = ImGui::GetMousePos();
-			mx -= m_ViewportBounds[0].x;
-			my -= m_ViewportBounds[0].y;
-			Vec2 viewportSize = m_ViewportBounds[1] - m_ViewportBounds[0];
-			my = viewportSize.y - my;
-			int mouseX = (int)mx;
-			int mouseY = (int)my;
-
-			// マウスpick情報
-			if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
-			{
-				sint32 pixelData = m_HDRBuffer->ReadPixel(1, mouseX, mouseY);
-				auto currentscene = (EditorCore::GetEditorState() == EditorState::Edit) ? m_EditorScene.get() : m_RuntimeScene.get();
-				m_HoveredEntity = (pixelData == -1) ? Entity() : Entity(static_cast<entt::entity>(pixelData), currentscene);
-			}
-
+			m_HDRBuffer->BlitMultisampledBuffer(m_IntermediateBuffer);
 			m_HDRBuffer->Unbind();
 
 			// ポストプロセス
-			RenderCommand::Clear();
 			m_PostProcessingBuffer->Bind();
-			postProcessingRenderer.Submit(m_HDRBuffer, m_Exposure);
+			RenderCommand::Clear();
+			postProcessingRenderer.Submit(m_IntermediateBuffer, m_Exposure);
 			m_PostProcessingBuffer->Unbind();
 		}
 
@@ -262,7 +254,10 @@ namespace Fluoresce {
 			if (e.GetMouseButton() == Mouse::ButtonLeft)
 			{
 				if (m_ViewportHovered && !ImGuizmo::IsOver() && !Input::IsKeyPressed(Key::LeftAlt))
-					m_SceneHierarchyPanel.SetSelectedEntity(m_HoveredEntity);
+				{
+					// MSAA pick使えない
+					// m_SceneHierarchyPanel.SetSelectedEntity(m_HoveredEntity);
+				}
 			}
 			return false;
 		}
@@ -406,7 +401,6 @@ namespace Fluoresce {
 					ImVec2 viewport = ImGui::GetContentRegionAvail();
 					m_ViewportSize = { viewport.x, viewport.y };
 					uint64_t textureID = m_PostProcessingBuffer->GetColorAttachmentRendererID();
-					//uint64_t textureID = m_HDRBuffer->GetColorAttachmentRendererID();
 					ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 				}
 
@@ -505,12 +499,8 @@ namespace Fluoresce {
 
 				if (ImGui::TreeNodeEx((void*)2754597, ImGuiTreeNodeFlags_DefaultOpen | treeNodeFlags, "Scene Setting"))
 				{
-					std::string name = "None";
 					ImGui::ColorEdit4("BackgroundColor", glm::value_ptr(m_ViewportClearColor));
 					ImGui::DragFloat("Exposure", &m_Exposure, 0.01f, 0.0f, 10.0f);
-					if (m_HoveredEntity)
-						name = m_HoveredEntity.GetComponent<TagComponent>().Tag;
-					ImGui::Text("Hovered Entity: %s", name.c_str());
 					ImGui::TreePop();
 				}
 

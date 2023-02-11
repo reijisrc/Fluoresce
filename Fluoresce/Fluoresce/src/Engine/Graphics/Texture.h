@@ -3,7 +3,7 @@
 // Describe : 	テクスチャ														// 
 // Author : Ding Qi																// 
 // Create Date : 2022/10/15														// 
-// Modify Date : 2023/02/10														// 
+// Modify Date : 2023/02/11														// 
 //==============================================================================//
 #pragma once
 
@@ -14,7 +14,7 @@ namespace Fluoresce {
 		None = 0,
 		RGB = 1,
 		RGBA = 2,
-		RGBA16f = 3
+		RGBA16f = 4,
 	};
 
 	enum class TextureWrap
@@ -23,6 +23,15 @@ namespace Fluoresce {
 		Clamp = 1,
 		Repeat = 2
 	};
+
+	// テクスチャオプション
+	struct TexturetOption
+	{
+		TextureFormat foramt = TextureFormat::RGBA;
+		TextureWrap   wrap = TextureWrap::Clamp;
+		bool          sRGB = false;
+	};
+
 
 	// テクスチャ
 	class Texture
@@ -33,11 +42,13 @@ namespace Fluoresce {
 		virtual TextureFormat GetFormat() const = 0;
 		virtual uint32 GetWidth() const = 0;
 		virtual uint32 GetHeight() const = 0;
-		virtual uint32_t GetRendererID() const = 0;
+		virtual uint32 GetRendererID() const = 0;
 
 		virtual void SetData(void* data, uint32 size) = 0;
 
 		virtual void Bind(uint32 slot) const = 0;
+
+		virtual bool IsHDR() const = 0;
 
 		virtual bool operator==(const Texture& other) const = 0;
 	};
@@ -46,16 +57,16 @@ namespace Fluoresce {
 	class Texture2D : public Texture
 	{
 	public:
-		static Ref<Texture2D> Create(TextureFormat format, uint32 width, uint32 height, TextureWrap wrap = TextureWrap::Clamp);
-		static Ref<Texture2D> Create(const std::string& path, TextureWrap wrap = TextureWrap::Clamp);
+		static Ref<Texture2D> Create(uint32 width, uint32 height, const TexturetOption& option = TexturetOption());
+		static Ref<Texture2D> Create(const std::string& path, const TexturetOption& option = TexturetOption());
 	};
 
 	// キューブテクスチャ
 	class TextureCube : public Texture
 	{
 	public:
-		static Ref<TextureCube> Create(TextureFormat format, uint32 width, uint32 height);
-		static Ref<TextureCube> Create(const std::string& path);
+		static Ref<TextureCube> Create(uint32 width, uint32 height, const TexturetOption& option = TexturetOption());
+		static Ref<TextureCube> Create(const std::string& path, const TexturetOption& option = TexturetOption());
 	};
 
 }

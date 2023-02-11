@@ -14,6 +14,8 @@
 #include "Engine/Renderer/RenderCommand.h"
 #include "Engine/Renderer/RenderPipeline.h"
 
+#include <glad/glad.h>
+
 namespace Fluoresce {
 
 	constexpr float32 gamma = 2.2f;
@@ -33,10 +35,10 @@ namespace Fluoresce {
 
 		float32 fullScreenQuad[] =
 		{
-			-1.0f, -1.0f, 0.2f, 0.0f, 0.0f,
-			1.0f, -1.0f, 0.2f, 1.0f, 0.0f,
-			1.0f, 1.0f, 0.2f, 1.0f, 1.0f,
-			-1.0f, 1.0f, 0.2f, 0.0f, 1.0f
+			-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+			1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+			1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+			-1.0f, 1.0f, 0.0f, 0.0f, 1.0f
 		};
 
 		m_Data->VertexBuffer = VertexBuffer::Create(fullScreenQuad, 20 * sizeof(float32));
@@ -60,7 +62,6 @@ namespace Fluoresce {
 
 	void PostProcessingRenderer::Submit(const Ref<Framebuffer>& framebuffer, float32 exposure)
 	{
-		
 		if (auto ubo = RenderPipeline::GetUniformBuffer(RenderPipeline::UniformBufferIndex::HdrEnvironment); ubo)
 		{
 			RenderPipeline::HdrEnvironmentData environment;
@@ -71,9 +72,6 @@ namespace Fluoresce {
 
 		m_Data->ToneMappingShader->Bind();
 		framebuffer->BindAttachmentToTextureSlot(0);
-
-		RenderCommand::SetDepthTestFunc(DepthTestFunc::DepthTest_Always);
 		RenderCommand::DrawIndexed(m_Data->VertexArray, 6);
-		RenderCommand::SetDepthTestFunc(DepthTestFunc::DepthTest_Default);
 	}
 }

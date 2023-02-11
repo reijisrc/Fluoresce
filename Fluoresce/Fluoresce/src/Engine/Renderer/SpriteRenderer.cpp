@@ -47,8 +47,6 @@ namespace Fluoresce {
 		Vec2 TexCoord = Vec2(0.0f);
 		float32 TexIndex = 0.0f;
 		float32 TilingFactor = 1.0f;
-		// マウスpick用ID
-		sint32 EntityID = -1;
 	};
 
 	struct SpriteRenderer::RendererData
@@ -77,8 +75,7 @@ namespace Fluoresce {
 			{ GPUDataType::Float4, "a_Color"},
 			{ GPUDataType::Float2, "a_TexCoord"},
 			{ GPUDataType::Float, "a_TexIndex" },
-			{ GPUDataType::Float, "a_TilingFactor" },
-			{ GPUDataType::Int, "a_EntityID" }
+			{ GPUDataType::Float, "a_TilingFactor" }
 			});
 
 		m_Data->VertexArray->AddVertexBuffer(m_Data->VertexBuffer);
@@ -187,15 +184,15 @@ namespace Fluoresce {
 		}
 	}
 
-	void SpriteRenderer::DrawQuad(const Vec3& position, const Vec2& size, const Vec4& color, sint32 entityID)
+	void SpriteRenderer::DrawQuad(const Vec3& position, const Vec2& size, const Vec4& color)
 	{
 		Mat4 transform = glm::translate(Mat4(1.0f), position)
 			* glm::scale(Mat4(1.0f), { size.x, size.y, 1.0f });
 
-		DrawQuad(transform, color, entityID);
+		DrawQuad(transform, color);
 	}
 
-	void SpriteRenderer::DrawQuad(const Mat4& transform, const Vec4& color, sint32 entityID)
+	void SpriteRenderer::DrawQuad(const Mat4& transform, const Vec4& color)
 	{
 		if (m_Data->QuadIndexCount >= maxIndices)
 			NextBatch();
@@ -209,7 +206,6 @@ namespace Fluoresce {
 			vertex.TexCoord = s_DefaultTexCoord[i];
 			vertex.TexIndex = 0.0f;
 			vertex.TilingFactor = 1.0f;
-			vertex.EntityID = entityID;
 			m_Buffer.PushData(&vertex, sizeof(QuadVertex));
 		}
 
@@ -219,15 +215,15 @@ namespace Fluoresce {
 		m_Stats.IndexCount += 6;
 	}
 
-	void SpriteRenderer::DrawSprite(const Vec3& position, const Vec2& size, const Vec4& color, const Ref<Texture2D>& texture, float32 tilingFactor, sint32 entityID)
+	void SpriteRenderer::DrawSprite(const Vec3& position, const Vec2& size, const Vec4& color, const Ref<Texture2D>& texture, float32 tilingFactor)
 	{
 		Mat4 transform = glm::translate(Mat4(1.0f), position)
 			* glm::scale(Mat4(1.0f), { size.x, size.y, 1.0f });
 
-		DrawSprite(transform, color, texture, tilingFactor, entityID);
+		DrawSprite(transform, color, texture, tilingFactor);
 	}
 
-	void SpriteRenderer::DrawSprite(const Mat4& transform, const Vec4& color, const Ref<Texture2D>& texture, float32 tilingFactor, sint32 entityID)
+	void SpriteRenderer::DrawSprite(const Mat4& transform, const Vec4& color, const Ref<Texture2D>& texture, float32 tilingFactor)
 	{
 		if (m_Data->QuadIndexCount >= maxIndices)
 			NextBatch();
@@ -261,7 +257,6 @@ namespace Fluoresce {
 			vertex.TexCoord = s_DefaultTexCoord[i];
 			vertex.TexIndex = textureIndex;
 			vertex.TilingFactor = tilingFactor;
-			vertex.EntityID = entityID;
 			m_Buffer.PushData(&vertex, sizeof(QuadVertex));
 		}
 
@@ -271,18 +266,18 @@ namespace Fluoresce {
 		m_Stats.IndexCount += 6;
 	}
 
-	void SpriteRenderer::DrawSpriteEntity(const Mat4& transform, SpriteRendererComponent& src, sint32 entityID)
+	void SpriteRenderer::DrawSpriteEntity(const Mat4& transform, SpriteRendererComponent& src)
 	{
 		if (src.Visible)
 		{
 			if (!src.Texture.expired() && src.EnableTexture)
 			{
 				auto texture = src.Texture.lock();
-				DrawSprite(transform, src.Color, texture, src.TilingFactor, entityID);
+				DrawSprite(transform, src.Color, texture, src.TilingFactor);
 			}
 			else
 			{
-				DrawQuad(transform, src.Color, entityID);
+				DrawQuad(transform, src.Color);
 			}
 		}
 	}

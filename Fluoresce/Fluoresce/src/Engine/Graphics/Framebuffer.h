@@ -50,7 +50,7 @@ namespace Fluoresce {
 	{
 		uint32 Width, Height;
 		uint32 Samples = 1;
-		bool SwapChainTarget = false;
+		//bool SwapChainTarget = false;
 		FramebufferAttachmentSpecification Attachments;
 	};
 
@@ -64,10 +64,13 @@ namespace Fluoresce {
 		virtual void Resize(uint32 width, uint32 height) = 0;
 		virtual sint32 ReadPixel(uint32 attachmentIndex, sint32 x, sint32 y) = 0;
 
+		virtual void BlitMultisampledBuffer(const Ref<Framebuffer>& intermediateBuffer) = 0;
+
 		virtual uint32 GetColorAttachmentRendererID(uint32 index = 0) const = 0;
 		virtual void ClearAttachment(uint32 attachmentIndex, sint32 value) = 0;
 		virtual void BindAttachmentToTextureSlot(uint32 slot, uint32 index = 0) const = 0;
 
+		virtual uint32 GetRendererID() const = 0;
 		virtual const FramebufferSpecification& GetSpecification() const = 0;
 
 		static Ref<Framebuffer> Create(const FramebufferSpecification& spec);

@@ -22,7 +22,7 @@ namespace Fluoresce {
 	{
 		RenderCommand::Init();
 
-		s_WhiteTexture = Texture2D::Create(TextureFormat::RGBA, 1, 1);
+		s_WhiteTexture = Texture2D::Create(1, 1);
 		uint32 whiteData = 0xffffffff;
 		s_WhiteTexture->SetData(&whiteData, sizeof(whiteData));
 
@@ -31,7 +31,8 @@ namespace Fluoresce {
 
 		s_LineRenderer->Init("resources/shaders/Line.glsl");
 		s_SpriteRenderer->Init("resources/shaders/Sprite.glsl");
-		s_SkyboxRenderer->Init("resources/shaders/HDRskybox.glsl","resources/textures/SkyCubeMap.tga");
+		s_SkyboxRenderer->Init("resources/shaders/HDRskybox.glsl","resources/textures/DefaultCubeMap.hdr");
+
 		s_PostProcessingRenderer->Init("resources/shaders/ToneMapping.glsl");
 	}
 

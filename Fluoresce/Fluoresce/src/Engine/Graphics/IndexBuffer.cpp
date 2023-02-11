@@ -13,7 +13,7 @@
 
 namespace Fluoresce {
 
-	Ref<IndexBuffer> IndexBuffer::Create(uint32* indices, uint32_t count)
+	Ref<IndexBuffer> IndexBuffer::Create(uint32* indices, uint32 count)
 	{
 		switch (GraphicsCore::GetAPI())
 		{

@@ -112,7 +112,7 @@ namespace Fluoresce {
 				{
 					auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 
-					spriteRenderer.DrawSpriteEntity(transform.GetTransform(), sprite, (sint32)entity);
+					spriteRenderer.DrawSpriteEntity(transform.GetTransform(), sprite);
 				}
 			}
 
@@ -154,7 +154,7 @@ namespace Fluoresce {
 					{
 						auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 
-						spriteRenderer.DrawSpriteEntity(transform.GetTransform(), sprite, (sint32)entity);
+						spriteRenderer.DrawSpriteEntity(transform.GetTransform(), sprite);
 					}
 				}
 

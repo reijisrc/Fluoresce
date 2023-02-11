@@ -34,7 +34,8 @@ namespace Fluoresce {
 			bool multisampled = samples > 1;
 			if (multisampled)
 			{
-				glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, internalFormat, width, height, GL_FALSE);
+				//glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, internalFormat, width, height, GL_FALSE);
+				glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, internalFormat, width, height, GL_TRUE);
 			}
 			else
 			{
@@ -55,7 +56,8 @@ namespace Fluoresce {
 			bool multisampled = samples > 1;
 			if (multisampled)
 			{
-				glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, format, width, height, GL_FALSE);
+				//glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, format, width, height, GL_FALSE);
+				glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, format, width, height, GL_TRUE);
 			}
 			else
 			{
@@ -167,6 +169,12 @@ namespace Fluoresce {
 				Utils::AttachDepthTexture(m_DepthAttachment, m_Specification.Samples, GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL_ATTACHMENT, m_Specification.Width, m_Specification.Height);
 				break;
 			}
+
+			//glCreateRenderbuffers(1, &m_RBO);
+			//glBindRenderbuffer(GL_RENDERBUFFER, m_RBO);
+			//glRenderbufferStorageMultisample(GL_RENDERBUFFER, m_Specification.Samples, GL_DEPTH24_STENCIL8, m_Specification.Width, m_Specification.Height);
+			//glBindRenderbuffer(GL_RENDERBUFFER, 0);
+			//glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_RBO);
 		}
 
 		if (m_ColorAttachments.size() > 1)
@@ -213,6 +221,15 @@ namespace Fluoresce {
 		int pixelData;
 		glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixelData);
 		return pixelData;
+	}
+
+	void GLFramebuffer::BlitMultisampledBuffer(const Ref<Framebuffer>& intermediateBuffer)
+	{
+		auto srcspec = GetSpecification();
+		auto dstspec = intermediateBuffer->GetSpecification();
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, m_RendererID);
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, intermediateBuffer->GetRendererID());
+		glBlitFramebuffer(0, 0, srcspec.Width, srcspec.Height, 0, 0, dstspec.Width, dstspec.Height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
 	}
 
 	void GLFramebuffer::ClearAttachment(uint32 attachmentIndex, sint32 value)

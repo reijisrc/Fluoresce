@@ -76,6 +76,7 @@ namespace Fluoresce {
 			sint32 m_GizmoType = -1;
 
 			Ref<Framebuffer> m_HDRBuffer;
+			Ref<Framebuffer> m_IntermediateBuffer;
 			Ref<Framebuffer> m_PostProcessingBuffer;
 
 			Ref<EditorScene> m_EditorScene;
@@ -86,7 +87,6 @@ namespace Fluoresce {
 			Ref<Texture2D> m_IconPause;
 
 			EditorCamera m_EditorCamera;
-			Entity		m_HoveredEntity;
 			PanelFlag	m_PanelFlag;
 
 			AssetsPanel			m_AssetsPanel;

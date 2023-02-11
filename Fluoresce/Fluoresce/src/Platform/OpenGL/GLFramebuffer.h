@@ -3,7 +3,7 @@
 // Describe : 	GLフレームバッファ												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/10/15														// 
-// Modify Date : 2022/10/15														// 
+// Modify Date : 2023/02/11														// 
 //==============================================================================//
 #include "Engine/Graphics/Framebuffer.h"
 
@@ -24,6 +24,8 @@ namespace Fluoresce {
 		virtual void Resize(uint32 width, uint32 height) override;
 		virtual sint32 ReadPixel(uint32 attachmentIndex, sint32 x, sint32 y) override;
 
+		virtual void BlitMultisampledBuffer(const Ref<Framebuffer>& intermediateBuffer) override;
+
 		virtual uint32 GetColorAttachmentRendererID(uint32 index = 0) const override
 		{
 			FR_CORE_ASSERT(index < m_ColorAttachments.size(), "Invalid colorattachment RendererID!"); return m_ColorAttachments[index];
@@ -32,9 +34,11 @@ namespace Fluoresce {
 
 		virtual void BindAttachmentToTextureSlot(uint32 slot, uint32 index = 0) const override;
 
+		virtual uint32 GetRendererID() const override { return m_RendererID; }
 		virtual const FramebufferSpecification& GetSpecification() const override { return m_Specification; };
 	private:
 		uint32 m_RendererID = 0;
+		uint32 m_RBO = 0;
 		FramebufferSpecification m_Specification;
 
 		std::vector<FramebufferTextureSpecification> m_ColorAttachmentSpecifications;

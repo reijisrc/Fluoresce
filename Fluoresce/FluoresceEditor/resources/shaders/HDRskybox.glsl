@@ -17,14 +17,12 @@ void main()
 	
 	mat4 inverseVP = inverse(u_ViewProjection);
 	v_Position = (inverseVP * position).xyz;
-	
 }
 
 <type>[fragment]
 #version 450 core
 
 layout(location = 0) out vec4 o_Color;
-layout(location = 1) out int o_EntityID;
 
 layout(location = 0) in vec3 v_Position;
 
@@ -34,5 +32,4 @@ void main()
 {
 	vec3 envColor = texture(u_EnvironmentTexture, v_Position).rgb;
 	o_Color = vec4(envColor, 1.0);
-	o_EntityID = -1;
 }

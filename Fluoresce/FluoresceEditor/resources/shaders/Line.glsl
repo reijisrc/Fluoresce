@@ -26,7 +26,6 @@ void main()
 #version 450 core
 
 layout(location = 0) out vec4 o_Color;
-layout(location = 1) out int o_EntityID;
 
 struct VertexOutput
 {
@@ -38,5 +37,4 @@ layout(location = 0) in VertexOutput Input;
 void main()
 {
 	o_Color = Input.Color;
-	o_EntityID = -1;
 }
