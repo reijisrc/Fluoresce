@@ -3,7 +3,7 @@
 // Describe : 	レンダーパイプライン											// 
 // Author : Ding Qi																// 
 // Create Date : 2022/04/23														// 
-// Modify Date : 2023/01/22														// 
+// Modify Date : 2023/02/11														// 
 //==============================================================================//
 #include "frpch.h"
 #include "Engine/Renderer/RenderPipeline.h"
@@ -15,6 +15,8 @@ namespace Fluoresce {
 	std::vector<Ref<UniformBuffer>> RenderPipeline::s_UniformBuffers;
 	Scope<LineRenderer> RenderPipeline::s_LineRenderer = CreateScope<LineRenderer>();
 	Scope<SpriteRenderer> RenderPipeline::s_SpriteRenderer = CreateScope<SpriteRenderer>();
+	Scope<SkyboxRenderer> RenderPipeline::s_SkyboxRenderer = CreateScope<SkyboxRenderer>();
+	Scope<PostProcessingRenderer> RenderPipeline::s_PostProcessingRenderer = CreateScope<PostProcessingRenderer>();
 
 	void RenderPipeline::Init()
 	{
@@ -23,15 +25,22 @@ namespace Fluoresce {
 		s_WhiteTexture = Texture2D::Create(TextureFormat::RGBA, 1, 1);
 		uint32 whiteData = 0xffffffff;
 		s_WhiteTexture->SetData(&whiteData, sizeof(whiteData));
+
 		s_UniformBuffers.push_back(UniformBuffer::Create(sizeof(CameraData), 0));
+		s_UniformBuffers.push_back(UniformBuffer::Create(sizeof(HdrEnvironmentData), 1));
+
 		s_LineRenderer->Init("resources/shaders/Line.glsl");
 		s_SpriteRenderer->Init("resources/shaders/Sprite.glsl");
+		s_SkyboxRenderer->Init("resources/shaders/HDRskybox.glsl","resources/textures/SkyCubeMap.tga");
+		s_PostProcessingRenderer->Init("resources/shaders/ToneMapping.glsl");
 	}
 
 	void RenderPipeline::ShutDown()
 	{
 		s_LineRenderer->ShutDown();
 		s_SpriteRenderer->ShutDown();
+		s_SkyboxRenderer->ShutDown();
+		s_PostProcessingRenderer->ShutDown();
 		s_UniformBuffers.clear();
 		s_WhiteTexture = nullptr;
 	}
@@ -63,6 +72,8 @@ namespace Fluoresce {
 		{
 		case Fluoresce::RenderPipeline::UniformBufferIndex::Camera:
 			return s_UniformBuffers.at(0);
+		case Fluoresce::RenderPipeline::UniformBufferIndex::HdrEnvironment:
+			return s_UniformBuffers.at(1);
 		case Fluoresce::RenderPipeline::UniformBufferIndex::Max:
 			break;
 		default:
@@ -80,6 +91,16 @@ namespace Fluoresce {
 	SpriteRenderer& RenderPipeline::GetSpriteRenderer()
 	{
 		return *s_SpriteRenderer;
+	}
+
+	SkyboxRenderer& RenderPipeline::GetSkyboxRenderer()
+	{
+		return *s_SkyboxRenderer;
+	}
+
+	PostProcessingRenderer& RenderPipeline::GetPostProcessingRenderer()
+	{
+		return *s_PostProcessingRenderer;
 	}
 
 };

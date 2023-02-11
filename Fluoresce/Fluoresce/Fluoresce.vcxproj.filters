@@ -235,6 +235,8 @@
     <ClInclude Include="src\Engine\Scene\SceneScriptTask.h" />
     <ClInclude Include="src\Engine\Asset\AssetsManager.h" />
     <ClInclude Include="src\Engine\Asset\AssetSerializer.h" />
+    <ClInclude Include="src\Engine\Renderer\SkyboxRenderer.h" />
+    <ClInclude Include="src\Engine\Renderer\PostProcessingRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dependencies\ImGuizmo\src\ImGuizmo.cpp">
@@ -373,5 +375,7 @@
     <ClCompile Include="src\Engine\Scene\ScriptableEntity.cpp" />
     <ClCompile Include="src\Engine\Asset\AssetsManager.cpp" />
     <ClCompile Include="src\Engine\Asset\AssetSerializer.cpp" />
+    <ClCompile Include="src\Engine\Renderer\SkyboxRenderer.cpp" />
+    <ClCompile Include="src\Engine\Renderer\PostProcessingRenderer.cpp" />
   </ItemGroup>
 </Project>

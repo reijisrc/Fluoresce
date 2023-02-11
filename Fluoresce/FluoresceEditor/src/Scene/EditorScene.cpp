@@ -100,6 +100,9 @@ namespace Fluoresce {
 		void EditorScene::OnEditorRender(DeltaTime ts, EditorCamera& camera)
 		{
 			auto& spriteRenderer = RenderPipeline::GetSpriteRenderer();
+			auto& skyboxRenderer = RenderPipeline::GetSkyboxRenderer();
+
+			skyboxRenderer.Submit(camera);
 
 			spriteRenderer.Begin(camera);
 
@@ -139,6 +142,9 @@ namespace Fluoresce {
 			if (mainCamera)
 			{
 				auto& spriteRenderer = RenderPipeline::GetSpriteRenderer();
+				auto& skyboxRenderer = RenderPipeline::GetSkyboxRenderer();
+
+				skyboxRenderer.Submit(*mainCamera, cameraTransform);
 
 				spriteRenderer.Begin(*mainCamera, cameraTransform);
 

@@ -3,7 +3,7 @@
 // Describe : 	フレームバッファ												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/10/15														// 
-// Modify Date : 2023/02/10														// 
+// Modify Date : 2023/02/11														// 
 //==============================================================================//
 #pragma once
 
@@ -66,6 +66,7 @@ namespace Fluoresce {
 
 		virtual uint32 GetColorAttachmentRendererID(uint32 index = 0) const = 0;
 		virtual void ClearAttachment(uint32 attachmentIndex, sint32 value) = 0;
+		virtual void BindAttachmentToTextureSlot(uint32 slot, uint32 index = 0) const = 0;
 
 		virtual const FramebufferSpecification& GetSpecification() const = 0;
 

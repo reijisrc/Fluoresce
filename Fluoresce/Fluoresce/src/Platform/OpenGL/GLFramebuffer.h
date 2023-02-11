@@ -24,12 +24,13 @@ namespace Fluoresce {
 		virtual void Resize(uint32 width, uint32 height) override;
 		virtual sint32 ReadPixel(uint32 attachmentIndex, sint32 x, sint32 y) override;
 
-		virtual void ClearAttachment(uint32_t attachmentIndex, sint32 value) override;
-
 		virtual uint32 GetColorAttachmentRendererID(uint32 index = 0) const override
 		{
 			FR_CORE_ASSERT(index < m_ColorAttachments.size(), "Invalid colorattachment RendererID!"); return m_ColorAttachments[index];
 		}
+		virtual void ClearAttachment(uint32 attachmentIndex, sint32 value) override;
+
+		virtual void BindAttachmentToTextureSlot(uint32 slot, uint32 index = 0) const override;
 
 		virtual const FramebufferSpecification& GetSpecification() const override { return m_Specification; };
 	private:

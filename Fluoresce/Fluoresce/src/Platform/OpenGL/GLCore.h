@@ -3,7 +3,7 @@
 // Describe : 	GLÉRÉA															// 
 // Author : Ding Qi																// 
 // Create Date : 2022/04/10														// 
-// Modify Date : 2022/04/10														// 
+// Modify Date : 2023/02/10														// 
 //==============================================================================//
 #pragma once
 
@@ -24,5 +24,10 @@ namespace Fluoresce
 		virtual void DrawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount) override;
 
 		virtual void SetLineWidth(float32 width) override;
+
+		virtual void SetDepthTest(bool enable) override;
+		virtual void SetDepthTestFunc(DepthTestFunc func) override;
+
+		virtual const APICapabilities& GetCapabilities() const override;
 	};
 }

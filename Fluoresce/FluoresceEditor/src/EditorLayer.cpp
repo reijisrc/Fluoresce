@@ -3,7 +3,7 @@
 // Describe : 	エディターレイヤー												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/05/14														// 
-// Modify Date : 2023/02/10														// 
+// Modify Date : 2023/02/11														// 
 //==============================================================================//
 #include "EditorLayer.h"
 #include "EditorCore.h"
@@ -50,11 +50,18 @@ namespace Fluoresce {
 
 			m_ContentBrowserPanel.Init();
 
-			FramebufferSpecification fbSpec;
-			fbSpec.Attachments = { FramebufferTextureFormat::RGBA16F, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
-			fbSpec.Width = 1280;
-			fbSpec.Height = 720;
-			m_Framebuffer = Framebuffer::Create(fbSpec);
+			FramebufferSpecification baseFBSpec;
+			baseFBSpec.Attachments = { FramebufferTextureFormat::RGBA16F, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
+			baseFBSpec.Width = 1280;
+			baseFBSpec.Height = 720;
+			m_HDRBuffer = Framebuffer::Create(baseFBSpec);
+
+
+			FramebufferSpecification postprocessingSpec;
+			postprocessingSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::Depth };
+			postprocessingSpec.Width = 1280;
+			postprocessingSpec.Height = 720;
+			m_PostProcessingBuffer = Framebuffer::Create(postprocessingSpec);
 
 			m_EditorCamera = EditorCamera(30.0f, 1600.0f / 900.0f, 0.1f, 1000.0f);
 
@@ -68,16 +75,15 @@ namespace Fluoresce {
 
 		void EditorLayer::OnUpdate(DeltaTime ts)
 		{
-			auto& lineRenderer = RenderPipeline::GetLineRenderer();
-			auto& spriteRenderer = RenderPipeline::GetSpriteRenderer();
+			auto& postProcessingRenderer = RenderPipeline::GetPostProcessingRenderer();
 
 			bool resize = false;
 			// ビューポートリサイズ
-			if (FramebufferSpecification spec = m_Framebuffer->GetSpecification();
+			if (FramebufferSpecification spec = m_HDRBuffer->GetSpecification();
 				m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f &&
 				(spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y))
 			{
-				m_Framebuffer->Resize((uint32)m_ViewportSize.x, (uint32)m_ViewportSize.y);
+				m_HDRBuffer->Resize((uint32)m_ViewportSize.x, (uint32)m_ViewportSize.y);
 				resize = true;
 			}
 
@@ -103,12 +109,13 @@ namespace Fluoresce {
 
 			RenderPipeline::ResetAllBatchStats();
 
-			m_Framebuffer->Bind();
+			m_HDRBuffer->Bind();
+
 			RenderCommand::SetClearColor(m_ViewportClearColor);
 			RenderCommand::Clear();
 
 			// カラーバッファ1:クリア
-			m_Framebuffer->ClearAttachment(1, -1);
+			m_HDRBuffer->ClearAttachment(1, -1);
 
 			switch (EditorCore::GetEditorState())
 			{
@@ -131,12 +138,18 @@ namespace Fluoresce {
 			// マウスpick情報
 			if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
 			{
-				sint32 pixelData = m_Framebuffer->ReadPixel(1, mouseX, mouseY);
+				sint32 pixelData = m_HDRBuffer->ReadPixel(1, mouseX, mouseY);
 				auto currentscene = (EditorCore::GetEditorState() == EditorState::Edit) ? m_EditorScene.get() : m_RuntimeScene.get();
 				m_HoveredEntity = (pixelData == -1) ? Entity() : Entity(static_cast<entt::entity>(pixelData), currentscene);
 			}
 
-			m_Framebuffer->Unbind();
+			m_HDRBuffer->Unbind();
+
+			// ポストプロセス
+			RenderCommand::Clear();
+			m_PostProcessingBuffer->Bind();
+			postProcessingRenderer.Submit(m_HDRBuffer, m_Exposure);
+			m_PostProcessingBuffer->Unbind();
 		}
 
 		void EditorLayer::OnImguiRender()
@@ -392,7 +405,8 @@ namespace Fluoresce {
 
 					ImVec2 viewport = ImGui::GetContentRegionAvail();
 					m_ViewportSize = { viewport.x, viewport.y };
-					uint64_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
+					uint64_t textureID = m_PostProcessingBuffer->GetColorAttachmentRendererID();
+					//uint64_t textureID = m_HDRBuffer->GetColorAttachmentRendererID();
 					ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 				}
 
@@ -492,14 +506,15 @@ namespace Fluoresce {
 				if (ImGui::TreeNodeEx((void*)2754597, ImGuiTreeNodeFlags_DefaultOpen | treeNodeFlags, "Scene Setting"))
 				{
 					std::string name = "None";
-					ImGui::ColorEdit4("BgColor", glm::value_ptr(m_ViewportClearColor));
+					ImGui::ColorEdit4("BackgroundColor", glm::value_ptr(m_ViewportClearColor));
+					ImGui::DragFloat("Exposure", &m_Exposure, 0.01f, 0.0f, 10.0f);
 					if (m_HoveredEntity)
 						name = m_HoveredEntity.GetComponent<TagComponent>().Tag;
 					ImGui::Text("Hovered Entity: %s", name.c_str());
 					ImGui::TreePop();
 				}
 
-				if (ImGui::TreeNodeEx((void*)5654597, ImGuiTreeNodeFlags_DefaultOpen | treeNodeFlags, "Main Camera"))
+				if (ImGui::TreeNodeEx((void*)5654532, ImGuiTreeNodeFlags_DefaultOpen | treeNodeFlags, "Main Camera"))
 				{
 					if (EditorCore::GetEditorState() == EditorState::Edit)
 					{
@@ -510,7 +525,7 @@ namespace Fluoresce {
 						}
 						ImGui::Separator();
 						float32 dist = m_EditorCamera.GetDistance();
-						if (ImGui::DragFloat("Distance", &dist))
+						if (ImGui::DragFloat("Distance", &dist, 1.0f, m_EditorCamera.GetNearClip(), m_EditorCamera.GetFarClip()))
 						{
 							m_EditorCamera.SetDistance(dist);
 						}

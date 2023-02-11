@@ -13,12 +13,12 @@
 
 namespace Fluoresce {
 
-	Ref<Texture2D> Texture2D::Create(TextureFormat format, uint32 width, uint32 height)
+	Ref<Texture2D> Texture2D::Create(TextureFormat format, uint32 width, uint32 height, TextureWrap wrap)
 	{
 		switch (GraphicsCore::GetAPI())
 		{
 		case GraphicsCore::API::None: FR_CORE_ASSERT(false, "RenderAPI: None is currently not supported!") return nullptr;
-		case GraphicsCore::API::OpenGL4: return CreateRef<GLTexture2D>(format, width, height);
+		case GraphicsCore::API::OpenGL4: return CreateRef<GLTexture2D>(format, width, height, wrap);
 		default:
 			break;
 		}
@@ -27,12 +27,12 @@ namespace Fluoresce {
 		return nullptr;
 	}
 
-	Ref<Texture2D> Texture2D::Create(const std::string& path)
+	Ref<Texture2D> Texture2D::Create(const std::string& path, TextureWrap wrap)
 	{
 		switch (GraphicsCore::GetAPI())
 		{
 		case GraphicsCore::API::None: FR_CORE_ASSERT(false, "RenderAPI: None is currently not supported!") return nullptr;
-		case GraphicsCore::API::OpenGL4: return CreateRef<GLTexture2D>(path);
+		case GraphicsCore::API::OpenGL4: return CreateRef<GLTexture2D>(path, wrap);
 		default:
 			break;
 		}
@@ -40,4 +40,34 @@ namespace Fluoresce {
 		FR_CORE_ASSERT(false, "Unknown GraphicsAPI!");
 		return nullptr;
 	}
+
+
+	Ref<TextureCube> TextureCube::Create(TextureFormat format, uint32 width, uint32 height)
+	{
+		switch (GraphicsCore::GetAPI())
+		{
+		case GraphicsCore::API::None: FR_CORE_ASSERT(false, "RenderAPI: None is currently not supported!") return nullptr;
+		case GraphicsCore::API::OpenGL4: return  CreateRef<GLTextureCube>(format, width, height);
+		default:
+			break;
+		}
+
+		FR_CORE_ASSERT(false, "Unknown GraphicsAPI!");
+		return nullptr;
+	}
+	
+	Ref<TextureCube> TextureCube::Create(const std::string& path)
+	{
+		switch (GraphicsCore::GetAPI())
+		{
+		case GraphicsCore::API::None: FR_CORE_ASSERT(false, "RenderAPI: None is currently not supported!") return nullptr;
+		case GraphicsCore::API::OpenGL4: return CreateRef<GLTextureCube>(path);
+		default:
+			break;
+		}
+
+		FR_CORE_ASSERT(false, "Unknown GraphicsAPI!");
+		return nullptr;
+	}
+
 }

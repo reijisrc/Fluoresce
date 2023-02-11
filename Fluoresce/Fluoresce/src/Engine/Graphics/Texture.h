@@ -3,7 +3,7 @@
 // Describe : 	テクスチャ														// 
 // Author : Ding Qi																// 
 // Create Date : 2022/10/15														// 
-// Modify Date : 2023/01/22														// 
+// Modify Date : 2023/02/10														// 
 //==============================================================================//
 #pragma once
 
@@ -14,6 +14,14 @@ namespace Fluoresce {
 		None = 0,
 		RGB = 1,
 		RGBA = 2,
+		RGBA16f = 3
+	};
+
+	enum class TextureWrap
+	{
+		None = 0,
+		Clamp = 1,
+		Repeat = 2
 	};
 
 	// テクスチャ
@@ -38,8 +46,16 @@ namespace Fluoresce {
 	class Texture2D : public Texture
 	{
 	public:
-		static Ref<Texture2D> Create(TextureFormat format, uint32 width, uint32 height);
-		static Ref<Texture2D> Create(const std::string& path);
+		static Ref<Texture2D> Create(TextureFormat format, uint32 width, uint32 height, TextureWrap wrap = TextureWrap::Clamp);
+		static Ref<Texture2D> Create(const std::string& path, TextureWrap wrap = TextureWrap::Clamp);
+	};
+
+	// キューブテクスチャ
+	class TextureCube : public Texture
+	{
+	public:
+		static Ref<TextureCube> Create(TextureFormat format, uint32 width, uint32 height);
+		static Ref<TextureCube> Create(const std::string& path);
 	};
 
 }

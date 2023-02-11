@@ -215,12 +215,18 @@ namespace Fluoresce {
 		return pixelData;
 	}
 
-	void GLFramebuffer::ClearAttachment(uint32_t attachmentIndex, sint32 value)
+	void GLFramebuffer::ClearAttachment(uint32 attachmentIndex, sint32 value)
 	{
 		FR_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size(), "Could not ClearAttachment!");
 
 		auto& spec = m_ColorAttachmentSpecifications[attachmentIndex];
 		glClearTexImage(m_ColorAttachments[attachmentIndex], 0,
 		Utils::FramebufferTextureFormatToGL(spec.TextureFormat), GL_INT, &value);
+	}
+
+	void GLFramebuffer::BindAttachmentToTextureSlot(uint32 slot, uint32 index) const
+	{
+		uint32 rendererId = GetColorAttachmentRendererID(index);
+		glBindTextureUnit(slot, rendererId);
 	}
 }

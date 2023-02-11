@@ -3,7 +3,7 @@
 // Describe :	レンダーコマンド												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/08/15														// 
-// Modify Date : 2022/08/15														// 
+// Modify Date : 2023/02/11														// 
 //==============================================================================//
 #pragma once
 
@@ -40,19 +40,29 @@ namespace Fluoresce {
 			s_GraphicsCore->Clear();
 		}
 
-		static void DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t count = 0)
+		static void DrawIndexed(const Ref<VertexArray>& vertexArray, uint32 count = 0)
 		{
 			s_GraphicsCore->DrawIndexed(vertexArray, count);
 		}
 
-		static void DrawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount)
+		static void DrawLines(const Ref<VertexArray>& vertexArray, uint32 vertexCount)
 		{
 			s_GraphicsCore->DrawLines(vertexArray, vertexCount);
 		}
 
-		static void SetLineWidth(float width)
+		static void SetLineWidth(float32 width)
 		{
 			s_GraphicsCore->SetLineWidth(width);
+		}
+
+		static void SetDepthTest(bool enable)
+		{
+			s_GraphicsCore->SetDepthTest(enable);
+		}
+
+		static void SetDepthTestFunc(DepthTestFunc func)
+		{
+			s_GraphicsCore->SetDepthTestFunc(func);
 		}
 
 	private:

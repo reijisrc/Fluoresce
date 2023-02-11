@@ -3,13 +3,26 @@
 // Describe : 	グラフィックスコア												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/04/10														// 
-// Modify Date : 2022/08/15														// 
+// Modify Date : 2023/02/11														// 
 //==============================================================================//
 #pragma once
 
 #include "Engine/Graphics/VertexArray.h"
 
 namespace Fluoresce {
+
+	enum class DepthTestFunc
+	{
+		DepthTest_Default = 0,
+		DepthTest_Always,
+		DepthTest_Never,
+		DepthTest_Less,
+		DepthTest_Equal,
+		DepthTest_Lequal,
+		DepthTest_Greater,
+		DepthTest_NotEqual,
+		DepthTest_Gequal,
+	};
 
 	// グラフィックコア
 	class GraphicsCore
@@ -19,6 +32,13 @@ namespace Fluoresce {
 		{
 			None = 0,
 			OpenGL4 = 1,
+		};
+
+		struct APICapabilities
+		{
+			sint32 MaxSamples = 0;
+			float32 MaxAnisotropy = 0.0f;
+			sint32 MaxTextureUnits = 0;
 		};
 
 	public:
@@ -32,6 +52,11 @@ namespace Fluoresce {
 		virtual void DrawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount) = 0;
 
 		virtual void SetLineWidth(float32 width) = 0;
+
+		virtual void SetDepthTest(bool enable) = 0;
+		virtual void SetDepthTestFunc(DepthTestFunc func) = 0;
+
+		virtual const APICapabilities& GetCapabilities() const = 0;
 
 		static API GetAPI() { return s_API; }
 

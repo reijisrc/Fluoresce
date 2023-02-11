@@ -3,7 +3,7 @@
 // Describe : 	エディターカメラ												// 
 // Author : Ding Qi																// 
 // Create Date : 2023/01/07														// 
-// Modify Date : 2023/01/22														// 
+// Modify Date : 2023/02/11														// 
 //==============================================================================//
 #pragma once
 
@@ -23,6 +23,10 @@ namespace Fluoresce {
 
 		void OnUpdate(DeltaTime ts);
 		void OnEvent(Event& e);
+
+		float32 GetAspect() const { return m_AspectRatio; }
+		float32 GetNearClip() const { return m_NearClip; }
+		float32 GetFarClip() const { return m_FarClip; }
 
 		float32 GetDistance() const { return m_Distance; }
 		void SetDistance(float32 distance) { m_Distance = distance; }
