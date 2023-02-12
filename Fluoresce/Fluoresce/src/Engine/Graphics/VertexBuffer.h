@@ -3,11 +3,12 @@
 // Describe :	頂点バッファ													// 
 // Author : Ding Qi																// 
 // Create Date : 2022/08/13														// 
-// Modify Date : 2022/08/13														// 
+// Modify Date : 2023/02/12														// 
 //==============================================================================//
 #pragma once
 
 #include "Engine/Graphics/GPUDataDefine.h"
+#include "Engine/Graphics/Mesh.h"
 
 namespace Fluoresce {
 
@@ -63,6 +64,7 @@ namespace Fluoresce {
 
 		static Ref<VertexBuffer> Create(uint32 size);
 		static Ref<VertexBuffer> Create(float32* vertices, uint32 size);
+		static Ref<VertexBuffer> Create(const StandardVertexData& data);
 	};
 
 };

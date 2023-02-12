@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="ImguiUtil">
+      <UniqueIdentifier>{7E0FD7D2-EA79-8B49-33B8-3CEF9F61699E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NativeScript">
+      <UniqueIdentifier>{C110AC74-AD73-3B19-56F9-73CF423B079C}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Panel">
       <UniqueIdentifier>{95BADD0D-01CF-05BF-CA50-A91E362402F0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{B3F7140E-1F0C-3DBF-E88D-E01E546139F0}</UniqueIdentifier>
     </Filter>
     <Filter Include="UIWindow">
       <UniqueIdentifier>{3B3185B3-27FE-DFBE-5017-CE663C43154D}</UniqueIdentifier>
@@ -11,44 +20,76 @@
   <ItemGroup>
     <ClInclude Include="src\EditorCore.h" />
     <ClInclude Include="src\EditorLayer.h" />
+    <ClInclude Include="src\ImguiUtil\ImguiUI.h">
+      <Filter>ImguiUtil</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NativeScript\AutoRotation2D.h">
+      <Filter>NativeScript</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NativeScript\MoveController2D.h">
+      <Filter>NativeScript</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NativeScript\ScriptTaskHandle.h">
+      <Filter>NativeScript</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NativeScript\SnowParticle.h">
+      <Filter>NativeScript</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NativeScript\SnowParticleManager.h">
+      <Filter>NativeScript</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Panel\AssetsPanel.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
     <ClInclude Include="src\Panel\ContentBrowserPanel.h">
       <Filter>Panel</Filter>
     </ClInclude>
     <ClInclude Include="src\Panel\SceneHierarchyPanel.h">
       <Filter>Panel</Filter>
     </ClInclude>
+    <ClInclude Include="src\Scene\EditorScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
     <ClInclude Include="src\UIWindow\MenuWindow.h">
       <Filter>UIWindow</Filter>
     </ClInclude>
-    <ClInclude Include="src\NativeScript\MoveController2D.h" />
-    <ClInclude Include="src\NativeScript\AutoRotation2D.h" />
-    <ClInclude Include="src\ImguiUtil\ImguiUI.h" />
-    <ClInclude Include="src\NativeScript\ScriptTaskHandle.h" />
-    <ClInclude Include="src\Panel\AssetsPanel.h" />
-    <ClInclude Include="src\NativeScript\SnowParticleManager.h" />
-    <ClInclude Include="src\NativeScript\SnowParticle.h" />
-    <ClInclude Include="src\Scene\EditorScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EditorCore.cpp" />
     <ClCompile Include="src\EditorLayer.cpp" />
     <ClCompile Include="src\FluoresceApp.cpp" />
+    <ClCompile Include="src\ImguiUtil\ImguiUI.cpp">
+      <Filter>ImguiUtil</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NativeScript\AutoRotation2D.cpp">
+      <Filter>NativeScript</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NativeScript\MoveController2D.cpp">
+      <Filter>NativeScript</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NativeScript\ScriptTaskHandle.cpp">
+      <Filter>NativeScript</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NativeScript\SnowParticle.cpp">
+      <Filter>NativeScript</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NativeScript\SnowParticleManager.cpp">
+      <Filter>NativeScript</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Panel\AssetsPanel.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
     <ClCompile Include="src\Panel\ContentBrowserPanel.cpp">
       <Filter>Panel</Filter>
     </ClCompile>
     <ClCompile Include="src\Panel\SceneHierarchyPanel.cpp">
       <Filter>Panel</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scene\EditorScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
     <ClCompile Include="src\UIWindow\MenuWindow.cpp">
       <Filter>UIWindow</Filter>
     </ClCompile>
-    <ClCompile Include="src\NativeScript\MoveController2D.cpp" />
-    <ClCompile Include="src\NativeScript\AutoRotation2D.cpp" />
-    <ClCompile Include="src\ImguiUtil\ImguiUI.cpp" />
-    <ClCompile Include="src\NativeScript\ScriptTaskHandle.cpp" />
-    <ClCompile Include="src\Panel\AssetsPanel.cpp" />
-    <ClCompile Include="src\NativeScript\SnowParticleManager.cpp" />
-    <ClCompile Include="src\NativeScript\SnowParticle.cpp" />
-    <ClCompile Include="src\Scene\EditorScene.cpp" />
   </ItemGroup>
 </Project>

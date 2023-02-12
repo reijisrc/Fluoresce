@@ -3,7 +3,7 @@
 // Describe :	GLバッファ														// 
 // Author : Ding Qi																// 
 // Create Date : 2022/08/13														// 
-// Modify Date : 2022/08/13														// 
+// Modify Date : 2023/02/12														// 
 //==============================================================================//
 #pragma once
 
@@ -18,6 +18,8 @@ namespace Fluoresce {
 	public:
 		GLVertexBuffer(uint32_t size);
 		GLVertexBuffer(float* vertices, uint32_t size);
+		GLVertexBuffer(const StandardVertexData& data);
+
 		virtual ~GLVertexBuffer();
 
 		virtual void Bind() const override;

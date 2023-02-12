@@ -3,27 +3,29 @@ Assets:
     - Name: snow_01
       Hash: 8956546848270429500
       Path: userData\assets\textures\snow_01.png
-    - Name: snow_03
-      Hash: 8956549047293685922
-      Path: userData\assets\textures\snow_03.png
     - Name: snow_02
       Hash: 8956550146805314133
       Path: userData\assets\textures\snow_02.png
+    - Name: snow_03
+      Hash: 8956549047293685922
+      Path: userData\assets\textures\snow_03.png
+    - Name: background
+      Hash: 15943154893769174749
+      Path: userData\assets\textures\background.jpg
 Scene: SnowExample
 Entities:
-  - Entity: 3991693939405439928
+  - Entity: 12109917822150332677
     TagComponent:
-      Tag: SnowManager
+      Tag: BG
     TransformComponent:
       Translation: [0, 0, 0]
       Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
+      Scale: [16, 9, 1]
     SpriteRendererComponent:
-      Visible: false
+      Visible: true
       Color: [1, 1, 1, 1]
+      TextureName: background
       TilingFactor: 1
-    ScriptComponent:
-      ScriptID: 4
   - Entity: 14873560220487755467
     TagComponent:
       Tag: Camera
@@ -42,3 +44,16 @@ Entities:
         OrthographicFar: 1000
       Primary: true
       FixedAspectRatio: false
+  - Entity: 3991693939405439928
+    TagComponent:
+      Tag: SnowManager
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Visible: false
+      Color: [1, 1, 1, 1]
+      TilingFactor: 1
+    ScriptComponent:
+      ScriptID: 4

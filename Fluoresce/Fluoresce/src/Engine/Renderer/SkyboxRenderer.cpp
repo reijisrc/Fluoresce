@@ -65,7 +65,7 @@ namespace Fluoresce {
 		Mat4 proj = camera.GetProjection();
 		Mat4 vp = proj * view;
 
-		if (auto ubo = RenderPipeline::GetUniformBuffer(RenderPipeline::UniformBufferIndex::Camera); ubo)
+		if (auto ubo = RenderPipeline::GetConstBuffers().GetUniformBuffer(ConstBuffer::UniformBufferIndex::Camera); ubo)
 		{
 			ubo->SetData(&vp, sizeof(RenderPipeline::CameraData));
 		}
@@ -79,7 +79,7 @@ namespace Fluoresce {
 
 	void SkyboxRenderer::Submit(const EditorCamera& camera)
 	{
-		if (auto ubo = RenderPipeline::GetUniformBuffer(RenderPipeline::UniformBufferIndex::Camera); ubo)
+		if (auto ubo = RenderPipeline::GetConstBuffers().GetUniformBuffer(ConstBuffer::UniformBufferIndex::Camera); ubo)
 		{
 			ubo->SetData(&camera.GetViewProjection(), sizeof(RenderPipeline::CameraData));
 		}

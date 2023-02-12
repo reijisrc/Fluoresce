@@ -62,7 +62,7 @@ namespace Fluoresce {
 
 	void PostProcessingRenderer::Submit(const Ref<Framebuffer>& framebuffer, float32 exposure)
 	{
-		if (auto ubo = RenderPipeline::GetUniformBuffer(RenderPipeline::UniformBufferIndex::HdrEnvironment); ubo)
+		if (auto ubo = RenderPipeline::GetConstBuffers().GetUniformBuffer(ConstBuffer::UniformBufferIndex::HdrEnvironment); ubo)
 		{
 			RenderPipeline::HdrEnvironmentData environment;
 			environment.Gamma = gamma;

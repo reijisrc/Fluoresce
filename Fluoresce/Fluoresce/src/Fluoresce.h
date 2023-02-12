@@ -19,6 +19,7 @@
 #include "Engine/Graphics/VertexArray.h"
 #include "Engine/Graphics/Framebuffer.h"
 #include "Engine/Graphics/Texture.h"
+#include "Engine/Graphics/Mesh.h"
 
 // ƒŒƒ“ƒ_ƒ‰[
 #include "Engine/Renderer/RenderCommand.h"

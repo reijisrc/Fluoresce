@@ -12,11 +12,45 @@
 namespace Fluoresce {
 
 	Ref<Texture2D> RenderPipeline::s_WhiteTexture = nullptr;
-	std::vector<Ref<UniformBuffer>> RenderPipeline::s_UniformBuffers;
+	Scope<ConstBuffer> RenderPipeline::s_ConstBuffers = CreateScope<ConstBuffer>();
 	Scope<LineRenderer> RenderPipeline::s_LineRenderer = CreateScope<LineRenderer>();
 	Scope<SpriteRenderer> RenderPipeline::s_SpriteRenderer = CreateScope<SpriteRenderer>();
 	Scope<SkyboxRenderer> RenderPipeline::s_SkyboxRenderer = CreateScope<SkyboxRenderer>();
 	Scope<PostProcessingRenderer> RenderPipeline::s_PostProcessingRenderer = CreateScope<PostProcessingRenderer>();
+
+	void ConstBuffer::Init()
+	{
+		uint32 cameraData = sizeof(RenderPipeline::CameraData);
+		uint32 environmentData = sizeof(RenderPipeline::HdrEnvironmentData);
+
+		m_UniformBuffers.push_back(UniformBuffer::Create(cameraData, 0));
+		m_UniformBuffers.push_back(UniformBuffer::Create(environmentData, 1));
+
+		m_Size += cameraData;
+		m_Size += environmentData;
+	}
+
+	void ConstBuffer::ShutDown()
+	{
+		m_UniformBuffers.clear();
+	}
+
+	Ref<UniformBuffer> ConstBuffer::GetUniformBuffer(UniformBufferIndex index)
+	{
+		switch (index)
+		{
+		case Fluoresce::ConstBuffer::UniformBufferIndex::Camera:
+			return m_UniformBuffers.at(0);
+		case Fluoresce::ConstBuffer::UniformBufferIndex::HdrEnvironment:
+			return m_UniformBuffers.at(1);
+		case Fluoresce::ConstBuffer::UniformBufferIndex::Max:
+			break;
+		default:
+			break;
+		}
+
+		return nullptr;
+	}
 
 	void RenderPipeline::Init()
 	{
@@ -25,9 +59,7 @@ namespace Fluoresce {
 		s_WhiteTexture = Texture2D::Create(1, 1);
 		uint32 whiteData = 0xffffffff;
 		s_WhiteTexture->SetData(&whiteData, sizeof(whiteData));
-
-		s_UniformBuffers.push_back(UniformBuffer::Create(sizeof(CameraData), 0));
-		s_UniformBuffers.push_back(UniformBuffer::Create(sizeof(HdrEnvironmentData), 1));
+		s_ConstBuffers->Init();
 
 		s_LineRenderer->Init("resources/shaders/Line.glsl");
 		s_SpriteRenderer->Init("resources/shaders/Sprite.glsl");
@@ -42,7 +74,7 @@ namespace Fluoresce {
 		s_SpriteRenderer->ShutDown();
 		s_SkyboxRenderer->ShutDown();
 		s_PostProcessingRenderer->ShutDown();
-		s_UniformBuffers.clear();
+		s_ConstBuffers->ShutDown();
 		s_WhiteTexture = nullptr;
 	}
 
@@ -67,21 +99,9 @@ namespace Fluoresce {
 		return s_WhiteTexture;
 	}
 
-	Ref<UniformBuffer> RenderPipeline::GetUniformBuffer(RenderPipeline::UniformBufferIndex index)
+	ConstBuffer& RenderPipeline::GetConstBuffers()
 	{
-		switch (index)
-		{
-		case Fluoresce::RenderPipeline::UniformBufferIndex::Camera:
-			return s_UniformBuffers.at(0);
-		case Fluoresce::RenderPipeline::UniformBufferIndex::HdrEnvironment:
-			return s_UniformBuffers.at(1);
-		case Fluoresce::RenderPipeline::UniformBufferIndex::Max:
-			break;
-		default:
-			break;
-		}
-
-		return nullptr;
+		return *s_ConstBuffers;
 	}
 
 	LineRenderer& RenderPipeline::GetLineRenderer()

@@ -22,6 +22,9 @@
     <Filter Include="src\Engine">
       <UniqueIdentifier>{12A1320E-FE58-745B-6760-4DB753370F4C}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Engine\Asset">
+      <UniqueIdentifier>{215BFBA7-0D54-1AFA-3686-FF7E22DEF905}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Engine\Core">
       <UniqueIdentifier>{AA407579-16CC-E23D-1FDD-65328BE73E3E}</UniqueIdentifier>
     </Filter>
@@ -59,6 +62,12 @@
     </ClInclude>
     <ClInclude Include="dependencies\stb_image\src\stb_image.h">
       <Filter>dependencies\stb_image\src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Asset\AssetSerializer.h">
+      <Filter>src\Engine\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Asset\AssetsManager.h">
+      <Filter>src\Engine\Asset</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Core\Application.h">
       <Filter>src\Engine\Core</Filter>
@@ -156,10 +165,10 @@
     <ClInclude Include="src\Engine\Graphics\VertexBuffer.h">
       <Filter>src\Engine\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Imgui\ImguiLayer.h">
+    <ClInclude Include="src\Engine\ImGui\ImguiLayer.h">
       <Filter>src\Engine\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Imgui\ImguiSerializer.h">
+    <ClInclude Include="src\Engine\ImGui\ImguiSerializer.h">
       <Filter>src\Engine\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Renderer\BatchRenderer.h">
@@ -168,10 +177,16 @@
     <ClInclude Include="src\Engine\Renderer\LineRenderer.h">
       <Filter>src\Engine\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Renderer\PostProcessingRenderer.h">
+      <Filter>src\Engine\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Renderer\RenderCommand.h">
       <Filter>src\Engine\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Renderer\RenderPipeline.h">
+      <Filter>src\Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Renderer\SkyboxRenderer.h">
       <Filter>src\Engine\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Renderer\SpriteRenderer.h">
@@ -189,7 +204,13 @@
     <ClInclude Include="src\Engine\Scene\SceneCamera.h">
       <Filter>src\Engine\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Scene\SceneScriptTask.h">
+      <Filter>src\Engine\Scene</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Scene\SceneSerializer.h">
+      <Filter>src\Engine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Scene\ScriptableEntity.h">
       <Filter>src\Engine\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Utils\FileUtil.h">
@@ -231,12 +252,7 @@
     <ClInclude Include="src\frpch.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Scene\ScriptableEntity.h" />
-    <ClInclude Include="src\Engine\Scene\SceneScriptTask.h" />
-    <ClInclude Include="src\Engine\Asset\AssetsManager.h" />
-    <ClInclude Include="src\Engine\Asset\AssetSerializer.h" />
-    <ClInclude Include="src\Engine\Renderer\SkyboxRenderer.h" />
-    <ClInclude Include="src\Engine\Renderer\PostProcessingRenderer.h" />
+    <ClInclude Include="src\Engine\Graphics\Mesh.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dependencies\ImGuizmo\src\ImGuizmo.cpp">
@@ -244,6 +260,12 @@
     </ClCompile>
     <ClCompile Include="dependencies\stb_image\src\stb_image.cpp">
       <Filter>dependencies\stb_image\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Asset\AssetSerializer.cpp">
+      <Filter>src\Engine\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Asset\AssetsManager.cpp">
+      <Filter>src\Engine\Asset</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Core\Application.cpp">
       <Filter>src\Engine\Core</Filter>
@@ -293,13 +315,13 @@
     <ClCompile Include="src\Engine\Graphics\VertexBuffer.cpp">
       <Filter>src\Engine\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\Imgui\ImguiImpl.cpp">
+    <ClCompile Include="src\Engine\ImGui\ImguiImpl.cpp">
       <Filter>src\Engine\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\Imgui\ImguiLayer.cpp">
+    <ClCompile Include="src\Engine\ImGui\ImguiLayer.cpp">
       <Filter>src\Engine\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\Imgui\ImguiSerializer.cpp">
+    <ClCompile Include="src\Engine\ImGui\ImguiSerializer.cpp">
       <Filter>src\Engine\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Renderer\BatchRenderer.cpp">
@@ -308,10 +330,16 @@
     <ClCompile Include="src\Engine\Renderer\LineRenderer.cpp">
       <Filter>src\Engine\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Renderer\PostProcessingRenderer.cpp">
+      <Filter>src\Engine\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Engine\Renderer\RenderCommand.cpp">
       <Filter>src\Engine\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Renderer\RenderPipeline.cpp">
+      <Filter>src\Engine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Renderer\SkyboxRenderer.cpp">
       <Filter>src\Engine\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Renderer\SpriteRenderer.cpp">
@@ -329,7 +357,13 @@
     <ClCompile Include="src\Engine\Scene\SceneCamera.cpp">
       <Filter>src\Engine\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Scene\SceneScriptTask.cpp">
+      <Filter>src\Engine\Scene</Filter>
+    </ClCompile>
     <ClCompile Include="src\Engine\Scene\SceneSerializer.cpp">
+      <Filter>src\Engine\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Scene\ScriptableEntity.cpp">
       <Filter>src\Engine\Scene</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\GLBuffer.cpp">
@@ -371,11 +405,6 @@
     <ClCompile Include="src\frpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\Scene\SceneScriptTask.cpp" />
-    <ClCompile Include="src\Engine\Scene\ScriptableEntity.cpp" />
-    <ClCompile Include="src\Engine\Asset\AssetsManager.cpp" />
-    <ClCompile Include="src\Engine\Asset\AssetSerializer.cpp" />
-    <ClCompile Include="src\Engine\Renderer\SkyboxRenderer.cpp" />
-    <ClCompile Include="src\Engine\Renderer\PostProcessingRenderer.cpp" />
+    <ClCompile Include="src\Engine\Graphics\Mesh.cpp" />
   </ItemGroup>
 </Project>

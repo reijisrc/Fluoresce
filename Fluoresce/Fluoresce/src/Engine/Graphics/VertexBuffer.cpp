@@ -40,4 +40,18 @@ namespace Fluoresce {
 		FR_CORE_ASSERT(false, "Unknown GraphicsAPI!");
 		return nullptr;
 	}
+
+	Ref<VertexBuffer> VertexBuffer::Create(const StandardVertexData& data)
+	{
+		switch (GraphicsCore::GetAPI())
+		{
+		case GraphicsCore::API::None: FR_CORE_ASSERT(false, "GraphicsCore::API::None is currently not supported!") return nullptr;
+		case GraphicsCore::API::OpenGL4: return CreateRef<GLVertexBuffer>(data);
+		default:
+			break;
+		}
+
+		FR_CORE_ASSERT(false, "Unknown GraphicsAPI!");
+		return nullptr;
+	}
 }

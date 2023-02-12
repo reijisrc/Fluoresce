@@ -16,8 +16,7 @@
 
 namespace Fluoresce 
 {
-	//	レンダーパイプライン
-	class RenderPipeline
+	class ConstBuffer
 	{
 	public:
 		enum class UniformBufferIndex
@@ -27,6 +26,21 @@ namespace Fluoresce
 			Max,
 		};
 
+	public:
+		void Init();
+		void ShutDown();
+
+		Ref<UniformBuffer> GetUniformBuffer(UniformBufferIndex index);
+		uint32 GetSize() const { return m_Size; }
+	private:
+		std::vector<Ref<UniformBuffer>> m_UniformBuffers;
+		uint32 m_Size;
+	};
+
+	//	レンダーパイプライン
+	class RenderPipeline
+	{
+	public:
 		struct CameraData
 		{
 			Mat4 ViewProjection;
@@ -37,7 +51,6 @@ namespace Fluoresce
 			float32 Gamma;
 			float32 Exposure;
 		};
-
 	public:
 		static void Init();
 		static void ShutDown();
@@ -48,14 +61,14 @@ namespace Fluoresce
 		static void RequestClearAllBatchAssets();
 
 		static Ref<Texture2D> GetWhiteTexture();
-		static Ref<UniformBuffer> GetUniformBuffer(UniformBufferIndex index);
+		static ConstBuffer& GetConstBuffers();
 		static LineRenderer& GetLineRenderer();
 		static SpriteRenderer& GetSpriteRenderer();
 		static SkyboxRenderer& GetSkyboxRenderer();
 		static PostProcessingRenderer& GetPostProcessingRenderer();
 	private:
 		static Ref<Texture2D> s_WhiteTexture;
-		static std::vector<Ref<UniformBuffer>> s_UniformBuffers;
+		static Scope<ConstBuffer> s_ConstBuffers;
 		static Scope<LineRenderer> s_LineRenderer;
 		static Scope<SpriteRenderer> s_SpriteRenderer;
 		static Scope<SkyboxRenderer> s_SkyboxRenderer;
