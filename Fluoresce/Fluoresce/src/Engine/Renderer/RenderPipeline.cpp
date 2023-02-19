@@ -65,7 +65,8 @@ namespace Fluoresce {
 		s_SpriteRenderer->Init("resources/shaders/Sprite.glsl");
 		s_SkyboxRenderer->Init("resources/shaders/HDRskybox.glsl","resources/textures/DefaultCubeMap.hdr");
 
-		s_PostProcessingRenderer->Init("resources/shaders/ToneMapping.glsl");
+		//s_PostProcessingRenderer->Init("resources/shaders/ToneMapping.glsl");
+		s_PostProcessingRenderer->Init("resources/shaders/ACESToneMapping.glsl");
 	}
 
 	void RenderPipeline::ShutDown()

@@ -140,6 +140,7 @@ namespace Fluoresce {
 			// ポストプロセス
 			m_PostProcessingBuffer->Bind();
 			RenderCommand::Clear();
+			// TODO:ブルーム
 			postProcessingRenderer.Submit(m_IntermediateBuffer, m_Exposure);
 			m_PostProcessingBuffer->Unbind();
 		}
