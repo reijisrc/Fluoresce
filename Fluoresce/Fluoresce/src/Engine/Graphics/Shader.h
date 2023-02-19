@@ -3,11 +3,17 @@
 // Describe :	シェーダ														// 
 // Author : Ding Qi																// 
 // Create Date : 2022/08/13														// 
-// Modify Date : 2022/08/13														// 
+// Modify Date : 2023/02/20														// 
 //==============================================================================//
 #pragma once
 
 namespace Fluoresce {
+
+	enum class ShaderType
+	{
+		EffectShader = 0,	// (VS + PS)
+		ComputeShader
+	};
 
 	// シェーダ
 	class Shader
@@ -29,13 +35,22 @@ namespace Fluoresce {
 
 		virtual void SetMat3(const std::string& name, const Mat3& mat) = 0;
 		virtual void SetMat4(const std::string& name, const Mat4& mat) = 0;
+	};
 
-		virtual const std::string& GetName() const = 0;
+	// エフェクトシェーダ(VS + PS)
+	class EffectShader : public Shader
+	{
+	public:
+		static Ref<EffectShader> Create(const std::string& filePath);
+		static Ref<EffectShader> CreateBySrc(const std::string& vertexSrc, const std::string& fragSrc);
+	};
 
-		static Ref<Shader> Create(const std::string& filePath);
-		static Ref<Shader> Create(const std::string& name, const std::string& vertexSrc, const std::string& fragSrc);
-	private:
-		uint32 m_RendererID = 0;
+	// コンピュートシェーダ
+	class ComputeShader : public Shader
+	{
+	public:
+		static Ref<ComputeShader> Create(const std::string& filePath);
+		static Ref<ComputeShader> CreateBySrc(const std::string& computeSrc);
 	};
 
 	// シェーダライブラリ
@@ -44,11 +59,9 @@ namespace Fluoresce {
 	public:
 		virtual ~ShaderLibrary() = default;
 
-		void Add(const Ref<Shader>& shader);
 		void Add(const std::string& name, const Ref<Shader>& shader);
 
-		Ref<Shader> Load(const std::string& filePath);
-		Ref<Shader> Load(const std::string& name, const std::string& filePath);
+		Ref<Shader> Load(const std::string& name, const std::string& filePath, ShaderType type);
 
 		Ref<Shader> Get(const std::string& name);
 

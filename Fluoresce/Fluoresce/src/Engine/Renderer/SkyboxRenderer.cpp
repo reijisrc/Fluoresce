@@ -3,7 +3,7 @@
 // Describe :	スプライトレンダラー											// 
 // Author : Ding Qi																// 
 // Create Date : 2023/02/11														// 
-// Modify Date : 2023/02/11														// 
+// Modify Date : 2023/02/20														// 
 //==============================================================================//
 #include "frpch.h"
 #include "Engine/Renderer/SkyboxRenderer.h"
@@ -20,14 +20,14 @@ namespace Fluoresce {
 	{
 		Ref<VertexArray>	VertexArray;
 		Ref<VertexBuffer>	VertexBuffer;
-		Ref<Shader>			Shader;
+		Ref<EffectShader>	Shader;
 		Ref<TextureCube>	SkyboxTexture;
 	};
 
 	void SkyboxRenderer::Init(const std::string& shaderPath, const std::string& skyboxPath)
 	{
 		m_Data = new SkyboxRenderer::RendererData();
-		m_Data->Shader = Shader::Create(shaderPath);
+		m_Data->Shader = EffectShader::Create(shaderPath);
 		m_Data->VertexArray = VertexArray::Create();
 
 		// NDC基準のサイズ

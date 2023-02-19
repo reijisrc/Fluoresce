@@ -3,13 +3,11 @@
 // Describe : 	GLテクスチャ													// 
 // Author : Ding Qi																// 
 // Create Date : 2022/10/15														// 
-// Modify Date : 2023/02/10														// 
+// Modify Date : 2023/02/20														// 
 //==============================================================================//
 #pragma once
 
 #include "Engine/Graphics/Texture.h"
-
-#include <glad/glad.h>
 
 namespace Fluoresce {
 

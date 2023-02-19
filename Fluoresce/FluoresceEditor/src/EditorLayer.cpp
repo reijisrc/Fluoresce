@@ -3,7 +3,7 @@
 // Describe : 	エディターレイヤー												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/05/14														// 
-// Modify Date : 2023/02/11														// 
+// Modify Date : 2023/02/20														// 
 //==============================================================================//
 #include "EditorLayer.h"
 #include "EditorCore.h"
@@ -55,7 +55,7 @@ namespace Fluoresce {
 			baseFBSpec.Attachments = { FramebufferTextureFormat::RGBA16F, FramebufferTextureFormat::Depth };
 			baseFBSpec.Width = 1280;
 			baseFBSpec.Height = 720;
-			baseFBSpec.Samples = 4;
+			baseFBSpec.Samples = m_ViewportSamples;
 			m_HDRBuffer = Framebuffer::Create(baseFBSpec);
 
 			// MSAAコピー用中間バッファ
@@ -134,15 +134,28 @@ namespace Fluoresce {
 				break;
 			}
 
-			m_HDRBuffer->BlitMultisampledBuffer(m_IntermediateBuffer);
-			m_HDRBuffer->Unbind();
+			// MSAA
+			if (m_ViewportSamples > 1)
+			{
+				m_HDRBuffer->BlitMultisampledBuffer(m_IntermediateBuffer);
+				m_HDRBuffer->Unbind();
 
-			// ポストプロセス
-			m_PostProcessingBuffer->Bind();
-			RenderCommand::Clear();
-			// TODO:ブルーム
-			postProcessingRenderer.Submit(m_IntermediateBuffer, m_Exposure);
-			m_PostProcessingBuffer->Unbind();
+				// ポストプロセス
+				m_PostProcessingBuffer->Bind();
+				RenderCommand::Clear();
+				// TODO:ブルーム
+				postProcessingRenderer.Submit(m_IntermediateBuffer, m_Exposure);
+				m_PostProcessingBuffer->Unbind();
+			}
+			else
+			{
+				// ポストプロセス
+				m_PostProcessingBuffer->Bind();
+				RenderCommand::Clear();
+				// TODO:ブルーム
+				postProcessingRenderer.Submit(m_HDRBuffer, m_Exposure);
+				m_PostProcessingBuffer->Unbind();
+			}
 		}
 
 		void EditorLayer::OnImguiRender()

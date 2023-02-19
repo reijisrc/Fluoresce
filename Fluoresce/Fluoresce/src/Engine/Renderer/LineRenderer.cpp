@@ -3,7 +3,7 @@
 // Describe :	ƒ‰ƒCƒ“ƒŒƒ“ƒ_ƒ‰[												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/08/15														// 
-// Modify Date : 2023/01/22														// 
+// Modify Date : 2023/02/20														// 
 //==============================================================================//
 #include "frpch.h"
 #include "Engine/Renderer/LineRenderer.h"
@@ -46,7 +46,7 @@ namespace Fluoresce {
 	{
 		Ref<VertexArray>	VertexArray;
 		Ref<VertexBuffer>	VertexBuffer;
-		Ref<Shader>			Shader;
+		Ref<EffectShader>			Shader;
 
 		uint32 LineVertexCount = 0;
 
@@ -56,7 +56,7 @@ namespace Fluoresce {
 	void LineRenderer::Init(const std::string& shaderPath)
 	{
 		m_Data = new LineRenderer::RendererData();
-		m_Data->Shader = Shader::Create(shaderPath);
+		m_Data->Shader = EffectShader::Create(shaderPath);
 		m_Data->VertexArray = VertexArray::Create();
 
 		m_Data->VertexBuffer = VertexBuffer::Create(maxVectices * sizeof(LineVertex));

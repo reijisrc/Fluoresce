@@ -13,12 +13,12 @@
 
 namespace Fluoresce {
 
-	Ref<Shader> Shader::Create(const std::string& filePath)
+	Ref<EffectShader> EffectShader::Create(const std::string& filePath)
 	{
 		switch (GraphicsCore::GetAPI())
 		{
 		case GraphicsCore::API::None: FR_CORE_ASSERT(false, "GraphicsCore::API::None is currently not supported!") return nullptr;
-		case GraphicsCore::API::OpenGL4: return CreateRef<GLShader>(filePath);
+		case GraphicsCore::API::OpenGL4: return CreateRef<GLEffectShader>(filePath);
 		default:
 			break;
 		}
@@ -27,12 +27,12 @@ namespace Fluoresce {
 		return nullptr;
 	}
 
-	Ref<Shader> Shader::Create(const std::string& name, const std::string& vertexSrc, const std::string& fragSrc)
+	Ref<EffectShader> EffectShader::CreateBySrc(const std::string& vertexSrc, const std::string& fragSrc)
 	{
 		switch (GraphicsCore::GetAPI())
 		{
 		case GraphicsCore::API::None: FR_CORE_ASSERT(false, "GraphicsCore::API::None is currently not supported!") return nullptr;
-		case GraphicsCore::API::OpenGL4: return CreateRef<GLShader>(name, vertexSrc, fragSrc);
+		case GraphicsCore::API::OpenGL4: return CreateRef<GLEffectShader>(vertexSrc, fragSrc, true);
 		default:
 			break;
 		}
@@ -41,30 +41,58 @@ namespace Fluoresce {
 		return nullptr;
 	}
 
-	void ShaderLibrary::Add(const Ref<Shader>& shader)
+	Ref<ComputeShader> ComputeShader::Create(const std::string& filePath)
 	{
-		auto& shadername = shader->GetName();
-		m_Shaders[shadername] = shader;
+		switch (GraphicsCore::GetAPI())
+		{
+		case GraphicsCore::API::None: FR_CORE_ASSERT(false, "GraphicsCore::API::None is currently not supported!") return nullptr;
+		case GraphicsCore::API::OpenGL4: return CreateRef<GLComputeShader>(filePath);
+		default:
+			break;
+		}
+
+		FR_CORE_ASSERT(false, "Unknown GraphicsAPI!");
+		return nullptr;
+	}
+
+	Ref<ComputeShader> ComputeShader::CreateBySrc(const std::string& computeSrc)
+	{
+		switch (GraphicsCore::GetAPI())
+		{
+		case GraphicsCore::API::None: FR_CORE_ASSERT(false, "GraphicsCore::API::None is currently not supported!") return nullptr;
+		case GraphicsCore::API::OpenGL4: return CreateRef<GLComputeShader>(computeSrc, true);
+		default:
+			break;
+		}
+
+		FR_CORE_ASSERT(false, "Unknown RendererAPI!")
+		return nullptr;
 	}
 
 	void ShaderLibrary::Add(const std::string& name, const Ref<Shader>& shader)
 	{
-		auto& shadername = shader->GetName();
+		auto& shadername = name;
 		FR_CORE_ASSERT(!Exists(shadername), "Shader aleady exists!");
 		m_Shaders[shadername] = shader;
 	}
 
-	Ref<Shader> ShaderLibrary::Load(const std::string& filePath)
+	Ref<Shader> ShaderLibrary::Load(const std::string& name, const std::string& filePath, ShaderType type)
 	{
-		auto shader = Shader::Create(filePath);
-		Add(shader);
-		return shader;
-	}
+		Ref<Shader> shader = nullptr;
+		switch (type)
+		{
+		case Fluoresce::ShaderType::EffectShader:
+			shader = EffectShader::Create(filePath);
+			Add(name, shader);
+			break;
+		case Fluoresce::ShaderType::ComputeShader:
+			shader = ComputeShader::Create(filePath);
+			Add(name, shader);
+			break;
+		default:
+			break;
+		}
 
-	Ref<Shader> ShaderLibrary::Load(const std::string& name, const std::string& filePath)
-	{
-		auto shader = Shader::Create(filePath);
-		Add(name, shader);
 		return shader;
 	}
 
