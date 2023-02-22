@@ -3,7 +3,7 @@
 // Describe : 	エディターレイヤー												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/05/14														// 
-// Modify Date : 2023/02/20														// 
+// Modify Date : 2023/02/23														// 
 //==============================================================================//
 #pragma once
 
@@ -70,7 +70,6 @@ namespace Fluoresce {
 				{ 0.0f, 0.0f },
 				{ 0.0f, 0.0f }
 			};
-			Vec4 m_ViewportClearColor = { 0.1f, 0.1f ,0.1f, 1.0f };
 			uint32 m_ViewportSamples = 4;
 			float32 m_Exposure = 1.0f;
 

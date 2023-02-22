@@ -3,7 +3,7 @@
 // Describe : 	エディターレイヤー												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/05/14														// 
-// Modify Date : 2023/02/20														// 
+// Modify Date : 2023/02/23														// 
 //==============================================================================//
 #include "EditorLayer.h"
 #include "EditorCore.h"
@@ -121,9 +121,6 @@ namespace Fluoresce {
 
 			m_HDRBuffer->Bind();
 
-			RenderCommand::SetClearColor(m_ViewportClearColor);
-			RenderCommand::Clear();
-
 			switch (EditorCore::GetEditorState())
 			{
 			case EditorState::Edit:
@@ -142,8 +139,6 @@ namespace Fluoresce {
 
 				// ポストプロセス
 				m_PostProcessingBuffer->Bind();
-				RenderCommand::Clear();
-				// TODO:ブルーム
 				postProcessingRenderer.Submit(m_IntermediateBuffer, m_Exposure);
 				m_PostProcessingBuffer->Unbind();
 			}
@@ -151,8 +146,6 @@ namespace Fluoresce {
 			{
 				// ポストプロセス
 				m_PostProcessingBuffer->Bind();
-				RenderCommand::Clear();
-				// TODO:ブルーム
 				postProcessingRenderer.Submit(m_HDRBuffer, m_Exposure);
 				m_PostProcessingBuffer->Unbind();
 			}
@@ -513,7 +506,6 @@ namespace Fluoresce {
 
 				if (ImGui::TreeNodeEx((void*)2754597, ImGuiTreeNodeFlags_DefaultOpen | treeNodeFlags, "Scene Setting"))
 				{
-					ImGui::ColorEdit4("BackgroundColor", glm::value_ptr(m_ViewportClearColor));
 					ImGui::DragFloat("Exposure", &m_Exposure, 0.01f, 0.0f, 10.0f);
 					ImGui::TreePop();
 				}

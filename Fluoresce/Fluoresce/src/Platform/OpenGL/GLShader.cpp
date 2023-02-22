@@ -3,7 +3,7 @@
 // Describe :	GLシェーダ														// 
 // Author : Ding Qi																// 
 // Create Date : 2022/08/13														// 
-// Modify Date : 2023/02/20														// 
+// Modify Date : 2023/02/23														// 
 //==============================================================================//
 #include "frpch.h"
 #include "Platform/OpenGL/GLShader.h"
@@ -277,12 +277,18 @@ namespace Fluoresce {
 
 	GLComputeShader::GLComputeShader(const std::string& filePath)
 	{
-
+		std::string shaderSouce = ReadFile(filePath);
+		auto shaderSources = PreProcess(shaderSouce);
+		Compile(shaderSources);
 	}
 
 	GLComputeShader::GLComputeShader(const std::string& computeSrc, bool compile)
 	{
-
+		std::string sources = computeSrc;
+		if (compile)
+		{
+			Compile(sources);
+		}
 	}
 
 	GLComputeShader::~GLComputeShader()
@@ -340,7 +346,12 @@ namespace Fluoresce {
 		UploadUniformMat4(m_RendererID, name, mat);
 	}
 
-	std::string PreProcess(const std::string& source)
+	void GLComputeShader::DispatchCompute(uint32 groupsX, uint32 groupsY, uint32 groupsZ) const
+	{
+		glDispatchCompute(groupsX, groupsY, groupsZ);
+	}
+
+	std::string GLComputeShader::PreProcess(const std::string& source)
 	{
 		std::string shaderSources;
 
@@ -359,13 +370,13 @@ namespace Fluoresce {
 			size_t nextLinePos = source.find_first_not_of(typeTokenEnd, eol);
 			FR_CORE_ASSERT(nextLinePos != std::string::npos, "Syntax error");
 			pos = source.find(typeTokenStart, nextLinePos);
-			shaderSources = (pos == std::string::npos) ? source.substr(nextLinePos) : source.substr(nextLinePos, pos - nextLinePos);
+			shaderSources = source.substr(nextLinePos);
 		}
 
 		return shaderSources;
 	}
 
-	void Compile(std::string& shaderSources)
+	void GLComputeShader::Compile(std::string& shaderSources)
 	{
 		GLuint program = glCreateProgram();
 

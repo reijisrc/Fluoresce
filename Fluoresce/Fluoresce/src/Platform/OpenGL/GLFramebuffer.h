@@ -3,7 +3,7 @@
 // Describe : 	GLフレームバッファ												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/10/15														// 
-// Modify Date : 2023/02/11														// 
+// Modify Date : 2023/02/23														// 
 //==============================================================================//
 #include "Engine/Graphics/Framebuffer.h"
 
@@ -38,11 +38,10 @@ namespace Fluoresce {
 		virtual const FramebufferSpecification& GetSpecification() const override { return m_Specification; };
 	private:
 		uint32 m_RendererID = 0;
-		uint32 m_RBO = 0;
 		FramebufferSpecification m_Specification;
 
 		std::vector<FramebufferTextureSpecification> m_ColorAttachmentSpecifications;
-		FramebufferTextureSpecification m_DepthAttachmentSpecification = FramebufferTextureFormat::None;
+		FramebufferTextureSpecification m_DepthAttachmentSpecification = FramebufferTextureFormat::UndefineFormat;
 
 		std::vector<uint32> m_ColorAttachments;
 		uint32 m_DepthAttachment = 0;

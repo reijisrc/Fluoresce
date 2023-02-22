@@ -3,7 +3,7 @@
 // Describe :	シェーダ														// 
 // Author : Ding Qi																// 
 // Create Date : 2022/08/13														// 
-// Modify Date : 2023/02/20														// 
+// Modify Date : 2023/02/23														// 
 //==============================================================================//
 #pragma once
 
@@ -48,6 +48,8 @@ namespace Fluoresce {
 	// コンピュートシェーダ
 	class ComputeShader : public Shader
 	{
+	public:
+		virtual void DispatchCompute(uint32 groupsX, uint32 groupsY, uint32 groupsZ) const = 0;
 	public:
 		static Ref<ComputeShader> Create(const std::string& filePath);
 		static Ref<ComputeShader> CreateBySrc(const std::string& computeSrc);

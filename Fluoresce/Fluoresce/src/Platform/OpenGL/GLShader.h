@@ -3,7 +3,7 @@
 // Describe :	GLシェーダ														// 
 // Author : Ding Qi																// 
 // Create Date : 2022/08/13														// 
-// Modify Date : 2023/02/20														// 
+// Modify Date : 2023/02/23														// 
 //==============================================================================//
 #pragma once
 
@@ -64,6 +64,8 @@ namespace Fluoresce {
 
 		virtual void SetMat3(const std::string& name, const Mat3& mat) override;
 		virtual void SetMat4(const std::string& name, const Mat4& mat) override;
+
+		virtual void DispatchCompute(uint32 groupsX, uint32 groupsY, uint32 groupsZ) const override;
 	private:
 		std::string PreProcess(const std::string& source);
 		void Compile(std::string& shaderSources);

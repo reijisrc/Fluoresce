@@ -3,7 +3,7 @@
 // Describe : 	フレームバッファ												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/10/15														// 
-// Modify Date : 2023/02/11														// 
+// Modify Date : 2023/02/23														// 
 //==============================================================================//
 #pragma once
 
@@ -12,7 +12,7 @@ namespace Fluoresce {
 	// フレームバッファフォーマット
 	enum class FramebufferTextureFormat
 	{
-		None = 0,
+		UndefineFormat = 0,
 
 		// カラーバッファ
 		RGBA8,
@@ -32,7 +32,7 @@ namespace Fluoresce {
 		FramebufferTextureSpecification(FramebufferTextureFormat format)
 			: TextureFormat(format) {}
 
-		FramebufferTextureFormat TextureFormat = FramebufferTextureFormat::None;
+		FramebufferTextureFormat TextureFormat = FramebufferTextureFormat::UndefineFormat;
 	};
 
 	// フレームバッファ-カラーバッファ情報(Attachment0 - Attachment3)
@@ -50,6 +50,7 @@ namespace Fluoresce {
 	{
 		uint32 Width, Height;
 		uint32 Samples = 1;
+		Vec4 ClearColor = Vec4(0.0f, 0.0f, 0.0f, 0.0f);
 		//bool SwapChainTarget = false;
 		FramebufferAttachmentSpecification Attachments;
 	};
