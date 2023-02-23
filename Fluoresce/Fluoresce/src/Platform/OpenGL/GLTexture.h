@@ -3,7 +3,7 @@
 // Describe : 	GLテクスチャ													// 
 // Author : Ding Qi																// 
 // Create Date : 2022/10/15														// 
-// Modify Date : 2023/02/20														// 
+// Modify Date : 2023/02/23														// 
 //==============================================================================//
 #pragma once
 
@@ -15,11 +15,11 @@ namespace Fluoresce {
 	class GLTexture2D : public Texture2D
 	{
 	public:
-		GLTexture2D(uint32 width, uint32 height, const TexturetOption& option);
-		GLTexture2D(const std::string& path, const TexturetOption& option);
+		GLTexture2D(uint32 width, uint32 height, const TexturetSpecification& spec);
+		GLTexture2D(const std::string& path, const TexturetSpecification& spec);
 		virtual ~GLTexture2D();
 
-		virtual TextureFormat GetFormat() const override { return m_Format; }
+		virtual TexturetSpecification GetSpecification() const override { return m_Specification; }
 		virtual uint32 GetWidth() const override { return m_Width; }
 		virtual uint32 GetHeight() const override { return m_Height; }
 		virtual uint32 GetRendererID() const override { return m_RendererID; }
@@ -38,13 +38,13 @@ namespace Fluoresce {
 			return m_RendererID == other.GetRendererID();
 		}
 	private:
-		void LoadLDRImage(const std::string& path, const TexturetOption& option);
-		void LoadHDRImage(const std::string& path, const TexturetOption& option);
+		void LoadLDRImage(const std::string& path);
+		void LoadHDRImage(const std::string& path);
 	private:
 		std::string m_Path;
 		uint32 m_Width, m_Height;
 		uint32 m_RendererID = 0;
-		TextureFormat m_Format;
+		TexturetSpecification m_Specification;
 		bool m_IsHDR = false;
 	};
 
@@ -52,11 +52,11 @@ namespace Fluoresce {
 	class GLTextureCube : public TextureCube
 	{
 	public:
-		GLTextureCube(uint32 width, uint32 height, const TexturetOption& option);
-		GLTextureCube(const std::string& path, const TexturetOption& option);
+		GLTextureCube(uint32 width, uint32 height, const TexturetSpecification& spec);
+		GLTextureCube(const std::string& path, const TexturetSpecification& spec);
 		virtual ~GLTextureCube();
 
-		virtual TextureFormat GetFormat() const override { return m_Format; }
+		virtual TexturetSpecification GetSpecification() const override { return m_Specification; }
 		virtual uint32 GetWidth() const override { return m_Width; }
 		virtual uint32 GetHeight() const override { return m_Height; }
 		virtual uint32 GetRendererID() const override { return m_RendererID; }
@@ -75,14 +75,14 @@ namespace Fluoresce {
 			return m_RendererID == other.GetRendererID();
 		}
 	private:
-		void LoadLDRImage(const std::string& path, const TexturetOption& option);
-		void LoadHDRImage(const std::string& path, const TexturetOption& option);
+		void LoadLDRImage(const std::string& path);
+		void LoadHDRImage(const std::string& path);
 
 	private:
 		std::string m_Path;
 		uint32 m_Width, m_Height;
 		uint32 m_RendererID = 0;
-		TextureFormat m_Format;
+		TexturetSpecification m_Specification;
 		bool m_IsHDR = false;
 	};
 }

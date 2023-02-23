@@ -147,10 +147,10 @@ namespace Fluoresce {
 			if (m_GrayScale)
 			{
 				m_InvertColorShader->Bind();
-				m_InvertColorShader->BindImageTexture(0, baseBuffer->GetColorAttachmentRendererID(0), 0, ImageTextureAccessFlag::Read, TextureFormat::RGBA16f);
-				m_InvertColorShader->BindImageTexture(1, baseBuffer->GetColorAttachmentRendererID(0), 0, ImageTextureAccessFlag::Write, TextureFormat::RGBA16f);
+				m_InvertColorShader->BindImageTexture(0, baseBuffer->GetColorAttachmentRendererID(), 0, ImageTextureAccessFlag::Read, TextureFormat::RGBA16f);
+				m_InvertColorShader->BindImageTexture(1, baseBuffer->GetColorAttachmentRendererID(), 0, ImageTextureAccessFlag::Write, TextureFormat::RGBA16f);
 				m_InvertColorShader->DispatchCompute(static_cast<uint32>(m_ViewportSize.x / 16.0f), static_cast<uint32>(m_ViewportSize.y / 9.0f), 1);
-				RenderCommand::SetMemoryBarrier(MemoryBarrierOption::TextureBarriers);
+				RenderCommand::SetMemoryBarrier(GPUMemoryBarrier::Barrier_Texture);
 			}
 
 			// ポストプロセス

@@ -3,7 +3,7 @@
 // Describe :	レンダーコマンド												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/08/15														// 
-// Modify Date : 2023/02/11														// 
+// Modify Date : 2023/02/23														// 
 //==============================================================================//
 #pragma once
 
@@ -35,9 +35,9 @@ namespace Fluoresce {
 			s_GraphicsCore->SetClearColor(color);
 		}
 
-		static void Clear()
+		static void Clear(ClearCommand command = ClearCommand::CommandDefault)
 		{
-			s_GraphicsCore->Clear();
+			s_GraphicsCore->Clear(command);
 		}
 
 		static void DrawIndexed(const Ref<VertexArray>& vertexArray, uint32 count = 0)
@@ -65,7 +65,7 @@ namespace Fluoresce {
 			s_GraphicsCore->SetDepthTestFunc(func);
 		}
 
-		static void SetMemoryBarrier(MemoryBarrierOption barriers)
+		static void SetMemoryBarrier(GPUMemoryBarrier barriers)
 		{
 			s_GraphicsCore->SetMemoryBarrier(barriers);
 		}

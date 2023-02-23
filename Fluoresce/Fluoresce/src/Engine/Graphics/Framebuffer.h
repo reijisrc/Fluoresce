@@ -32,6 +32,7 @@ namespace Fluoresce {
 		FramebufferTextureSpecification(FramebufferTextureFormat format)
 			: TextureFormat(format) {}
 
+		uint32					 MipmapLevel = 1;
 		FramebufferTextureFormat TextureFormat = FramebufferTextureFormat::UndefineFormat;
 	};
 
@@ -51,7 +52,6 @@ namespace Fluoresce {
 		uint32 Width, Height;
 		uint32 Samples = 1;
 		Vec4 ClearColor = Vec4(0.0f, 0.0f, 0.0f, 0.0f);
-		//bool SwapChainTarget = false;
 		FramebufferAttachmentSpecification Attachments;
 	};
 
@@ -68,6 +68,7 @@ namespace Fluoresce {
 		virtual void BlitMultisampledBuffer(const Ref<Framebuffer>& intermediateBuffer) = 0;
 
 		virtual uint32 GetColorAttachmentRendererID(uint32 index = 0) const = 0;
+		virtual uint32 GetDepthAttachmentRendererID() const = 0;
 		virtual void ClearAttachment(uint32 attachmentIndex, sint32 value) = 0;
 		virtual void BindAttachmentToTextureSlot(uint32 slot, uint32 index = 0) const = 0;
 

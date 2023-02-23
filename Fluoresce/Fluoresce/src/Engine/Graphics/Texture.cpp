@@ -3,7 +3,7 @@
 // Describe :	シェーダ														// 
 // Author : Ding Qi																// 
 // Create Date : 2022/08/13														// 
-// Modify Date : 2023/02/11														// 
+// Modify Date : 2023/02/23														// 
 //==============================================================================//
 #include "frpch.h"
 #include "Engine/Graphics/Texture.h"
@@ -13,7 +13,7 @@
 
 namespace Fluoresce {
 
-	Ref<Texture2D> Texture2D::Create(uint32 width, uint32 height, const TexturetOption& option)
+	Ref<Texture2D> Texture2D::Create(uint32 width, uint32 height, const TexturetSpecification& option)
 	{
 		switch (GraphicsCore::GetAPI())
 		{
@@ -27,7 +27,7 @@ namespace Fluoresce {
 		return nullptr;
 	}
 
-	Ref<Texture2D> Texture2D::Create(const std::string& path, const TexturetOption& option)
+	Ref<Texture2D> Texture2D::Create(const std::string& path, const TexturetSpecification& option)
 	{
 		switch (GraphicsCore::GetAPI())
 		{
@@ -41,8 +41,7 @@ namespace Fluoresce {
 		return nullptr;
 	}
 
-
-	Ref<TextureCube> TextureCube::Create(uint32 width, uint32 height, const TexturetOption& option)
+	Ref<TextureCube> TextureCube::Create(uint32 width, uint32 height, const TexturetSpecification& option)
 	{
 		switch (GraphicsCore::GetAPI())
 		{
@@ -56,7 +55,7 @@ namespace Fluoresce {
 		return nullptr;
 	}
 	
-	Ref<TextureCube> TextureCube::Create(const std::string& path, const TexturetOption& option)
+	Ref<TextureCube> TextureCube::Create(const std::string& path, const TexturetSpecification& option)
 	{
 		switch (GraphicsCore::GetAPI())
 		{

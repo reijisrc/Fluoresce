@@ -17,11 +17,18 @@ namespace Fluoresce {
 		RGBA16f = 4,
 	};
 
+	enum class TextureFilter
+	{
+		Nearest = 1,
+		Linear = 2,
+	};
+
 	enum class TextureWrap
 	{
-		None = 0,
-		Clamp = 1,
-		Repeat = 2
+		Clamp = 0,
+		Repeat = 1,
+		MirroredRepeat = 2,
+		Board = 3
 	};
 
 }

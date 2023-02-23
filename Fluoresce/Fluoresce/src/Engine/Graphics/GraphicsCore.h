@@ -11,6 +11,16 @@
 
 namespace Fluoresce {
 
+	enum ClearCommand
+	{
+		CommandNone = 0,
+		CommandClearColor = BIT(0),
+		CommandClearDepth = BIT(1),
+		CommandClearStencil = BIT(2),
+
+		CommandDefault = (CommandClearColor | CommandClearDepth)
+	};
+
 	enum class DepthTestFunc
 	{
 		DepthTest_Default = 0,
@@ -24,10 +34,10 @@ namespace Fluoresce {
 		DepthTest_Gequal,
 	};
 
-	enum class MemoryBarrierOption
+	enum class GPUMemoryBarrier
 	{
-		ShaderStorageBarriers,
-		TextureBarriers
+		Barrier_ShaderStorage,
+		Barrier_Texture,
 	};
 
 	// グラフィックコア
@@ -52,7 +62,7 @@ namespace Fluoresce {
 		virtual void SetViewport(uint32 x, uint32 y, uint32 width, uint32 height) = 0;
 		virtual void SetClearColor(const FrVec4& color) = 0;
 		virtual void SetClearColor(const Vec4& color) = 0;
-		virtual void Clear() = 0;
+		virtual void Clear(ClearCommand command) = 0;
 
 		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount = 0) = 0;
 		virtual void DrawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount) = 0;
@@ -62,7 +72,7 @@ namespace Fluoresce {
 		virtual void SetDepthTest(bool enable) = 0;
 		virtual void SetDepthTestFunc(DepthTestFunc func) = 0;
 
-		virtual void SetMemoryBarrier(MemoryBarrierOption barriers) = 0;
+		virtual void SetMemoryBarrier(GPUMemoryBarrier barriers) = 0;
 
 		virtual const APICapabilities& GetCapabilities() const = 0;
 

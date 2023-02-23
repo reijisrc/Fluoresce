@@ -8,7 +8,7 @@
 #include "frpch.h"
 #include "Platform/OpenGL/GLCore.h"
 
-#include <glad/glad.h>
+#include "Platform/OpenGL/GLUtils.h"
 
 namespace Fluoresce
 {
@@ -71,9 +71,9 @@ namespace Fluoresce
 		glClearColor(color.r, color.g, color.b, color.a);
 	}
 
-	void GLCore::Clear()
+	void GLCore::Clear(ClearCommand command)
 	{
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GLUtil::ConvertOpenGLClearCommand(command));
 	}
 
 	void GLCore::DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount)
@@ -135,21 +135,19 @@ namespace Fluoresce
 		}
 	}
 
-	void GLCore::SetMemoryBarrier(MemoryBarrierOption barriers)
+	void GLCore::SetMemoryBarrier(GPUMemoryBarrier barriers)
 	{
-		GLbitfield glbarriers;
 		switch (barriers)
 		{
-		case Fluoresce::MemoryBarrierOption::ShaderStorageBarriers:
-			glbarriers = GL_SHADER_STORAGE_BARRIER_BIT;
+		case Fluoresce::GPUMemoryBarrier::Barrier_ShaderStorage:
+			glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 			break;
-		case Fluoresce::MemoryBarrierOption::TextureBarriers:
-			glbarriers = (GL_SHADER_IMAGE_ACCESS_BARRIER_BIT | GL_TEXTURE_FETCH_BARRIER_BIT);
+		case Fluoresce::GPUMemoryBarrier::Barrier_Texture:
+			glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT | GL_TEXTURE_FETCH_BARRIER_BIT);
 			break;
 		default:
 			break;
 		}
-		glMemoryBarrier(glbarriers);
 	}
 
 	const GraphicsCore::APICapabilities& GLCore::GetCapabilities() const

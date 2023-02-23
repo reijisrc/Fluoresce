@@ -30,6 +30,12 @@ namespace Fluoresce {
 		{
 			FR_CORE_ASSERT(index < m_ColorAttachments.size(), "Invalid colorattachment RendererID!"); return m_ColorAttachments[index];
 		}
+
+		virtual uint32 GetDepthAttachmentRendererID() const override
+		{
+			return m_DepthAttachment;
+		}
+
 		virtual void ClearAttachment(uint32 attachmentIndex, sint32 value) override;
 
 		virtual void BindAttachmentToTextureSlot(uint32 slot, uint32 index = 0) const override;

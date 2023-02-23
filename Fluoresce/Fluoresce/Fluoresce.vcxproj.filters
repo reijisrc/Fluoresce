@@ -254,6 +254,7 @@
     </ClInclude>
     <ClInclude Include="src\Engine\Graphics\Mesh.h" />
     <ClInclude Include="src\Engine\Graphics\TextureDefine.h" />
+    <ClInclude Include="src\Platform\OpenGL\GLUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dependencies\ImGuizmo\src\ImGuizmo.cpp">
