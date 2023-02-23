@@ -73,7 +73,7 @@ namespace Fluoresce
 
 	void GLCore::Clear(ClearCommand command)
 	{
-		glClear(GLUtil::ConvertOpenGLClearCommand(command));
+		glClear(GLUtils::ConvertOpenGLClearCommand(command));
 	}
 
 	void GLCore::DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount)

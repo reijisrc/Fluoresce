@@ -10,7 +10,7 @@
 #include "Engine/Scene/SceneSerializer.h"
 #include "Engine/Asset/AssetSerializer.h"
 
-#define EDITOR_VERSION               "0.88"
+#define EDITOR_VERSION               "0.89"
 
 namespace Fluoresce {
 

@@ -3,7 +3,7 @@
 // Describe : 	GLテクスチャ													// 
 // Author : Ding Qi																// 
 // Create Date : 2022/10/15														// 
-// Modify Date : 2023/02/20														// 
+// Modify Date : 2023/02/23														// 
 //==============================================================================//
 
 #include "frpch.h"
@@ -30,9 +30,9 @@ namespace Fluoresce {
 	GLTexture2D::GLTexture2D(uint32 width, uint32 height, const TexturetSpecification& spec)
 		: m_Width(width), m_Height(height), m_Specification(spec)
 	{
-		auto internalFormat = GLUtil::ConvertOpenGLTextureInternalFormat(m_Specification.Format);
-		auto filter = GLUtil::ConvertOpenGLTextureFilter(m_Specification.Filter);
-		auto wrap = GLUtil::ConvertOpenGLTextureWrap(m_Specification.Wrap);
+		auto internalFormat = GLUtils::ConvertOpenGLTextureInternalFormat(m_Specification.Format);
+		auto filter = GLUtils::ConvertOpenGLTextureFilter(m_Specification.Filter);
+		auto wrap = GLUtils::ConvertOpenGLTextureWrap(m_Specification.Wrap);
 
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
 		glTextureStorage2D(m_RendererID, m_Specification.MipmapLevel, internalFormat, m_Width, m_Height);
@@ -64,8 +64,8 @@ namespace Fluoresce {
 	void GLTexture2D::SetData(void* data, uint32 size)
 	{
 		uint32 channels = GetChannels(m_Specification.Format);
-		auto dataFormat = GLUtil::ConvertOpenGLTextureDataFormat(m_Specification.Format);
-		auto type = GLUtil::ConvertOpenGLTextureDataType(m_Specification.Format);
+		auto dataFormat = GLUtils::ConvertOpenGLTextureDataFormat(m_Specification.Format);
+		auto type = GLUtils::ConvertOpenGLTextureDataType(m_Specification.Format);
 		FR_CORE_ASSERT(size == m_Width * m_Height * channels, "Data must be entire texture!");
 		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, dataFormat, type, data);
 	}
@@ -102,11 +102,11 @@ namespace Fluoresce {
 		m_Width = width;
 		m_Height = height;
 
-		auto internalFormat = GLUtil::ConvertOpenGLTextureInternalFormat(m_Specification.Format);
-		auto dataFormat = GLUtil::ConvertOpenGLTextureDataFormat(m_Specification.Format);
-		auto filter = GLUtil::ConvertOpenGLTextureFilter(m_Specification.Filter);
-		auto wrap = GLUtil::ConvertOpenGLTextureWrap(m_Specification.Wrap);
-		auto type = GLUtil::ConvertOpenGLTextureDataType(m_Specification.Format);
+		auto internalFormat = GLUtils::ConvertOpenGLTextureInternalFormat(m_Specification.Format);
+		auto dataFormat = GLUtils::ConvertOpenGLTextureDataFormat(m_Specification.Format);
+		auto filter = GLUtils::ConvertOpenGLTextureFilter(m_Specification.Filter);
+		auto wrap = GLUtils::ConvertOpenGLTextureWrap(m_Specification.Wrap);
+		auto type = GLUtils::ConvertOpenGLTextureDataType(m_Specification.Format);
 
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
 		glTextureStorage2D(m_RendererID, m_Specification.MipmapLevel, internalFormat, m_Width, m_Height);
@@ -133,11 +133,11 @@ namespace Fluoresce {
 		m_Width = width;
 		m_Height = height;
 
-		auto internalFormat = GLUtil::ConvertOpenGLTextureInternalFormat(m_Specification.Format);
-		auto dataFormat = GLUtil::ConvertOpenGLTextureDataFormat(m_Specification.Format);
-		auto filter = GLUtil::ConvertOpenGLTextureFilter(m_Specification.Filter);
-		auto wrap = GLUtil::ConvertOpenGLTextureWrap(m_Specification.Wrap);
-		auto type = GLUtil::ConvertOpenGLTextureDataType(m_Specification.Format);
+		auto internalFormat = GLUtils::ConvertOpenGLTextureInternalFormat(m_Specification.Format);
+		auto dataFormat = GLUtils::ConvertOpenGLTextureDataFormat(m_Specification.Format);
+		auto filter = GLUtils::ConvertOpenGLTextureFilter(m_Specification.Filter);
+		auto wrap = GLUtils::ConvertOpenGLTextureWrap(m_Specification.Wrap);
+		auto type = GLUtils::ConvertOpenGLTextureDataType(m_Specification.Format);
 
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
 		glTextureStorage2D(m_RendererID, 1, internalFormat, m_Width, m_Height);
@@ -155,9 +155,9 @@ namespace Fluoresce {
 	GLTextureCube::GLTextureCube(uint32 width, uint32 height, const TexturetSpecification& spec)
 		: m_Width(width), m_Height(height), m_Specification(spec)
 	{
-		auto internalFormat = GLUtil::ConvertOpenGLTextureInternalFormat(m_Specification.Format);
-		auto filter = GLUtil::ConvertOpenGLTextureFilter(m_Specification.Filter);
-		auto wrap = GLUtil::ConvertOpenGLTextureWrap(m_Specification.Wrap);
+		auto internalFormat = GLUtils::ConvertOpenGLTextureInternalFormat(m_Specification.Format);
+		auto filter = GLUtils::ConvertOpenGLTextureFilter(m_Specification.Filter);
+		auto wrap = GLUtils::ConvertOpenGLTextureWrap(m_Specification.Wrap);
 
 		glCreateTextures(GL_TEXTURE_CUBE_MAP, 1, &m_RendererID);
 		glTextureStorage2D(m_RendererID, 1, internalFormat, width, height);
@@ -190,9 +190,9 @@ namespace Fluoresce {
 
 	void GLTextureCube::SetData(void* data, uint32 size)
 	{
-		auto internalFormat = GLUtil::ConvertOpenGLTextureInternalFormat(m_Specification.Format);
-		auto dataFormat = GLUtil::ConvertOpenGLTextureDataFormat(m_Specification.Format);
-		auto type = GLUtil::ConvertOpenGLTextureDataType(m_Specification.Format);
+		auto internalFormat = GLUtils::ConvertOpenGLTextureInternalFormat(m_Specification.Format);
+		auto dataFormat = GLUtils::ConvertOpenGLTextureDataFormat(m_Specification.Format);
+		auto type = GLUtils::ConvertOpenGLTextureDataType(m_Specification.Format);
 
 		uint32_t faceWidth = m_Width / 4;
 		uint32_t faceHeight = m_Height / 3;
@@ -288,10 +288,10 @@ namespace Fluoresce {
 		glGenTextures(1, &m_RendererID);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, m_RendererID);
 
-		auto internalFormat = GLUtil::ConvertOpenGLTextureInternalFormat(m_Specification.Format);
-		auto dataFormat = GLUtil::ConvertOpenGLTextureDataFormat(m_Specification.Format);
-		auto wrap = GLUtil::ConvertOpenGLTextureWrap(m_Specification.Wrap);
-		auto type = GLUtil::ConvertOpenGLTextureDataType(m_Specification.Format);
+		auto internalFormat = GLUtils::ConvertOpenGLTextureInternalFormat(m_Specification.Format);
+		auto dataFormat = GLUtils::ConvertOpenGLTextureDataFormat(m_Specification.Format);
+		auto wrap = GLUtils::ConvertOpenGLTextureWrap(m_Specification.Wrap);
+		auto type = GLUtils::ConvertOpenGLTextureDataType(m_Specification.Format);
 
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -378,10 +378,10 @@ namespace Fluoresce {
 		glGenTextures(1, &m_RendererID);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, m_RendererID);
 
-		auto internalFormat = GLUtil::ConvertOpenGLTextureInternalFormat(m_Specification.Format);
-		auto dataFormat = GLUtil::ConvertOpenGLTextureDataFormat(m_Specification.Format);
-		auto wrap = GLUtil::ConvertOpenGLTextureWrap(m_Specification.Wrap);
-		auto type = GLUtil::ConvertOpenGLTextureDataType(m_Specification.Format);
+		auto internalFormat = GLUtils::ConvertOpenGLTextureInternalFormat(m_Specification.Format);
+		auto dataFormat = GLUtils::ConvertOpenGLTextureDataFormat(m_Specification.Format);
+		auto wrap = GLUtils::ConvertOpenGLTextureWrap(m_Specification.Wrap);
+		auto type = GLUtils::ConvertOpenGLTextureDataType(m_Specification.Format);
 
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

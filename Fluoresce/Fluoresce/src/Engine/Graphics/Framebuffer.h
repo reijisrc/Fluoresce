@@ -7,6 +7,8 @@
 //==============================================================================//
 #pragma once
 
+#include "Engine/Graphics/TextureDefine.h"
+
 namespace Fluoresce {
 
 	// フレームバッファフォーマット
@@ -29,11 +31,22 @@ namespace Fluoresce {
 	struct FramebufferTextureSpecification
 	{
 		FramebufferTextureSpecification() = default;
-		FramebufferTextureSpecification(FramebufferTextureFormat format)
-			: TextureFormat(format) {}
+		FramebufferTextureSpecification(FramebufferTextureFormat format, 
+			TextureFilter filter = TextureFilter::Linear,
+			TextureWrap   wrap = TextureWrap::Clamp,
+			uint32 mipmap = 1)
+			: Format(format),
+			Filter(filter),
+			Wrap(wrap),
+			MipmapLevel(mipmap)
+		{
+		
+		}
 
-		uint32					 MipmapLevel = 1;
-		FramebufferTextureFormat TextureFormat = FramebufferTextureFormat::UndefineFormat;
+		FramebufferTextureFormat Format =	FramebufferTextureFormat::UndefineFormat;
+		TextureFilter			 Filter =	TextureFilter::Linear;
+		TextureWrap				 Wrap =		TextureWrap::Clamp;
+		uint32					 MipmapLevel =		1;
 	};
 
 	// フレームバッファ-カラーバッファ情報(Attachment0 - Attachment3)

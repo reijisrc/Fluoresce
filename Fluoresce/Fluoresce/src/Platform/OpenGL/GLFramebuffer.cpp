@@ -8,99 +8,119 @@
 #include "frpch.h"
 #include "Platform/OpenGL/GLFramebuffer.h"
 
-#include <glad/glad.h>
+#include "Platform/OpenGL/GLUtils.h"
 
 namespace Fluoresce {
 
-	namespace Utils {
+	static GLenum TextureTarget(bool multisampled)
+	{
+		return multisampled ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
+	}
 
-		static GLenum TextureTarget(bool multisampled)
+	static void CreateTextures(bool multisampled, uint32_t* outID, uint32_t count)
+	{
+		glCreateTextures(TextureTarget(multisampled), count, outID);
+	}
+
+	static void BindTexture(bool multisampled, uint32_t id)
+	{
+		glBindTexture(TextureTarget(multisampled), id);
+	}
+
+	static bool IsDepthFormat(FramebufferTextureFormat format)
+	{
+		switch (format)
 		{
-			return multisampled ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
+		case FramebufferTextureFormat::DEPTH24STENCIL8:  return true;
 		}
 
-		static void CreateTextures(bool multisampled, uint32_t* outID, uint32_t count)
+		return false;
+	}
+
+	static GLenum ConvertOpenGLFramebufferInternalFormat(FramebufferTextureFormat format)
+	{
+		switch (format)
 		{
-			glCreateTextures(TextureTarget(multisampled), count, outID);
+		case FramebufferTextureFormat::RGBA8:       return GL_RGBA8;
+		case FramebufferTextureFormat::RGBA16F:     return GL_RGBA16F;
+		case FramebufferTextureFormat::RED_INTEGER: return GL_R32I;
+		case FramebufferTextureFormat::DEPTH24STENCIL8: return GL_DEPTH24_STENCIL8;
 		}
 
-		static void BindTexture(bool multisampled, uint32_t id)
+		FR_CORE_ASSERT(false, "Unknown FrameBuffer Format!");
+		return 0;
+	}
+
+	static GLenum ConvertOpenGLFramebufferDataFormat(FramebufferTextureFormat format)
+	{
+		switch (format)
 		{
-			glBindTexture(TextureTarget(multisampled), id);
+		case FramebufferTextureFormat::RGBA8:       return GL_RGBA;
+		case FramebufferTextureFormat::RGBA16F:     return GL_RGBA;
+		case FramebufferTextureFormat::RED_INTEGER: return GL_RED_INTEGER;
+		case FramebufferTextureFormat::DEPTH24STENCIL8: return GL_DEPTH_STENCIL;
 		}
 
-		static void AttachColorTexture(uint32_t id, int samples, GLenum format, uint32_t width, uint32_t height, int index)
+		FR_CORE_ASSERT(false, "Unknown FrameBuffer Format!");
+		return 0;
+	}
+
+	static void AttachColorTexture(uint32_t id, int samples, FramebufferTextureSpecification spec, uint32_t width, uint32_t height, int index)
+	{
+		bool multisampled = samples > 1;
+		auto texformat = ConvertOpenGLFramebufferInternalFormat(spec.Format);
+		if (multisampled)
 		{
-			bool multisampled = samples > 1;
-			if (multisampled)
-			{
-				glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, format, width, height, GL_TRUE);
-			}
-			else
-			{
-				glTexStorage2D(GL_TEXTURE_2D, 1, format, width, height);
+			glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, texformat, width, height, GL_TRUE);
+		}
+		else
+		{
+			auto filter = GLUtils::ConvertOpenGLTextureFilter(spec.Filter);
+			auto wrap = GLUtils::ConvertOpenGLTextureWrap(spec.Wrap);
 
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-			}
+			glTexStorage2D(GL_TEXTURE_2D, 1, texformat, width, height);
 
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + index, TextureTarget(multisampled), id, 0);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, wrap);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap);
 		}
 
-		static void AttachDepthTexture(uint32_t id, int samples, GLenum format, GLenum attachmentType, uint32_t width, uint32_t height)
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + index, TextureTarget(multisampled), id, 0);
+	}
+
+	static void AttachDepthTexture(uint32_t id, int samples, FramebufferTextureSpecification spec, uint32_t width, uint32_t height)
+	{
+		bool multisampled = samples > 1;
+		auto texformat = ConvertOpenGLFramebufferInternalFormat(spec.Format);
+		if (multisampled)
 		{
-			bool multisampled = samples > 1;
-			if (multisampled)
-			{
-				glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, format, width, height, GL_TRUE);
-			}
-			else
-			{
-				glTexStorage2D(GL_TEXTURE_2D, 1, format, width, height);
+			glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, texformat, width, height, GL_TRUE);
+		}
+		else
+		{
+			auto filter = GLUtils::ConvertOpenGLTextureFilter(spec.Filter);
+			auto wrap = GLUtils::ConvertOpenGLTextureWrap(spec.Wrap);
 
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-			}
+			glTexStorage2D(GL_TEXTURE_2D, 1, texformat, width, height);
 
-			glFramebufferTexture2D(GL_FRAMEBUFFER, attachmentType, TextureTarget(multisampled), id, 0);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, wrap);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap);
 		}
 
-		static bool IsDepthFormat(FramebufferTextureFormat format)
-		{
-			switch (format)
-			{
-			case FramebufferTextureFormat::DEPTH24STENCIL8:  return true;
-			}
-
-			return false;
-		}
-
-		static GLenum FramebufferTextureFormatToGL(FramebufferTextureFormat format)
-		{
-			switch (format)
-			{
-			case FramebufferTextureFormat::RGBA8:       return GL_RGBA8;
-			case FramebufferTextureFormat::RGBA16F:     return GL_RGBA16F;
-			case FramebufferTextureFormat::RED_INTEGER: return GL_RED_INTEGER;
-			}
-
-			FR_CORE_ASSERT(false, "Unknown FrameBuffer Format!");
-			return 0;
-		}
-	};
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, TextureTarget(multisampled), id, 0);
+	}
 
 	GLFramebuffer::GLFramebuffer(const FramebufferSpecification& spec) :
 		m_Specification(spec)
 	{
 		for (auto spec : m_Specification.Attachments.Attachments)
 		{
-			if (!Utils::IsDepthFormat(spec.TextureFormat))
+			if (!IsDepthFormat(spec.Format))
 				m_ColorAttachmentSpecifications.emplace_back(spec);
 			else
 				m_DepthAttachmentSpecification = spec;
@@ -137,36 +157,20 @@ namespace Fluoresce {
 		if (m_ColorAttachmentSpecifications.size())
 		{
 			m_ColorAttachments.resize(m_ColorAttachmentSpecifications.size());
-			Utils::CreateTextures(multisample, m_ColorAttachments.data(), m_ColorAttachments.size());
+			CreateTextures(multisample, m_ColorAttachments.data(), m_ColorAttachments.size());
 
 			for (size_t i = 0; i < m_ColorAttachments.size(); i++)
 			{
-				Utils::BindTexture(multisample, m_ColorAttachments[i]);
-				switch (m_ColorAttachmentSpecifications[i].TextureFormat)
-				{
-				case FramebufferTextureFormat::RGBA8:
-					Utils::AttachColorTexture(m_ColorAttachments[i], m_Specification.Samples, GL_RGBA8, m_Specification.Width, m_Specification.Height, i);
-					break;
-				case FramebufferTextureFormat::RGBA16F:
-					Utils::AttachColorTexture(m_ColorAttachments[i], m_Specification.Samples, GL_RGBA16F, m_Specification.Width, m_Specification.Height, i);
-					break;
-				case FramebufferTextureFormat::RED_INTEGER:
-					Utils::AttachColorTexture(m_ColorAttachments[i], m_Specification.Samples, GL_R32I, m_Specification.Width, m_Specification.Height, i);
-					break;
-				}
+				BindTexture(multisample, m_ColorAttachments[i]);
+				AttachColorTexture(m_ColorAttachments[i], m_Specification.Samples, m_ColorAttachmentSpecifications[i], m_Specification.Width, m_Specification.Height, i);
 			}
 		}
 
-		if (m_DepthAttachmentSpecification.TextureFormat != FramebufferTextureFormat::UndefineFormat)
+		if (m_DepthAttachmentSpecification.Format != FramebufferTextureFormat::UndefineFormat)
 		{
-			Utils::CreateTextures(multisample, &m_DepthAttachment, 1);
-			Utils::BindTexture(multisample, m_DepthAttachment);
-			switch (m_DepthAttachmentSpecification.TextureFormat)
-			{
-			case FramebufferTextureFormat::DEPTH24STENCIL8:
-				Utils::AttachDepthTexture(m_DepthAttachment, m_Specification.Samples, GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL_ATTACHMENT, m_Specification.Width, m_Specification.Height);
-				break;
-			}
+			CreateTextures(multisample, &m_DepthAttachment, 1);
+			BindTexture(multisample, m_DepthAttachment);
+			AttachDepthTexture(m_DepthAttachment, m_Specification.Samples, m_DepthAttachmentSpecification, m_Specification.Width, m_Specification.Height);
 		}
 
 		if (m_ColorAttachments.size() > 1)
@@ -231,7 +235,7 @@ namespace Fluoresce {
 		FR_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size(), "Could not ClearAttachment!");
 
 		auto& spec = m_ColorAttachmentSpecifications[attachmentIndex];
-		glClearTexImage(m_ColorAttachments[attachmentIndex], 0, Utils::FramebufferTextureFormatToGL(spec.TextureFormat), GL_INT, &value);
+		glClearTexImage(m_ColorAttachments[attachmentIndex], 0, ConvertOpenGLFramebufferDataFormat(spec.Format), GL_INT, &value);
 	}
 
 	void GLFramebuffer::BindAttachmentToTextureSlot(uint32 slot, uint32 index) const

@@ -16,7 +16,7 @@
 namespace Fluoresce {
 
 	// GL”Ä—p‹@”\
-	class GLUtil
+	class GLUtils
 	{
 	public:
 		static GLbitfield ConvertOpenGLClearCommand(ClearCommand command)
