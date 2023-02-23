@@ -253,6 +253,7 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Graphics\Mesh.h" />
+    <ClInclude Include="src\Engine\Graphics\TextureDefine.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dependencies\ImGuizmo\src\ImGuizmo.cpp">

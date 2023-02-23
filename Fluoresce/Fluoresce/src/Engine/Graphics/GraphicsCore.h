@@ -3,7 +3,7 @@
 // Describe : 	グラフィックスコア												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/04/10														// 
-// Modify Date : 2023/02/11														// 
+// Modify Date : 2023/02/23														// 
 //==============================================================================//
 #pragma once
 
@@ -22,6 +22,12 @@ namespace Fluoresce {
 		DepthTest_Greater,
 		DepthTest_NotEqual,
 		DepthTest_Gequal,
+	};
+
+	enum class MemoryBarrierOption
+	{
+		ShaderStorageBarriers,
+		TextureBarriers
 	};
 
 	// グラフィックコア
@@ -55,6 +61,8 @@ namespace Fluoresce {
 
 		virtual void SetDepthTest(bool enable) = 0;
 		virtual void SetDepthTestFunc(DepthTestFunc func) = 0;
+
+		virtual void SetMemoryBarrier(MemoryBarrierOption barriers) = 0;
 
 		virtual const APICapabilities& GetCapabilities() const = 0;
 

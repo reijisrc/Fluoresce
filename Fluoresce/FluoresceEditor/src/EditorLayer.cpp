@@ -50,6 +50,8 @@ namespace Fluoresce {
 
 			m_ContentBrowserPanel.Init();
 
+			m_InvertColorShader = ComputeShader::Create("resources/shaders/Grayscale_Comp.glsl");
+
 			// MSAAフレームバッファ
 			FramebufferSpecification baseFBSpec;
 			baseFBSpec.Attachments = { FramebufferTextureFormat::RGBA16F, FramebufferTextureFormat::Depth };
@@ -131,24 +133,30 @@ namespace Fluoresce {
 				break;
 			}
 
-			// MSAA
+			// MSAAコピー
 			if (m_ViewportSamples > 1)
 			{
 				m_HDRBuffer->BlitMultisampledBuffer(m_IntermediateBuffer);
 				m_HDRBuffer->Unbind();
+			}
 
-				// ポストプロセス
-				m_PostProcessingBuffer->Bind();
-				postProcessingRenderer.Submit(m_IntermediateBuffer, m_Exposure);
-				m_PostProcessingBuffer->Unbind();
-			}
-			else
+
+			auto& baseBuffer = (m_ViewportSamples > 1) ? m_IntermediateBuffer : m_HDRBuffer;
+
+			// コンピュートシェーダ処理段階
+			if (m_GrayScale)
 			{
-				// ポストプロセス
-				m_PostProcessingBuffer->Bind();
-				postProcessingRenderer.Submit(m_HDRBuffer, m_Exposure);
-				m_PostProcessingBuffer->Unbind();
+				m_InvertColorShader->Bind();
+				m_InvertColorShader->BindImageTexture(0, baseBuffer->GetColorAttachmentRendererID(0), 0, ImageTextureAccessFlag::Read, TextureFormat::RGBA16f);
+				m_InvertColorShader->BindImageTexture(1, baseBuffer->GetColorAttachmentRendererID(0), 0, ImageTextureAccessFlag::Write, TextureFormat::RGBA16f);
+				m_InvertColorShader->DispatchCompute(static_cast<uint32>(m_ViewportSize.x / 16.0f), static_cast<uint32>(m_ViewportSize.y / 9.0f), 1);
+				RenderCommand::SetMemoryBarrier(MemoryBarrierOption::TextureBarriers);
 			}
+
+			// ポストプロセス
+			m_PostProcessingBuffer->Bind();
+			postProcessingRenderer.Submit(baseBuffer, m_Exposure);
+			m_PostProcessingBuffer->Unbind();
 		}
 
 		void EditorLayer::OnImguiRender()
@@ -506,6 +514,9 @@ namespace Fluoresce {
 
 				if (ImGui::TreeNodeEx((void*)2754597, ImGuiTreeNodeFlags_DefaultOpen | treeNodeFlags, "Scene Setting"))
 				{
+					ImGui::Text("ViewportWidth:  %.2f", m_ViewportSize.x);
+					ImGui::Text("ViewportHeight: %.2f", m_ViewportSize.y);
+					ImGui::Checkbox("GrayScale", &m_GrayScale);
 					ImGui::DragFloat("Exposure", &m_Exposure, 0.01f, 0.0f, 10.0f);
 					ImGui::TreePop();
 				}

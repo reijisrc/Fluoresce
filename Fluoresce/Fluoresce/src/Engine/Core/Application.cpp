@@ -3,7 +3,7 @@
 // Describe : 	アプリケーション												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/03/22														// 
-// Modify Date : 2022/05/14														// 
+// Modify Date : 2023/02/23														// 
 //==============================================================================//
 #include "frpch.h"
 #include "Engine/Core/Application.h"
@@ -24,7 +24,7 @@ namespace Fluoresce {
 		if (!m_Specification.WorkingDirectory.empty())
 			std::filesystem::current_path(m_Specification.WorkingDirectory);
 
-		m_Window = Window::Create(WindowProps(m_Specification.Name));
+		m_Window = Window::Create(WindowProps(m_Specification.Name, m_Specification.WindowWidth, m_Specification.WindowHeight));
 		m_Window->SetEventCallBack(FR_BIND_EVENT_FN(Application::OnEvent));
 
 		RenderPipeline::Init();

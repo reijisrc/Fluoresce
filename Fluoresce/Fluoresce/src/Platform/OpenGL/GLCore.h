@@ -3,7 +3,7 @@
 // Describe : 	GLÉRÉA															// 
 // Author : Ding Qi																// 
 // Create Date : 2022/04/10														// 
-// Modify Date : 2023/02/10														// 
+// Modify Date : 2023/02/23														// 
 //==============================================================================//
 #pragma once
 
@@ -27,6 +27,8 @@ namespace Fluoresce
 
 		virtual void SetDepthTest(bool enable) override;
 		virtual void SetDepthTestFunc(DepthTestFunc func) override;
+
+		virtual void SetMemoryBarrier(MemoryBarrierOption barriers) override;
 
 		virtual const APICapabilities& GetCapabilities() const override;
 	};

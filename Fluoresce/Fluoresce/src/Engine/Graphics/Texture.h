@@ -7,22 +7,9 @@
 //==============================================================================//
 #pragma once
 
+#include "Engine/Graphics/TextureDefine.h"
+
 namespace Fluoresce {
-
-	enum class TextureFormat
-	{
-		None = 0,
-		RGB = 1,
-		RGBA = 2,
-		RGBA16f = 4,
-	};
-
-	enum class TextureWrap
-	{
-		None = 0,
-		Clamp = 1,
-		Repeat = 2
-	};
 
 	// テクスチャオプション
 	struct TexturetOption
@@ -31,7 +18,6 @@ namespace Fluoresce {
 		TextureWrap   wrap = TextureWrap::Clamp;
 		bool          sRGB = false;
 	};
-
 
 	// テクスチャ
 	class Texture

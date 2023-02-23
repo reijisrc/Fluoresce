@@ -3,7 +3,7 @@
 // Describe : 	GLÉRÉA															// 
 // Author : Ding Qi																// 
 // Create Date : 2022/04/10														// 
-// Modify Date : 2023/02/10														// 
+// Modify Date : 2023/02/23														// 
 //==============================================================================//
 #include "frpch.h"
 #include "Platform/OpenGL/GLCore.h"
@@ -133,6 +133,23 @@ namespace Fluoresce
 		default:
 			break;
 		}
+	}
+
+	void GLCore::SetMemoryBarrier(MemoryBarrierOption barriers)
+	{
+		GLbitfield glbarriers;
+		switch (barriers)
+		{
+		case Fluoresce::MemoryBarrierOption::ShaderStorageBarriers:
+			glbarriers = GL_SHADER_STORAGE_BARRIER_BIT;
+			break;
+		case Fluoresce::MemoryBarrierOption::TextureBarriers:
+			glbarriers = (GL_SHADER_IMAGE_ACCESS_BARRIER_BIT | GL_TEXTURE_FETCH_BARRIER_BIT);
+			break;
+		default:
+			break;
+		}
+		glMemoryBarrier(glbarriers);
 	}
 
 	const GraphicsCore::APICapabilities& GLCore::GetCapabilities() const

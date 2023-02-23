@@ -66,6 +66,7 @@ namespace Fluoresce {
 		virtual void SetMat4(const std::string& name, const Mat4& mat) override;
 
 		virtual void DispatchCompute(uint32 groupsX, uint32 groupsY, uint32 groupsZ) const override;
+		virtual void BindImageTexture(uint32 slot, uint32 rendererID, uint32 minMapLevel, ImageTextureAccessFlag flag, TextureFormat format) const override;
 	private:
 		std::string PreProcess(const std::string& source);
 		void Compile(std::string& shaderSources);

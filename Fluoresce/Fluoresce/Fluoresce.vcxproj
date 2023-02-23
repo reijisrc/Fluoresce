@@ -200,6 +200,7 @@
     <ClInclude Include="src\Engine\Scene\SceneScriptTask.h" />
     <ClInclude Include="src\Engine\Scene\SceneSerializer.h" />
     <ClInclude Include="src\Engine\Scene\ScriptableEntity.h" />
+    <ClInclude Include="src\Engine\Graphics\TextureDefine.h" />
     <ClInclude Include="src\Engine\Utils\FileUtil.h" />
     <ClInclude Include="src\Engine\Utils\GlmUtil.h" />
     <ClInclude Include="src\Fluoresce.h" />

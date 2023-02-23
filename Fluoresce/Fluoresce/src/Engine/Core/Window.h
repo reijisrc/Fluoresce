@@ -3,7 +3,7 @@
 // Describe : 	モジュール:ウインドウ											// 
 // Author : Ding Qi																// 
 // Create Date : 2022/03/22														// 
-// Modify Date : 2022/03/26														// 
+// Modify Date : 2023/02/23														// 
 //==============================================================================//
 #pragma once
 
@@ -22,8 +22,8 @@ namespace Fluoresce {
 		uint32 Height;
 
 		WindowProps(const std::string& title,
-			uint32_t width = 1600,
-			uint32_t height = 900)
+			uint32_t width,
+			uint32_t height)
 			: Title(title), Width(width), Height(height)
 		{
 
@@ -51,6 +51,6 @@ namespace Fluoresce {
 
 		virtual float32 GetWindowTime() const = 0;
 
-		static Scope<Window> Create(const WindowProps& props = WindowProps("Fluoresce Engine"));
+		static Scope<Window> Create(const WindowProps& props);
 	};
 }

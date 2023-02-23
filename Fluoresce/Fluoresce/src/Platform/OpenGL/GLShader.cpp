@@ -29,6 +29,18 @@ namespace Fluoresce {
 		return 0;
 	}
 
+	static GLenum ConvertOpenGLTextureInternalFormat(TextureFormat format)
+	{
+		switch (format)
+		{
+		case Fluoresce::TextureFormat::RGB:     return GL_RGB8;
+		case Fluoresce::TextureFormat::RGBA:    return GL_RGBA8;
+		case Fluoresce::TextureFormat::RGBA16f:    return GL_RGBA16F;
+		}
+		FR_CORE_ASSERT(false, "Unknown texture format!");
+		return 0;
+	}
+
 	static void UploadUniformInt(uint32 renderId, const std::string& name, sint32 value)
 	{
 		auto location = glGetUniformLocation(renderId, name.c_str());
@@ -351,6 +363,26 @@ namespace Fluoresce {
 		glDispatchCompute(groupsX, groupsY, groupsZ);
 	}
 
+	void GLComputeShader::BindImageTexture(uint32 bingding, uint32 rendererID, uint32 minMapLevel, ImageTextureAccessFlag flag, TextureFormat format) const
+	{
+		GLenum glformat = ConvertOpenGLTextureInternalFormat(format);
+
+		switch (flag)
+		{
+		case Fluoresce::ImageTextureAccessFlag::Read:
+			glBindImageTexture(bingding, rendererID, minMapLevel, GL_FALSE, 0, GL_READ_ONLY, glformat);
+			break;
+		case Fluoresce::ImageTextureAccessFlag::Write:
+			glBindImageTexture(bingding, rendererID, minMapLevel, GL_FALSE, 0, GL_WRITE_ONLY, glformat);
+			break;
+		case Fluoresce::ImageTextureAccessFlag::ReadWrite:
+			glBindImageTexture(bingding, rendererID, minMapLevel, GL_FALSE, 0, GL_READ_WRITE, glformat);
+			break;
+		default:
+			break;
+		}
+	}
+
 	std::string GLComputeShader::PreProcess(const std::string& source)
 	{
 		std::string shaderSources;
@@ -365,7 +397,7 @@ namespace Fluoresce {
 			FR_CORE_ASSERT(eol != std::string::npos, "Syntax error");
 			size_t begin = pos + typeTokenLength;
 			std::string type = source.substr(begin, eol - begin);
-			FR_CORE_ASSERT(GetShaderTypeFromString(type) != GL_COMPUTE_SHADER, "Invalid shader type specified");
+			FR_CORE_ASSERT(GetShaderTypeFromString(type) == GL_COMPUTE_SHADER, "Invalid shader type specified");
 
 			size_t nextLinePos = source.find_first_not_of(typeTokenEnd, eol);
 			FR_CORE_ASSERT(nextLinePos != std::string::npos, "Syntax error");
@@ -428,6 +460,8 @@ namespace Fluoresce {
 		}
 
 		glDetachShader(program, shader);
+
+		m_RendererID = program;
 	}
 
 }

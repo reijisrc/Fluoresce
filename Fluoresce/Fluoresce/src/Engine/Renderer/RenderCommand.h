@@ -65,6 +65,10 @@ namespace Fluoresce {
 			s_GraphicsCore->SetDepthTestFunc(func);
 		}
 
+		static void SetMemoryBarrier(MemoryBarrierOption barriers)
+		{
+			s_GraphicsCore->SetMemoryBarrier(barriers);
+		}
 	private:
 		static Scope<GraphicsCore> s_GraphicsCore;
 	};

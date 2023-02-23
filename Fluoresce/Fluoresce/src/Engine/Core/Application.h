@@ -3,7 +3,7 @@
 // Describe : 	アプリケーション												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/03/22														// 
-// Modify Date : 2022/05/29														// 
+// Modify Date : 2023/02/23														// 
 //==============================================================================//
 #pragma once
 
@@ -38,6 +38,8 @@ namespace Fluoresce {
 	struct ApplicationSpecification
 	{
 		std::string Name = "Fluoresce";
+		uint32 WindowWidth = 1600;
+		uint32 WindowHeight = 900;
 		std::string WorkingDirectory;
 		CommandLineArgs CmdLineArgs;
 	};

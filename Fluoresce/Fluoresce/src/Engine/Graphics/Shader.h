@@ -7,6 +7,8 @@
 //==============================================================================//
 #pragma once
 
+#include "Engine/Graphics/TextureDefine.h"
+
 namespace Fluoresce {
 
 	enum class ShaderType
@@ -45,11 +47,19 @@ namespace Fluoresce {
 		static Ref<EffectShader> CreateBySrc(const std::string& vertexSrc, const std::string& fragSrc);
 	};
 
+	enum class ImageTextureAccessFlag
+	{
+		Read = 0,
+		Write,
+		ReadWrite
+	};
+
 	// コンピュートシェーダ
 	class ComputeShader : public Shader
 	{
 	public:
 		virtual void DispatchCompute(uint32 groupsX, uint32 groupsY, uint32 groupsZ) const = 0;
+		virtual void BindImageTexture(uint32 bingding, uint32 rendererID, uint32 minMapLevel, ImageTextureAccessFlag flag, TextureFormat format) const = 0;
 	public:
 		static Ref<ComputeShader> Create(const std::string& filePath);
 		static Ref<ComputeShader> CreateBySrc(const std::string& computeSrc);

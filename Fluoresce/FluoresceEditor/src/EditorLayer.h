@@ -86,6 +86,9 @@ namespace Fluoresce {
 			Ref<Texture2D> m_IconStop;
 			Ref<Texture2D> m_IconPause;
 
+			bool			   m_GrayScale = false;
+			Ref<ComputeShader> m_InvertColorShader;
+
 			EditorCamera m_EditorCamera;
 			PanelFlag	m_PanelFlag;
 
