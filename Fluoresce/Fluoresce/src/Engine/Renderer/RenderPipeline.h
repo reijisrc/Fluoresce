@@ -3,7 +3,7 @@
 // Describe : 	レンダーパイプライン											// 
 // Author : Ding Qi																// 
 // Create Date : 2022/04/23														// 
-// Modify Date : 2023/02/11														// 
+// Modify Date : 2023/03/04														// 
 //==============================================================================//
 #pragma once
 
@@ -16,25 +16,46 @@
 
 namespace Fluoresce 
 {
-	class ConstBuffer
+	class ConstantBuffer
 	{
 	public:
-		enum class UniformBufferIndex
+		enum ConstantBufferIndex : uint32 
 		{
 			Camera = 0,
 			HdrEnvironment = 1,
 			Max,
 		};
 
+		static uint32 GetMaxSize();
+
 	public:
 		void Init();
 		void ShutDown();
 
-		Ref<UniformBuffer> GetUniformBuffer(UniformBufferIndex index);
-		uint32 GetSize() const { return m_Size; }
+		template<typename T>
+		void SetData(ConstantBufferIndex index, T& data)
+		{
+			uint32 idx = static_cast<uint32>(index);
+
+			if (idx < ConstantBuffer::ConstantBufferIndex::Max)
+			{
+				uint32 size = 0;
+				for (uint32 i = 0; i < idx; i++)
+				{
+					size += m_UniformBuffers.at(i)->GetSize();
+				}
+
+				uint32 datasize = sizeof(T);
+				if (size + datasize < GetMaxSize())
+				{
+					m_UniformBuffers.at(idx)->SetData(&data, datasize);
+				}
+			}
+		}
+
+		Ref<UniformBuffer> GetBuffer(ConstantBufferIndex index);
 	private:
 		std::vector<Ref<UniformBuffer>> m_UniformBuffers;
-		uint32 m_Size;
 	};
 
 	//	レンダーパイプライン
@@ -61,14 +82,14 @@ namespace Fluoresce
 		static void RequestClearAllBatchAssets();
 
 		static Ref<Texture2D> GetWhiteTexture();
-		static ConstBuffer& GetConstBuffers();
+		static ConstantBuffer& GetConstantBuffers();
 		static LineRenderer& GetLineRenderer();
 		static SpriteRenderer& GetSpriteRenderer();
 		static SkyboxRenderer& GetSkyboxRenderer();
 		static PostProcessingRenderer& GetPostProcessingRenderer();
 	private:
 		static Ref<Texture2D> s_WhiteTexture;
-		static Scope<ConstBuffer> s_ConstBuffers;
+		static Scope<ConstantBuffer> s_ConstantBuffers;
 		static Scope<LineRenderer> s_LineRenderer;
 		static Scope<SpriteRenderer> s_SpriteRenderer;
 		static Scope<SkyboxRenderer> s_SkyboxRenderer;

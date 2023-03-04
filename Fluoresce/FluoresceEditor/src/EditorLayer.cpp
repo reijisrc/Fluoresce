@@ -526,6 +526,8 @@ namespace Fluoresce {
 					if (EditorCore::GetEditorState() == EditorState::Edit)
 					{
 						Vec3 pos = m_EditorCamera.GetFocusPoint();
+						ImGui::Text("Yaw: %.2f", m_EditorCamera.GetYaw());
+						ImGui::Text("Pitch: %.2f", m_EditorCamera.GetPitch());
 						if (ImguiUI::DrawVec3Controller("FocusPoint", pos, 0.0f, 80.0f))
 						{
 							m_EditorCamera.SetFocusPoint(pos);

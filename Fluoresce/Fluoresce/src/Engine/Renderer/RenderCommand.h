@@ -3,7 +3,7 @@
 // Describe :	レンダーコマンド												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/08/15														// 
-// Modify Date : 2023/02/23														// 
+// Modify Date : 2023/03/04														// 
 //==============================================================================//
 #pragma once
 
@@ -35,7 +35,7 @@ namespace Fluoresce {
 			s_GraphicsCore->SetClearColor(color);
 		}
 
-		static void Clear(ClearCommand command = ClearCommand::CommandDefault)
+		static void Clear(ClearCommand command = ClearCommand::ClearCommand_Default)
 		{
 			s_GraphicsCore->Clear(command);
 		}

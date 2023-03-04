@@ -3,7 +3,7 @@
 // Describe :	GLシェーダ														// 
 // Author : Ding Qi																// 
 // Create Date : 2022/08/13														// 
-// Modify Date : 2023/02/23														// 
+// Modify Date : 2023/03/04														// 
 //==============================================================================//
 #include "frpch.h"
 #include "Platform/OpenGL/GLShader.h"
@@ -155,14 +155,19 @@ namespace Fluoresce {
 		glUseProgram(0);
 	}
 
+	void GLEffectShader::SetIntArray(const std::string& name, sint32* values, uint32_t count)
+	{
+		UploadUniformIntArray(m_RendererID, name, values, count);
+	}
+
 	void GLEffectShader::SetInt(const std::string& name, sint32 value)
 	{
 		UploadUniformInt(m_RendererID, name, value);
 	}
 
-	void GLEffectShader::SetIntArray(const std::string& name, sint32* values, uint32_t count)
+	void GLEffectShader::SetFloatArray(const std::string& name, float32* values, uint32_t count)
 	{
-		UploadUniformIntArray(m_RendererID, name, values, count);
+		UploadUniformFloatArray(m_RendererID, name, values, count);
 	}
 
 	void GLEffectShader::SetFloat(const std::string& name, float32 value)
@@ -170,9 +175,9 @@ namespace Fluoresce {
 		UploadUniformFloat(m_RendererID, name, value);
 	}
 
-	void GLEffectShader::SetFloatArray(const std::string& name, float32* values, uint32_t count)
+	void GLEffectShader::SetFloat2(const std::string& name, const Vec2& vec2)
 	{
-		UploadUniformFloatArray(m_RendererID, name, values, count);
+		UploadUniformFloat2(m_RendererID, name, vec2);
 	}
 
 	void GLEffectShader::SetFloat3(const std::string& name, const Vec3& vec3)
@@ -318,14 +323,19 @@ namespace Fluoresce {
 		glUseProgram(0);
 	}
 
+	void GLComputeShader::SetIntArray(const std::string& name, sint32* values, uint32_t count)
+	{
+		UploadUniformIntArray(m_RendererID, name, values, count);
+	}
+
 	void GLComputeShader::SetInt(const std::string& name, sint32 value)
 	{
 		UploadUniformInt(m_RendererID, name, value);
 	}
 
-	void GLComputeShader::SetIntArray(const std::string& name, sint32* values, uint32_t count)
+	void GLComputeShader::SetFloatArray(const std::string& name, float32* values, uint32_t count)
 	{
-		UploadUniformIntArray(m_RendererID, name, values, count);
+		UploadUniformFloatArray(m_RendererID, name, values, count);
 	}
 
 	void GLComputeShader::SetFloat(const std::string& name, float32 value)
@@ -333,9 +343,9 @@ namespace Fluoresce {
 		UploadUniformFloat(m_RendererID, name, value);
 	}
 
-	void GLComputeShader::SetFloatArray(const std::string& name, float32* values, uint32_t count)
+	void GLComputeShader::SetFloat2(const std::string& name, const Vec2& vec2)
 	{
-		UploadUniformFloatArray(m_RendererID, name, values, count);
+		UploadUniformFloat2(m_RendererID, name, vec2);
 	}
 
 	void GLComputeShader::SetFloat3(const std::string& name, const Vec3& vec3)

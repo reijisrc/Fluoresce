@@ -3,7 +3,7 @@
 // Describe : 	グラフィックスコア												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/04/10														// 
-// Modify Date : 2023/02/23														// 
+// Modify Date : 2023/03/04														// 
 //==============================================================================//
 #pragma once
 
@@ -11,16 +11,18 @@
 
 namespace Fluoresce {
 
+	// クリアコマンド
 	enum ClearCommand
 	{
-		CommandNone = 0,
-		CommandClearColor = BIT(0),
-		CommandClearDepth = BIT(1),
-		CommandClearStencil = BIT(2),
+		ClearCommand_None = 0,
+		ClearCommand_Color = BIT(0),
+		ClearCommand_Depth = BIT(1),
+		ClearCommand_Stencil = BIT(2),
 
-		CommandDefault = (CommandClearColor | CommandClearDepth)
+		ClearCommand_Default = (ClearCommand_Color | ClearCommand_Depth)
 	};
 
+	// ZバッファFunc
 	enum class DepthTestFunc
 	{
 		DepthTest_Default = 0,
@@ -34,10 +36,21 @@ namespace Fluoresce {
 		DepthTest_Gequal,
 	};
 
+	// GPUメモリバリア
 	enum class GPUMemoryBarrier
 	{
 		Barrier_ShaderStorage,
 		Barrier_Texture,
+	};
+
+	// インダイレクト描画コマンド
+	struct DrawIndirectCommand
+	{
+		uint32 VertexCount;
+		uint32 InstanceCount;
+		uint32 FirstIndex;
+		uint32 BaseVertex;
+		uint32 BaseInstance;
 	};
 
 	// グラフィックコア
@@ -53,8 +66,9 @@ namespace Fluoresce {
 		struct APICapabilities
 		{
 			sint32 MaxSamples = 0;
-			float32 MaxAnisotropy = 0.0f;
+			sint32 MaxUniformBufferSize = 0;
 			sint32 MaxTextureUnits = 0;
+			float32 MaxAnisotropy = 0.0f;
 		};
 
 	public:

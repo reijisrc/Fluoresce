@@ -3,7 +3,7 @@
 // Describe :	ポストプロセスレンダラー										// 
 // Author : Ding Qi																// 
 // Create Date : 2023/02/11														// 
-// Modify Date : 2023/02/20														// 
+// Modify Date : 2023/03/04														// 
 //==============================================================================//
 #include "frpch.h"
 #include "Engine/Renderer/PostProcessingRenderer.h"
@@ -62,13 +62,10 @@ namespace Fluoresce {
 
 	void PostProcessingRenderer::Submit(const Ref<Framebuffer>& framebuffer, float32 exposure)
 	{
-		if (auto ubo = RenderPipeline::GetConstBuffers().GetUniformBuffer(ConstBuffer::UniformBufferIndex::HdrEnvironment); ubo)
-		{
-			RenderPipeline::HdrEnvironmentData environment;
-			environment.Gamma = gamma;
-			environment.Exposure = exposure;
-			ubo->SetData(&environment, sizeof(RenderPipeline::HdrEnvironmentData));
-		}
+		RenderPipeline::HdrEnvironmentData environment;
+		environment.Gamma = gamma;
+		environment.Exposure = exposure;
+		RenderPipeline::GetConstantBuffers().SetData<RenderPipeline::HdrEnvironmentData>(ConstantBuffer::ConstantBufferIndex::HdrEnvironment, environment);
 
 		m_Data->ToneMappingShader->Bind();
 		framebuffer->BindAttachmentToTextureSlot(0);

@@ -3,7 +3,7 @@
 // Describe :	GL”Ä—p‹@”\														// 
 // Author : Ding Qi																// 
 // Create Date : 2023/02/23														// 
-// Modify Date : 2023/02/23														// 
+// Modify Date : 2023/03/04														// 
 //==============================================================================//
 #pragma once
 
@@ -22,17 +22,17 @@ namespace Fluoresce {
 		static GLbitfield ConvertOpenGLClearCommand(ClearCommand command)
 		{
 			GLbitfield glcommand = 0;
-			if (command || ClearCommand::CommandClearColor)
+			if (command || ClearCommand::ClearCommand_Color)
 			{
 				glcommand |= GL_COLOR_BUFFER_BIT;
 			}
 
-			if (command || ClearCommand::CommandClearDepth)
+			if (command || ClearCommand::ClearCommand_Depth)
 			{
 				glcommand |= GL_DEPTH_BUFFER_BIT;
 			}
 
-			if (command || ClearCommand::CommandClearStencil)
+			if (command || ClearCommand::ClearCommand_Stencil)
 			{
 				glcommand |= GL_STENCIL_BUFFER_BIT;
 			}

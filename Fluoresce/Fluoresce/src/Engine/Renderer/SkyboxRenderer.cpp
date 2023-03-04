@@ -3,7 +3,7 @@
 // Describe :	スプライトレンダラー											// 
 // Author : Ding Qi																// 
 // Create Date : 2023/02/11														// 
-// Modify Date : 2023/02/20														// 
+// Modify Date : 2023/03/04														// 
 //==============================================================================//
 #include "frpch.h"
 #include "Engine/Renderer/SkyboxRenderer.h"
@@ -65,10 +65,9 @@ namespace Fluoresce {
 		Mat4 proj = camera.GetProjection();
 		Mat4 vp = proj * view;
 
-		if (auto ubo = RenderPipeline::GetConstBuffers().GetUniformBuffer(ConstBuffer::UniformBufferIndex::Camera); ubo)
-		{
-			ubo->SetData(&vp, sizeof(RenderPipeline::CameraData));
-		}
+		RenderPipeline::CameraData data;
+		data.ViewProjection = vp;
+		RenderPipeline::GetConstantBuffers().SetData<RenderPipeline::CameraData>(ConstantBuffer::ConstantBufferIndex::Camera, data);
 
 		m_Data->Shader->Bind();
 		m_Data->SkyboxTexture->Bind(0);
@@ -79,10 +78,9 @@ namespace Fluoresce {
 
 	void SkyboxRenderer::Submit(const EditorCamera& camera)
 	{
-		if (auto ubo = RenderPipeline::GetConstBuffers().GetUniformBuffer(ConstBuffer::UniformBufferIndex::Camera); ubo)
-		{
-			ubo->SetData(&camera.GetViewProjection(), sizeof(RenderPipeline::CameraData));
-		}
+		RenderPipeline::CameraData data;
+		data.ViewProjection = camera.GetViewProjection();
+		RenderPipeline::GetConstantBuffers().SetData<RenderPipeline::CameraData>(ConstantBuffer::ConstantBufferIndex::Camera, data);
 
 		m_Data->Shader->Bind();
 		m_Data->SkyboxTexture->Bind(0);

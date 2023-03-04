@@ -32,7 +32,7 @@ namespace Fluoresce {
 		void SetDistance(float32 distance) { m_Distance = distance; }
 
 		void SetViewportSize(float32 width, float32 height) { m_ViewportWidth = width; m_ViewportHeight = height; UpdateProjection(); }
-		void SetFocusPoint(const Vec3& focuspoint, bool recalculateView = false);
+		void SetFocusPoint(const Vec3& focuspoint);
 		void ResetView(float32 aspect);
 
 		const Mat4& GetViewMatrix() const { return m_ViewMatrix; }

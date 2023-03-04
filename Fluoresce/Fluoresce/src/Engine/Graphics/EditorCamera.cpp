@@ -49,13 +49,26 @@ namespace Fluoresce {
 		dispatcher.Dispatch<MouseScrolledEvent>(FR_BIND_EVENT_FN(EditorCamera::OnMouseScroll));
 	}
 
-	void EditorCamera::SetFocusPoint(const Vec3& focuspoint, bool recalculateView)
+	void EditorCamera::SetFocusPoint(const Vec3& focuspoint)
 	{
 		m_FocusPoint = focuspoint;
-		if (recalculateView)
-		{
-			UpdateView();
-		}
+
+		Vec3 forward = glm::normalize(m_FocusPoint - m_Position);
+		Vec3 right = glm::normalize(glm::cross(Vec3(0.0f, 1.0f, 0.0f), forward));
+		Vec3 up = glm::normalize(glm::cross(forward, right));
+
+		Mat4 mat = glm::lookAt(
+			m_Position,
+			m_FocusPoint,
+			up
+		);
+
+		glm::quat rotation = glm::normalize(glm::quat_cast(mat));
+
+		m_Distance = glm::length(m_FocusPoint - m_Position);
+		m_Pitch = glm::pitch(rotation);
+		m_Yaw = glm::yaw(rotation);
+		m_ViewMatrix = mat;
 	}
 
 	void EditorCamera::ResetView(float32 aspect)

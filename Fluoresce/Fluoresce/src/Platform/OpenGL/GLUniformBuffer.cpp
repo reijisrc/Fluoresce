@@ -3,7 +3,7 @@
 // Describe :	GLユニフォームバッファ											// 
 // Author : Ding Qi																// 
 // Create Date : 2022/08/13														// 
-// Modify Date : 2022/08/13														// 
+// Modify Date : 2023/03/04														// 
 //==============================================================================//
 #include "frpch.h"
 #include "Platform/OpenGL/GLUniformBuffer.h"
@@ -17,6 +17,7 @@ namespace Fluoresce {
 		glCreateBuffers(1, &m_RendererID);
 		glNamedBufferData(m_RendererID, size, nullptr, GL_DYNAMIC_DRAW);
 		glBindBufferBase(GL_UNIFORM_BUFFER, binding, m_RendererID);
+		m_Size = size;
 	}
 
 	GLUniformBuffer::~GLUniformBuffer()

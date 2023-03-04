@@ -3,7 +3,7 @@
 // Describe : 	GLÉRÉA															// 
 // Author : Ding Qi																// 
 // Create Date : 2022/04/10														// 
-// Modify Date : 2023/02/23														// 
+// Modify Date : 2023/03/04														// 
 //==============================================================================//
 #include "frpch.h"
 #include "Platform/OpenGL/GLCore.h"
@@ -45,8 +45,9 @@ namespace Fluoresce
 		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, NULL, GL_FALSE);
 #endif
 		glGetIntegerv(GL_MAX_SAMPLES, &s_caps.MaxSamples);
-		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY, &s_caps.MaxAnisotropy);
+		glGetIntegerv(GL_MAX_UNIFORM_BLOCK_SIZE, &s_caps.MaxUniformBufferSize);
 		glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &s_caps.MaxTextureUnits);
+		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY, &s_caps.MaxAnisotropy);
 
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
