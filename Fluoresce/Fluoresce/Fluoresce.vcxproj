@@ -180,6 +180,7 @@
     <ClInclude Include="src\Engine\Graphics\IndexBuffer.h" />
     <ClInclude Include="src\Engine\Graphics\Mesh.h" />
     <ClInclude Include="src\Engine\Graphics\Shader.h" />
+    <ClInclude Include="src\Engine\Graphics\StorageBuffer.h" />
     <ClInclude Include="src\Engine\Graphics\Texture.h" />
     <ClInclude Include="src\Engine\Graphics\UniformBuffer.h" />
     <ClInclude Include="src\Engine\Graphics\VertexArray.h" />
@@ -209,6 +210,7 @@
     <ClInclude Include="src\Platform\OpenGL\GLCore.h" />
     <ClInclude Include="src\Platform\OpenGL\GLFramebuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\GLShader.h" />
+    <ClInclude Include="src\Platform\OpenGL\GLShaderStorageBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\GLTexture.h" />
     <ClInclude Include="src\Platform\OpenGL\GLUniformBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\GLUtils.h" />
@@ -236,6 +238,7 @@
     <ClCompile Include="src\Engine\Graphics\IndexBuffer.cpp" />
     <ClCompile Include="src\Engine\Graphics\Mesh.cpp" />
     <ClCompile Include="src\Engine\Graphics\Shader.cpp" />
+    <ClCompile Include="src\Engine\Graphics\StorageBuffer.cpp" />
     <ClCompile Include="src\Engine\Graphics\Texture.cpp" />
     <ClCompile Include="src\Engine\Graphics\UniformBuffer.cpp" />
     <ClCompile Include="src\Engine\Graphics\VertexArray.cpp" />
@@ -262,6 +265,7 @@
     <ClCompile Include="src\Platform\OpenGL\GLCore.cpp" />
     <ClCompile Include="src\Platform\OpenGL\GLFramebuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\GLShader.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\GLShaderStorageBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\GLTexture.cpp" />
     <ClCompile Include="src\Platform\OpenGL\GLUniformBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\GLVertexArray.cpp" />

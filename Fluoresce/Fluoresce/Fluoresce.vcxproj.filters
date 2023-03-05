@@ -255,6 +255,8 @@
     <ClInclude Include="src\Engine\Graphics\Mesh.h" />
     <ClInclude Include="src\Engine\Graphics\TextureDefine.h" />
     <ClInclude Include="src\Platform\OpenGL\GLUtils.h" />
+    <ClInclude Include="src\Engine\Graphics\StorageBuffer.h" />
+    <ClInclude Include="src\Platform\OpenGL\GLShaderStorageBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dependencies\ImGuizmo\src\ImGuizmo.cpp">
@@ -408,5 +410,7 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Graphics\Mesh.cpp" />
+    <ClCompile Include="src\Engine\Graphics\StorageBuffer.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\GLShaderStorageBuffer.cpp" />
   </ItemGroup>
 </Project>

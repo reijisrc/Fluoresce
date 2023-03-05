@@ -15,8 +15,8 @@ namespace Fluoresce {
 	GLUniformBuffer::GLUniformBuffer(uint32 size, uint32 binding)
 	{
 		glCreateBuffers(1, &m_RendererID);
-		glNamedBufferData(m_RendererID, size, nullptr, GL_DYNAMIC_DRAW);
 		glBindBufferBase(GL_UNIFORM_BUFFER, binding, m_RendererID);
+		glNamedBufferData(m_RendererID, size, nullptr, GL_DYNAMIC_DRAW);
 		m_Size = size;
 	}
 
