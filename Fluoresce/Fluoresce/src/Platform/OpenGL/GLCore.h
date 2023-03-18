@@ -3,7 +3,7 @@
 // Describe : 	GLÉRÉA															// 
 // Author : Ding Qi																// 
 // Create Date : 2022/04/10														// 
-// Modify Date : 2023/02/23														// 
+// Modify Date : 2023/03/19														// 
 //==============================================================================//
 #pragma once
 
@@ -21,6 +21,9 @@ namespace Fluoresce
 		virtual void Clear(ClearCommand command) override;
 
 		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount = 0) override;
+		virtual void DrawInstanced(const Ref<VertexArray>& vertexArray, uint32 instanceNum = 1, uint32_t indexCount = 0) override;
+		virtual void MultDrawIndirect(const Ref<VertexArray>& vertexArray, uint32 instanceNum = 1, uint32 offset = 0) override;
+
 		virtual void DrawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount) override;
 
 		virtual void SetLineWidth(float32 width) override;

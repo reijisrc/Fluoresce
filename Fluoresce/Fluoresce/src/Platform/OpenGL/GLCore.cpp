@@ -3,7 +3,7 @@
 // Describe : 	GLƒRƒA															// 
 // Author : Ding Qi																// 
 // Create Date : 2022/04/10														// 
-// Modify Date : 2023/03/04														// 
+// Modify Date : 2023/03/19														// 
 //==============================================================================//
 #include "frpch.h"
 #include "Platform/OpenGL/GLCore.h"
@@ -82,6 +82,19 @@ namespace Fluoresce
 		vertexArray->Bind();
 		uint32_t count = (indexCount == 0) ? vertexArray->GetIndexBuffer()->GetCount() : indexCount;
 		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
+	}
+
+	void GLCore::DrawInstanced(const Ref<VertexArray>& vertexArray, uint32 instanceNum, uint32_t indexCount)
+	{
+		vertexArray->Bind();
+		uint32_t count = (indexCount == 0) ? vertexArray->GetIndexBuffer()->GetCount() : indexCount;
+		glDrawElementsInstanced(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0, instanceNum);
+	}
+
+	void GLCore::MultDrawIndirect(const Ref<VertexArray>& vertexArray, uint32 instanceNum, uint32 offset)
+	{
+		vertexArray->Bind();
+		glMultiDrawElementsIndirect(GL_TRIANGLES, GL_UNSIGNED_INT, (GLvoid*)offset, instanceNum, 0);
 	}
 
 	void GLCore::DrawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount)

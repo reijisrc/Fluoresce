@@ -31,7 +31,7 @@ namespace Fluoresce {
 	{
 		m_Data = new PostProcessingRenderer::RendererData();
 		m_Data->ToneMappingShader = EffectShader::Create(shaderPath);
-		m_Data->VertexArray = VertexArray::Create();
+		m_Data->VertexArray = VertexArray::Create(VertexArray::VertexStreamsType::Sequential);
 
 		float32 fullScreenQuad[] =
 		{

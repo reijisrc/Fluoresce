@@ -3,7 +3,7 @@
 // Describe :	GLバッファ														// 
 // Author : Ding Qi																// 
 // Create Date : 2022/08/13														// 
-// Modify Date : 2023/02/12														// 
+// Modify Date : 2023/03/19														// 
 //==============================================================================//
 #pragma once
 
@@ -25,7 +25,7 @@ namespace Fluoresce {
 		virtual void Bind() const override;
 		virtual void Unbind() const override;
 
-		virtual void SetData(const void* data, uint32_t size) override;
+		virtual void SetData(const void* data, uint32 offset, uint32_t size) override;
 
 		virtual const VertexBufferLayout& GetBufferLayout() const override { return m_Layout; }
 		virtual void SetLayout(const VertexBufferLayout& layout) override { m_Layout = layout; }

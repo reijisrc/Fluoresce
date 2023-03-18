@@ -79,6 +79,9 @@ namespace Fluoresce {
 		virtual void Clear(ClearCommand command) = 0;
 
 		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount = 0) = 0;
+		virtual void DrawInstanced(const Ref<VertexArray>& vertexArray, uint32 instanceNum = 1, uint32_t indexCount = 0) = 0;
+		virtual void MultDrawIndirect(const Ref<VertexArray>& vertexArray, uint32 instanceNum = 1, uint32 offset = 0) = 0;
+
 		virtual void DrawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount) = 0;
 
 		virtual void SetLineWidth(float32 width) = 0;

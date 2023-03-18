@@ -28,7 +28,7 @@ namespace Fluoresce {
 	{
 		m_Data = new SkyboxRenderer::RendererData();
 		m_Data->Shader = EffectShader::Create(shaderPath);
-		m_Data->VertexArray = VertexArray::Create();
+		m_Data->VertexArray = VertexArray::Create(VertexArray::VertexStreamsType::Sequential);
 
 		// NDCŠî€‚ÌƒTƒCƒY
 		float32 fullScreenQuad[] =

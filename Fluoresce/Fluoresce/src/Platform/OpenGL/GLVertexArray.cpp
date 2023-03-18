@@ -3,7 +3,7 @@
 // Describe :	GL’¸“_”z—ñ														// 
 // Author : Ding Qi																// 
 // Create Date : 2022/08/13														// 
-// Modify Date : 2022/08/13														// 
+// Modify Date : 2023/03/19														// 
 //==============================================================================//
 #include "frpch.h"
 #include "Platform/OpenGL/GLVertexArray.h"
@@ -38,7 +38,8 @@ namespace Fluoresce {
 		return GL_FLOAT;
 	}
 
-	GLVertexArray::GLVertexArray()
+	GLVertexArray::GLVertexArray(VertexStreamsType type) :
+		m_Type(type)
 	{
 		glCreateVertexArrays(1, &m_RendererID);
 	}
@@ -66,6 +67,7 @@ namespace Fluoresce {
 		vertexBuffer->Bind();
 
 		const auto& layout = vertexBuffer->GetBufferLayout();
+		uint32 index = 0;
 		for (const auto& element : layout)
 		{
 			switch (element.Type)
@@ -75,14 +77,14 @@ namespace Fluoresce {
 			case GPUDataType::Float3:
 			case GPUDataType::Float4:
 			{
-				glEnableVertexAttribArray(m_VertexBufferIndex);
-				glVertexAttribPointer(m_VertexBufferIndex,
+				glEnableVertexAttribArray(index);
+				glVertexAttribPointer(index,
 					GetGPUDataTypeCount(element.Type),
 					GPUDataTypeToOpenGLBaseType(element.Type),
 					element.Normalized ? GL_TRUE : GL_FALSE,
-					layout.GetStride(),
+					(m_Type == VertexStreamsType::Sequential) ? layout.GetStride() : element.Offset,
 					(const void*)element.Offset);
-				m_VertexBufferIndex++;
+				index++;
 				break;
 			}
 			case GPUDataType::Int:
@@ -91,13 +93,13 @@ namespace Fluoresce {
 			case GPUDataType::Int4:
 			case GPUDataType::Bool:
 			{
-				glEnableVertexAttribArray(m_VertexBufferIndex);
-				glVertexAttribIPointer(m_VertexBufferIndex,
+				glEnableVertexAttribArray(index);
+				glVertexAttribIPointer(index,
 					GetGPUDataTypeCount(element.Type),
 					GPUDataTypeToOpenGLBaseType(element.Type),
-					layout.GetStride(),
+					(m_Type == VertexStreamsType::Sequential) ? layout.GetStride() : element.Offset,
 					(const void*)element.Offset);
-				m_VertexBufferIndex++;
+				index++;
 				break;
 			}
 			case GPUDataType::Mat3:
@@ -106,15 +108,15 @@ namespace Fluoresce {
 				uint8_t count = GetGPUDataTypeCount(element.Type);
 				for (uint8_t i = 0; i < count; i++)
 				{
-					glEnableVertexAttribArray(m_VertexBufferIndex);
-					glVertexAttribPointer(m_VertexBufferIndex,
+					glEnableVertexAttribArray(index);
+					glVertexAttribPointer(index,
 						count,
 						GPUDataTypeToOpenGLBaseType(element.Type),
 						element.Normalized ? GL_TRUE : GL_FALSE,
-						layout.GetStride(),
+						(m_Type == VertexStreamsType::Sequential) ? layout.GetStride() : element.Offset,
 						(const void*)(element.Offset + sizeof(float) * count * i));
-					glVertexAttribDivisor(m_VertexBufferIndex, 1);
-					m_VertexBufferIndex++;
+					glVertexAttribDivisor(index, 1);
+					index++;
 				}
 				break;
 			}

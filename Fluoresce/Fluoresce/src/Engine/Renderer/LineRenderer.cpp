@@ -57,7 +57,7 @@ namespace Fluoresce {
 	{
 		m_Data = new LineRenderer::RendererData();
 		m_Data->Shader = EffectShader::Create(shaderPath);
-		m_Data->VertexArray = VertexArray::Create();
+		m_Data->VertexArray = VertexArray::Create(VertexArray::VertexStreamsType::Sequential);
 
 		m_Data->VertexBuffer = VertexBuffer::Create(maxVectices * sizeof(LineVertex));
 		m_Data->VertexBuffer->SetLayout({
@@ -80,7 +80,7 @@ namespace Fluoresce {
 		if (m_Data->LineVertexCount)
 		{
 			uint32 dataSize = m_Buffer.GetValidOffset();
-			m_Data->VertexBuffer->SetData(&m_Buffer[0], dataSize);
+			m_Data->VertexBuffer->SetData(&m_Buffer[0], 0, dataSize);
 
 			m_Data->Shader->Bind();
 			RenderCommand::SetLineWidth(m_Data->LineWidth);

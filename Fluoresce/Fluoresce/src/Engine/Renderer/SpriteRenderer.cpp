@@ -67,7 +67,7 @@ namespace Fluoresce {
     {
 		m_Data = new SpriteRenderer::RendererData();
 		m_Data->Shader = EffectShader::Create(shaderPath);
-		m_Data->VertexArray = VertexArray::Create();
+		m_Data->VertexArray = VertexArray::Create(VertexArray::VertexStreamsType::Sequential);
 
 		m_Data->VertexBuffer = VertexBuffer::Create(maxVectices * sizeof(QuadVertex));
 		m_Data->VertexBuffer->SetLayout({
@@ -115,7 +115,7 @@ namespace Fluoresce {
 		if (m_Data->QuadIndexCount > 0)
 		{
 			uint32 dataSize = m_Buffer.GetValidOffset();
-			m_Data->VertexBuffer->SetData(&m_Buffer[0], dataSize);
+			m_Data->VertexBuffer->SetData(&m_Buffer[0], 0, dataSize);
 
 			for (uint32_t i = 0; i < m_Data->TextureSlotIndex; i++)
 			{

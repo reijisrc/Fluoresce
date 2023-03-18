@@ -53,14 +53,22 @@ namespace Fluoresce {
 		{
 			offset += texcoords_size;
 			glBufferSubData(GL_ARRAY_BUFFER, offset, sizeof(tangents_size), data.Tangents.data());
-		}
 
-		SetLayout
-		({	{ GPUDataType::Float3, "a_Position" },
-			{ GPUDataType::Float3, "a_Normal" },
-			{ GPUDataType::Float3, "a_Tangent" },
-			{ GPUDataType::Float2, "a_TexCoord" }
-		});
+			SetLayout
+			({ { GPUDataType::Float3, "a_Position" },
+				{ GPUDataType::Float3, "a_Normal" },
+				{ GPUDataType::Float2, "a_TexCoord" },
+				{ GPUDataType::Float3, "a_Tangent" }
+				});
+		}
+		else
+		{
+			SetLayout
+			({ { GPUDataType::Float3, "a_Position" },
+				{ GPUDataType::Float3, "a_Normal" },
+				{ GPUDataType::Float2, "a_TexCoord" }
+				});
+		}
 	}
 
 	GLVertexBuffer::~GLVertexBuffer()
@@ -78,10 +86,10 @@ namespace Fluoresce {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
-	void GLVertexBuffer::SetData(const void* data, uint32_t size)
+	void GLVertexBuffer::SetData(const void* data, uint32 offset, uint32_t size)
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
+		glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
 	}
 
 	GLIndexBuffer::GLIndexBuffer(uint32_t* indices, uint32_t count)

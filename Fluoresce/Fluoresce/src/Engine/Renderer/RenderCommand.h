@@ -3,7 +3,7 @@
 // Describe :	レンダーコマンド												// 
 // Author : Ding Qi																// 
 // Create Date : 2022/08/15														// 
-// Modify Date : 2023/03/04														// 
+// Modify Date : 2023/03/19														// 
 //==============================================================================//
 #pragma once
 
@@ -43,6 +43,16 @@ namespace Fluoresce {
 		static void DrawIndexed(const Ref<VertexArray>& vertexArray, uint32 count = 0)
 		{
 			s_GraphicsCore->DrawIndexed(vertexArray, count);
+		}
+
+		virtual void DrawInstanced(const Ref<VertexArray>& vertexArray, uint32 instanceNum = 1, uint32_t indexCount = 0)
+		{
+			s_GraphicsCore->DrawInstanced(vertexArray, instanceNum, indexCount);
+		}
+
+		virtual void MultDrawIndirect(const Ref<VertexArray>& vertexArray, uint32 instanceNum = 1, uint32 offset = 0)
+		{
+			s_GraphicsCore->MultDrawIndirect(vertexArray, instanceNum, offset);
 		}
 
 		static void DrawLines(const Ref<VertexArray>& vertexArray, uint32 vertexCount)

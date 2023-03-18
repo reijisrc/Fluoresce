@@ -3,7 +3,7 @@
 // Describe :	GL’¸“_”z—ñ														// 
 // Author : Ding Qi																// 
 // Create Date : 2022/08/13														// 
-// Modify Date : 2022/08/13														// 
+// Modify Date : 2023/03/19														// 
 //==============================================================================//
 #pragma once
 #include "Engine/Graphics/VertexArray.h"
@@ -14,7 +14,7 @@ namespace Fluoresce {
 	class GLVertexArray : public VertexArray
 	{
 	public:
-		GLVertexArray();
+		GLVertexArray(VertexStreamsType type);
 		virtual ~GLVertexArray();
 
 		virtual void Bind() const override;
@@ -25,9 +25,11 @@ namespace Fluoresce {
 
 		virtual const std::vector<Ref<VertexBuffer>>& GetVertexBuffer() const { return m_VertexBuffers; }
 		virtual const Ref<IndexBuffer>& GetIndexBuffer() const { return m_IndexBuffers; }
+
+		virtual const VertexStreamsType GetVertexDataType() const { return m_Type; }
 	private:
 		uint32_t m_RendererID = 0;
-		uint32_t m_VertexBufferIndex = 0;
+		VertexStreamsType m_Type;
 		std::vector<Ref<VertexBuffer>> m_VertexBuffers;
 		Ref<IndexBuffer> m_IndexBuffers;
 	};
