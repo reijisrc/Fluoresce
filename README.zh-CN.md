@@ -5,7 +5,7 @@
 ![FluoersceEditor](Images/FluoersceEditor.png) 
 
 ## 简介
-   基于 `C++17` 和 `OpenGL4`的小型游戏引擎
+   基于 `C++17` 和 `OpenGL4`的小型RuntimeEditor
    * 使用了[Dear ImGui](https://github.com/ocornut/imgui)
    * 使用YAML来对数据进行序列化
    * 使用了ECS架构
