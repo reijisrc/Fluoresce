@@ -5,7 +5,7 @@
 ![FluoersceEditor](Images/FluoersceEditor.png) 
 
 ## 概要
- `C++17` と `OpenGL4`で作成した軽量なランタイムエディター。
+ `C++17` と `OpenGL4`で作成した軽量なランタイムエディター
  * [Dear ImGui](https://github.com/ocornut/imgui)を使用
  * YAMLでデータシリアライズ化を対応
  * ECSアーキテクチャを使用
