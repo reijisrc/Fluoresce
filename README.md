@@ -2,8 +2,13 @@
 
 日本語 | [中国簡体字](README.zh-CN.md)
 
+![Test Image 1](Images/FluoersceEditor.png) 
+
 ## 概要
- `C++17` と `OpenGL4`で作成した軽量なゲームエンジン、ECSアーキテクチャを使用しました。
+ `C++17` と `OpenGL4`で作成した軽量なゲームエンジン。
+ * [Dear ImGui](https://github.com/ocornut/imgui)を使用
+ * YAMLでデータシリアライズ化対応
+ * ECSアーキテクチャを使用
 
 ## 動作環境
 * OS
