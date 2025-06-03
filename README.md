@@ -2,7 +2,7 @@
 
 日本語 | [中国簡体字](README.zh-CN.md)
 
-![Test Image 1](Images/FluoersceEditor.png) 
+![FluoersceEditor](Images/FluoersceEditor.png) 
 
 ## 概要
  `C++17` と `OpenGL4`で作成した軽量なゲームエンジン。
